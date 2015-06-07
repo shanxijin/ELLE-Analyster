@@ -64,7 +64,6 @@ public class AddRecords extends javax.swing.JFrame {
                     }
 
                 } else if (e.getKeyCode() == KeyEvent.VK_D && e.isControlDown()) {
-
                     JTable table = (JTable) e.getComponent().getParent();
                     int column = table.getSelectedColumn();
                     if (table.getColumnName(column).toLowerCase().contains("date")) {
