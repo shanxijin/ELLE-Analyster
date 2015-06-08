@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -48,11 +50,47 @@ public class UploadRecordTest {
         modifiedDataList.add(modifiedData);
 
 
-        uploadRecord.uploadRecord(tableAssignment, modifiedDataList);
-
+        String uploadedQuedy = uploadRecord.uploadRecord(tableAssignment, modifiedDataList);
+        assertThat(uploadedQuedy, notNullValue());
 
         verify(tableAssignment).getColumnName(2);
         verify(statement).executeUpdate(anyString());
+
+    }
+
+    @Test
+    public void testUpdateBatchEdit() throws SQLException {
+        JTable tableAssignment = mock(JTable.class);
+        List<ModifiedData> modifiedDataList = new ArrayList<>();
+        when(tableAssignment.getColumnCount()).thenReturn(7);
+        UploadRecord uploadRecord = new UploadRecord();
+
+        ModifiedData modifiedData = new ModifiedData();
+        modifiedData.setValueModified("Eric");
+        modifiedData.setTableName("Assignments");
+        modifiedData.setColumnIndex(2);
+        modifiedData.setId(320);
+        modifiedDataList.add(modifiedData);
+        ModifiedData modifiedData1 = new ModifiedData();
+        modifiedData1.setValueModified("Eric");
+        modifiedData1.setTableName("Assignments");
+        modifiedData1.setColumnIndex(2);
+        modifiedData1.setId(420);
+        modifiedDataList.add(modifiedData1);
+        ModifiedData modifiedData2 = new ModifiedData();
+        modifiedData2.setValueModified("Eric");
+        modifiedData2.setTableName("Assignments");
+        modifiedData2.setColumnIndex(2);
+        modifiedData2.setId(466);
+        modifiedDataList.add(modifiedData2);
+
+
+        String uploadedQuedy = uploadRecord.uploadRecord(tableAssignment, modifiedDataList);
+        assertThat(uploadedQuedy, notNullValue());
+
+        verify(tableAssignment, times(3)).getColumnName(2);
+        verify(statement, times(3)).executeUpdate(anyString());
+
 
     }
 

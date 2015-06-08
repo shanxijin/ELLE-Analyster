@@ -1,6 +1,5 @@
 package com.elle.analyster.service;
 
-import com.elle.analyster.Analyster;
 import com.elle.analyster.GUI;
 import com.elle.analyster.domain.ModifiedData;
 import org.slf4j.Logger;
@@ -18,21 +17,19 @@ public class UploadRecord {
 
     private Logger log = LoggerFactory.getLogger(UploadRecord.class);
 
-    public void uploadRecord(JTable table, List<ModifiedData> modifiedDataList) {
-        Analyster ana = Analyster.getInstance();
+    public String uploadRecord(JTable table, List<ModifiedData> modifiedDataList) throws SQLException {
         int id, col;
-        boolean flag = false;   // if upload successfully, flag turns to true
         Object value;
+        String sqlChange = null;
 
         for (ModifiedData modifiedData : modifiedDataList) {
             String tableName = modifiedData.getTableName();
             id = modifiedData.getId();
             col = modifiedData.getColumnIndex();
             value = modifiedData.getValueModified();
-
             try {
-                String sqlChange;
-                if (value.equals("")) {
+
+                if ("".equals(value)) {
                     value = null;
                     sqlChange = "UPDATE " + tableName + " SET " + table.getColumnName(col)
                             + " = " + value + " WHERE ID = " + id + ";";
@@ -40,24 +37,15 @@ public class UploadRecord {
                     sqlChange = "UPDATE " + tableName + " SET " + table.getColumnName(col)
                             + " = '" + value + "' WHERE ID = " + id + ";";
                 }
-                System.out.println(sqlChange);
+                log.info(sqlChange);
                 GUI.getStmt().executeUpdate(sqlChange);
-                ana.logwind.sendMessages(sqlChange);
-                flag = true;
+                table.setAutoCreateRowSorter(true);
+
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Upload failed!");
-                ana.getLogwind().sendMessages(ex.getMessage());
-                ana.getLogwind().sendMessages(ex.getSQLState() + "\n");
                 log.error("Error: ", ex);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error!");
-                log.error("Error: ", ex);
-                ana.getLogwind().sendMessages(ex.getMessage());
+                throw ex;
             }
         }
-        if (flag) {
-            JOptionPane.showMessageDialog(null, "Edits uploaded!");
-            table.setAutoCreateRowSorter(true);
-        }
+        return sqlChange;
     }
 }

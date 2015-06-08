@@ -20,6 +20,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -867,17 +868,15 @@ public class Analyster extends JFrame {
     private void jUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadActionPerformed
         // upload two tables separately
         String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        UploadRecord uploadRecord = new UploadRecord();
-
         switch(selectedTab){
             case (ASSIGNMENTS_TABLE_NAME):
-                uploadRecord.uploadRecord(assignmentTable, modifiedDataList);
+                updateTable(assignmentTable, modifiedDataList);
                 break;
             case (REPORTS_TABLE_NAME):
-                uploadRecord.uploadRecord(assignmentTable, modifiedDataList);
+                updateTable(reportTable, modifiedDataList);
                 break;
             case (ARCHIVE_TABLE_NAME):
-                uploadRecord.uploadRecord(assignmentTable, modifiedDataList);
+                updateTable(archiveAssignTable, modifiedDataList);
                 break;
         }
 
@@ -1485,14 +1484,15 @@ public class Analyster extends JFrame {
         int row[], col = 1, i, j, num;
         TableState ts = getTableState();
         JTable table = getSelectedTable();   // current table
-        final JTable tableview = table;
+        final JTable tableView = table;
         Vector data = ts.getData();
         Vector newRow = new Vector(), temp1 = new Vector(), temp2 = new Vector();    // used for updating the vector
         String newString, columnName;
 
+        List<ModifiedData> modifiedDataBatchEdit = new ArrayList<>();
         newString = editor.newString;
-        row = tableview.getSelectedRows();
-        num = tableview.getSelectedRowCount();
+        row = tableView.getSelectedRows();
+        num = tableView.getSelectedRowCount();
         columnName = editor.category;
         for (i = 0; i < 30; i++) {
             if (columnName.equals(table.getColumnName(i))) {
@@ -1503,27 +1503,42 @@ public class Analyster extends JFrame {
 
         if (i <= 29) {    // the last for loop works fine with a break
             for (i = 0; i <= num - 1; i++) {
-                for (j = 0; j <= tableview.getColumnCount() - 1; j++) {
-                    newRow.add(tableview.getValueAt(i, j));
+                for (j = 0; j <= tableView.getColumnCount() - 1; j++) {
+                    newRow.add(tableView.getValueAt(i, j));
                 }
-                tableview.setValueAt(newString, row[i], col);
+                tableView.setValueAt(newString, row[i], col);
                 newRow.set(col, newString);
                 temp2.add(newRow);
                 data.size();// insert all elements into a new 2d vector temp2
                 data.set(row[i], newRow);
+                ModifiedData modifiedData = new ModifiedData();
+                modifiedData.setColumnIndex(col);
+                modifiedData.setTableName(table.getName());
+                modifiedData.setId((Integer)tableView.getValueAt(i, 0));
+                modifiedData.setValueModified(newString);
+                modifiedDataBatchEdit.add(modifiedData);
                 newRow = new Vector();  // vanish former storage
                 temp2 = new Vector();
             }
 
+
             ts.setData(data);
             table.setAutoCreateRowSorter(false);
 
-            new UploadRecord().uploadRecord(table, modifiedDataList);
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Editing failed.");
+            updateTable(table,modifiedDataBatchEdit);
         }
+    }
 
+    private void updateTable(JTable table, List<ModifiedData> modifiedDataList ) {
+        try {
+              String uploadQuery = new UploadRecord().uploadRecord(table, modifiedDataList);
+              JOptionPane.showMessageDialog(null, "Edits uploaded!");
+              logwind.sendMessages(uploadQuery);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Upload failed!");
+            logwind.sendMessages(e.getMessage());
+            logwind.sendMessages(e.getSQLState() + "\n");
+        }
     }
 
     public JTable getSelectedTable() {  //get JTable by  selected Tab
