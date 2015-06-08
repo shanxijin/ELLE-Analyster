@@ -25,6 +25,7 @@ public class TableService {
     JTable assignmentTable;
     JTable reportTable;
     JTable archiveAssignTable;
+    JTable viewerTable;
 
     public String[] getColumnNames(int number) {
         JTable table = assignmentTable;  // use this method cause table1 and table2 are private
@@ -38,6 +39,8 @@ public class TableService {
             case 3:
                 table = archiveAssignTable;
                 break;
+            case 4:
+                table = viewerTable;
         }
 
         ArrayList<String> col = new ArrayList<>();
@@ -63,17 +66,24 @@ public class TableService {
         archiveAssignTable = table;
     }
 
+    public void setViewerTable(JTable table) {
+        viewerTable =table;
+    }
+
     public String textToNumOfRecords(int num) { // Set text to element numofRecords2
         String setTextNumofRecords2 = "Number of records shown: " + num;
         return setTextNumofRecords2;
     }
+
     private void loadArchiveAssignTable() {
         new LoadTables().loadArchiveAssignTable();
 
     }
-    private void loadAssignmentTable(){
+
+    private void loadAssignmentTable() {
         new LoadTables().loadAssignmentTable();
     }
+
     public void activateRecords() {
 
         int rowSelected = archiveAssignTable.getSelectedRows().length;
@@ -116,9 +126,7 @@ public class TableService {
 
     }
 
-
-
-    public void archiveRecords(){
+    public void archiveRecords() {
         JTable table = assignmentTable;
 
         int rowSelected = table.getSelectedRows().length;
@@ -130,11 +138,11 @@ public class TableService {
         // Delete Selected Records from Assignments
         if (rowSelected != -1) {
             for (int i = 0; i < rowSelected; i++) {
-                String analyst = (String) table.getValueAt(rowsSelected[i],2);
+                String analyst = (String) table.getValueAt(rowsSelected[i], 2);
                 Integer selectedTask = (Integer) table.getValueAt(rowsSelected[i], 0); // Add Note to selected taskID
                 String sqlDelete = "UPDATE " + GUI.getDatabase() + "." + assignmentTable.getName() + " SET analyst = \"\",\n"
                         + " priority=null,\n"
-                        + " dateAssigned= '" + today +"',"
+                        + " dateAssigned= '" + today + "',"
                         + " dateDone=null,\n"
                         + " notes= \'Previous " + analyst + "' " + "where ID=" + selectedTask;
                 try {
@@ -174,8 +182,8 @@ public class TableService {
             }
             loadAssignmentTable();
             loadArchiveAssignTable();
-            table.setRowSelectionInterval(rowsSelected[0], rowsSelected[rowSelected-1]);
-            JOptionPane.showMessageDialog(null, rowSelected+ " Record(s) Archived!");
+            table.setRowSelectionInterval(rowsSelected[0], rowsSelected[rowSelected - 1]);
+            JOptionPane.showMessageDialog(null, rowSelected + " Record(s) Archived!");
 
         } else {
             JOptionPane.showMessageDialog(null, "Please, select one task!");

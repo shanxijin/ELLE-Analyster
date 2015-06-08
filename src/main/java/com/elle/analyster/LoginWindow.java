@@ -278,15 +278,7 @@ public class LoginWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordKeyPressed
 
     private void jDatabaseActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jDatabaseActionPerformed
-//        String selectedDB = jDatabase.getSelectedItem().toString();
-//        String newItem;
-//        
-//        if (selectedDB.equals("Add New Database")) {
-////            newItem = jDatabase.getEditor().getItem().toString();   // figure out how to use getEditor()
-////            jDatabase.setVisible(false);
-//            jNewDB.setVisible(true);
-//
-//        }
+
 
     }//GEN-LAST:event_jDatabaseActionPerformed
 
@@ -303,10 +295,6 @@ public class LoginWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jUsernameActionPerformed
 
     public void loadList() {
-//        String[] aws = {"dummy"};
-//        String[] loc = {"test"};
-//        String[] dbList = aws;
-//        String server = jServer.getSelectedItem().toString();
         String temp = null;
         List<String> dbList = new ArrayList<String>();
         String dbFile = "database.txt";

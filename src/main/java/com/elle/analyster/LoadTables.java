@@ -20,6 +20,7 @@ public class LoadTables {
     JTable assignmentTable = ana.getassignmentTable();
     JTable reportTable = ana.getReportTable();
     JTable archiveAssignTable = ana.getArchiveAssignTable();
+    JTable viewerTable = ana.getViewerTable();
 
 
     public void loadTables() {
@@ -33,6 +34,7 @@ public class LoadTables {
         loadArchiveAssignTable();
         ana.setTerminalsFunction(ana.getArchiveAssignTable());
 
+        loadViewerTable();
         ana.setLastUpdateTime();
     }
 
@@ -41,8 +43,8 @@ public class LoadTables {
         connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
         ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
-        ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
+//        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
+//        ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(assignmentTable.getRowCount());
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
@@ -109,6 +111,12 @@ public class LoadTables {
         filter.setColumnIndex(columnIndex);
 
     }
+      public void loadReportTable() {
+        connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
+        ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
+        ana.getReports().init(reportTable, new String[]{"Symbol", "Author"});
+        Analyster.setNumberReportsInit(reportTable.getRowCount());
+    }
 
     public void loadReportTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
 
@@ -133,12 +141,16 @@ public class LoadTables {
         filter.saveFilterCriteria(filterCriteria);
         filter.setColumnIndex(columnIndex);
     }
-
-    public void loadReportTable() {
-        connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
-        ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
-        ana.getReports().init(reportTable, new String[]{"Symbol", "Author"});
-        Analyster.setNumberReportsInit(reportTable.getRowCount());
+    public void loadViewerTable(){
+        connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), viewerTable);
+        ana.setColumnFormat(ana.columnWidthPercentage1, viewerTable);
+        ana.getViewer().init(viewerTable, new String[]{"Symbol", "Analyst"});
+        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(viewerTable).actions(true).apply());
+        ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
+        Analyster.setNumberAssignmentInit(viewerTable.getRowCount());
+        ana.getjActivateRecord().setEnabled(false);
+        ana.getjArchiveRecord().setEnabled(true);
     }
+  
 
 }

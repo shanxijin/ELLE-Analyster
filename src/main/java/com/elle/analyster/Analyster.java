@@ -51,7 +51,6 @@ public class Analyster extends JFrame {
     private static int numberReportsInit;
     private static int numberArchiveAssignInit;
 
-
     public ITableFilter<?> getFilterTempArchive() {
         return filterTempArchive;
     }
@@ -118,6 +117,9 @@ public class Analyster extends JFrame {
     public JTable getArchiveAssignTable() {
         return archiveAssignTable;
     }
+     JTable getViewerTable() {
+        return viewerTable;
+    }
 
     public JTabbedPane getjTabbedPanel1() {
         return jTabbedPanel1;
@@ -146,6 +148,7 @@ public class Analyster extends JFrame {
         tableService.setAssignmentTable(assignmentTable);
         tableService.setReportTable(reportTable);
         tableService.setArchiveAssignTable(archiveAssignTable);
+        tableService.setViewerTable(assignmentTable);
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {// Allow to TAB-
 
             @Override
@@ -219,6 +222,8 @@ public class Analyster extends JFrame {
         reportTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         archiveAssignTable = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        viewerTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jSwitchEditMode = new javax.swing.JButton();
         jLabelEdit = new javax.swing.JLabel();
@@ -492,6 +497,24 @@ public class Analyster extends JFrame {
 
         jTabbedPanel1.addTab("Assignments_Archived", jScrollPane3);
 
+        viewerTable.setAutoCreateRowSorter(true);
+        viewerTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "symbol", "analyst", "priority", "dateAssigned", "dateDone", "notes"
+            }
+        ));
+        viewerTable.setMinimumSize(new java.awt.Dimension(10, 240));
+        viewerTable.setName("ViewerTable"); // NOI18N
+        jScrollPane5.setViewportView(viewerTable);
+
+        jTabbedPanel1.addTab("Viewer", jScrollPane5);
+
         jLabel2.setText("Edit Mode:");
 
         jSwitchEditMode.setText("Switch");
@@ -529,7 +552,7 @@ public class Analyster extends JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
@@ -541,7 +564,7 @@ public class Analyster extends JFrame {
                 .addComponent(jButtonCancel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 236, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jBatchAdd)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBatchEdit)
@@ -867,8 +890,9 @@ public class Analyster extends JFrame {
 
     private void jUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadActionPerformed
         // upload two tables separately
+        
         String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        switch(selectedTab){
+        switch (selectedTab) {
             case (ASSIGNMENTS_TABLE_NAME):
                 updateTable(assignmentTable, modifiedDataList);
                 break;
@@ -880,11 +904,10 @@ public class Analyster extends JFrame {
                 break;
         }
 
-        if(GUI.isIsFiltering()){
-            loadPrevious(selectedTab);
-        }
-        else {
-            switch(selectedTab){
+        if (GUI.isIsFiltering()) {
+//            loadPrevious(selectedTab);
+        } else {
+            switch (selectedTab) {
                 case (ASSIGNMENTS_TABLE_NAME):
                     loadTables.loadAssignmentTable();
                     break;
@@ -894,6 +917,8 @@ public class Analyster extends JFrame {
                 case (ARCHIVE_TABLE_NAME):
                     loadTables.loadArchiveAssignTable();
                     break;
+                case ("Viewer"):
+                    loadTables.loadAssignmentTable();
             }
         }
         getModifiedDataList().clear();    // reset the arraylist to record future changes
@@ -967,12 +992,16 @@ public class Analyster extends JFrame {
             ((MyTableModel) assignmentTable.getModel()).setReadOnly(true);
             ((MyTableModel) reportTable.getModel()).setReadOnly(true);
             ((MyTableModel) archiveAssignTable.getModel()).setReadOnly(true);
+            ((MyTableModel) viewerTable.getModel()).setReadOnly(true);
         }
     }
 
     private void makeEditable(TableModel tableModel) {
         if (tableModel instanceof MyTableModel) {
             ((MyTableModel) tableModel).setReadOnly(false);
+             tableModel.removeTableModelListener(assignmentTable); 
+             tableModel.removeTableModelListener(reportTable); 
+             
         }
     }
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
@@ -980,7 +1009,7 @@ public class Analyster extends JFrame {
         if (GUI.isIsFiltering()) {
             loadPrevious(selectedTab);
         } else {
-            switch(selectedTab){
+            switch (selectedTab) {
                 case (ASSIGNMENTS_TABLE_NAME):
                     loadTables.loadAssignmentTable();
                     break;
@@ -996,26 +1025,20 @@ public class Analyster extends JFrame {
 
     }//GEN-LAST:event_jButtonCancelActionPerformed
     public void loadPrevious(String selectedTab) {
-//        clearAllFilters();
+
         if (selectedTab.equals(ASSIGNMENTS_TABLE_NAME)) {
-
-//            Collection<DistinctColumnItem> filterCriteria = filterTempAssignment.getFilterCriteria();
-            loadTables.loadAssignmentTableWithFilter(filterTempAssignment.getColumnIndex(),filterTempAssignment.getFilterCriteria());
+            loadTables.loadAssignmentTableWithFilter(filterTempAssignment.getColumnIndex(), filterTempAssignment.getFilterCriteria());
             setColumnFormat(columnWidthPercentage1, assignmentTable);
-            GUI.columnFilterStatus(filterTempAssignment.getColumnIndex(),assignmentTable);
-        }
-        else if (selectedTab.equals(REPORTS_TABLE_NAME)) {
-//            Collection<DistinctColumnItem> filterCriteria = filterTempAssignment.getFilterCriteria();
-            loadTables.loadReportTableWithFilter(filterTempReport.getColumnIndex(),filterTempReport.getFilterCriteria());
+            GUI.columnFilterStatus(filterTempAssignment.getColumnIndex(), assignmentTable);
+        } else if (selectedTab.equals(REPORTS_TABLE_NAME)) {
+            loadTables.loadReportTableWithFilter(filterTempReport.getColumnIndex(), filterTempReport.getFilterCriteria());
             setColumnFormat(columnWidthPercentage2, reportTable);
-            GUI.columnFilterStatus(filterTempReport.getColumnIndex(),reportTable);
+            GUI.columnFilterStatus(filterTempReport.getColumnIndex(), reportTable);
 
-        }
-        else {
-//            Collection<DistinctColumnItem> filterCriteria = filterTempArchive.getFilterCriteria();
-            loadTables.loadArchiveTableWithFilter(filterTempArchive.getColumnIndex(),filterTempArchive.getFilterCriteria());
+        } else {
+            loadTables.loadArchiveTableWithFilter(filterTempArchive.getColumnIndex(), filterTempArchive.getFilterCriteria());
             setColumnFormat(columnWidthPercentage1, archiveAssignTable);
-            GUI.columnFilterStatus(filterTempArchive.getColumnIndex(),archiveAssignTable);
+            GUI.columnFilterStatus(filterTempArchive.getColumnIndex(), archiveAssignTable);
         }
     }
 //Filter is generated everytime that table is selected.
@@ -1080,6 +1103,14 @@ public class Analyster extends JFrame {
                 numOfRecords1.setText("Number of records in Archive: " + numberArchiveAssignInit);
                 numOfRecords2.setText("Number of records shown: " + archiveAssignFiltered.getRowCount());
                 break;
+            case "Viewer":
+                jActivateRecord.setEnabled(false);
+                jArchiveRecord.setEnabled(true);
+                viewerTable = assignmentTable;
+                viewerTable.setVisible(true);
+                numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
+                numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
+                break;
         }
 
     }
@@ -1126,15 +1157,21 @@ public class Analyster extends JFrame {
 
     private void jDeleteRecordActionPerformed(java.awt.event.ActionEvent evt) {
         DeleteRecord deleteRecord = new DeleteRecord();
-        JTable table;
+        JTable table = null;
         String tableName = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
 
-        if (ASSIGNMENTS_TABLE_NAME.equals(tableName)) {
-            table = assignmentTable;
-        } else if (REPORTS_TABLE_NAME.equals(tableName)) {
-            table = reportTable;
-        } else {
-            table = archiveAssignTable;
+        if (null != tableName) {
+            switch (tableName) {
+                case ASSIGNMENTS_TABLE_NAME:
+                    table = assignmentTable;
+                    break;
+                case REPORTS_TABLE_NAME:
+                    table = reportTable;
+                    break;
+                default:
+                    table = archiveAssignTable;
+                    break;
+            }
         }
         deleteRecord.deleteRecordSelected(table);
     }
@@ -1212,25 +1249,24 @@ public class Analyster extends JFrame {
 
     }//GEN-LAST:event_jActivateRecordActionPerformed
 
-
     private void jTableChanged(TableModelEvent e) {
 
         int row = e.getFirstRow();
         int col = e.getColumn();
-        int id=0;
-        Object value=null;
+        int id = 0;
+        Object value = null;
         String tableName = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        switch (tableName){
+        switch (tableName) {
             case ASSIGNMENTS_TABLE_NAME:
-                id = (Integer)assignmentTable.getModel().getValueAt(row, 0);
+                id = (Integer) assignmentTable.getModel().getValueAt(row, 0);
                 value = assignmentTable.getModel().getValueAt(row, col);
                 break;
             case REPORTS_TABLE_NAME:
-                id = (Integer)reportTable.getModel().getValueAt(row, 0);
+                id = (Integer) reportTable.getModel().getValueAt(row, 0);
                 value = reportTable.getModel().getValueAt(row, col);
                 break;
             case ARCHIVE_TABLE_NAME:
-                id = (Integer)archiveAssignTable.getModel().getValueAt(row, 0);
+                id = (Integer) archiveAssignTable.getModel().getValueAt(row, 0);
                 value = archiveAssignTable.getModel().getValueAt(row, col);
                 break;
         }
@@ -1246,6 +1282,9 @@ public class Analyster extends JFrame {
     public void loadData() {
         loadTables = new LoadTables();
         loadTables.loadTables();
+         filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
+                            .apply();
+                    assignmentFiltered = filterTempAssignment.getTable(); 
     }
 
     public void setTerminalsFunction(final JTable table) { //set all listenner for JTable.
@@ -1364,7 +1403,7 @@ public class Analyster extends JFrame {
     public void loadActiveData() {// load only active data from analyst
         System.out.println("Connection");
         String sqlC = "select A.* from Assignments A left join t_analysts T\n" + "on A.analyst = T.analyst\n" + "where T.active = 1\n" + "order by A.symbol";
-        con.connection(sqlC, assignmentTable);
+        Connection.connection(sqlC, assignmentTable);
         setColumnFormat(columnWidthPercentage1, assignmentTable);
         assignments.init(assignmentTable, new String[]{"Symbol", "Analyst"});
         numOfRecords1.setText("Number of records in Assignments:" + assignments.getRowsNumber());
@@ -1442,6 +1481,8 @@ public class Analyster extends JFrame {
         }
     }
 
+   
+
     class AlignmentTableHeaderCellRenderer implements TableCellRenderer {
 
         private final TableCellRenderer wrappedRenderer;
@@ -1486,7 +1527,7 @@ public class Analyster extends JFrame {
         JTable table = getSelectedTable();   // current table
         final JTable tableView = table;
         Vector data = ts.getData();
-        Vector newRow = new Vector(), temp1 = new Vector(), temp2 = new Vector();    // used for updating the vector
+        Vector newRow = new Vector(), temp2 = new Vector();    // used for updating the vector
         String newString, columnName;
 
         List<ModifiedData> modifiedDataBatchEdit = new ArrayList<>();
@@ -1514,26 +1555,27 @@ public class Analyster extends JFrame {
                 ModifiedData modifiedData = new ModifiedData();
                 modifiedData.setColumnIndex(col);
                 modifiedData.setTableName(table.getName());
-                modifiedData.setId((Integer)tableView.getValueAt(i, 0));
+                modifiedData.setId((Integer) tableView.getValueAt(i, 0));
                 modifiedData.setValueModified(newString);
                 modifiedDataBatchEdit.add(modifiedData);
                 newRow = new Vector();  // vanish former storage
                 temp2 = new Vector();
             }
-
-
             ts.setData(data);
             table.setAutoCreateRowSorter(false);
 
-            updateTable(table,modifiedDataBatchEdit);
+            updateTable(table, modifiedDataBatchEdit);
         }
     }
 
-    private void updateTable(JTable table, List<ModifiedData> modifiedDataList ) {
+    private void updateTable(JTable table, List<ModifiedData> modifiedDataList) {
+        table.getModel().addTableModelListener(table);
         try {
-              String uploadQuery = new UploadRecord().uploadRecord(table, modifiedDataList);
-              JOptionPane.showMessageDialog(null, "Edits uploaded!");
-              logwind.sendMessages(uploadQuery);
+            String uploadQuery = new UploadRecord().uploadRecord(table, modifiedDataList);
+            loadPrevious(table.getName());
+
+            JOptionPane.showMessageDialog(null, "Edits uploaded!");
+            logwind.sendMessages(uploadQuery);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Upload failed!");
             logwind.sendMessages(e.getMessage());
@@ -1563,6 +1605,8 @@ public class Analyster extends JFrame {
                 return reports;
             case ARCHIVE_TABLE_NAME:
                 return archiveAssign;
+            case "Viewer":
+                return viewer;
             default:
                 return null;
         }
@@ -1575,6 +1619,8 @@ public class Analyster extends JFrame {
             return reports;
         } else if (table == archiveAssignTable) {
             return archiveAssign;
+        } else if (table == viewerTable) {
+            return viewer;
         } else {
             JOptionPane.showMessageDialog(null, "TableState not found!");
             return null;
@@ -1584,7 +1630,6 @@ public class Analyster extends JFrame {
     public void setLastUpdateTime() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = dateFormat.format(new Date());
-
         jTimeLastUpdate.setText("Last updated: " + time);
     }
 
@@ -1604,6 +1649,10 @@ public class Analyster extends JFrame {
         return assignments;
     }
 
+    public TableState getViewer() {
+        return viewer;
+    }
+
     public TableState getReports() {
         return reports;
     }
@@ -1615,7 +1664,7 @@ public class Analyster extends JFrame {
     public ITableFilter<?> getFilterTempAssignment() {
         return filterTempAssignment;
     }
-
+    public TableState viewer = new TableState();
     public TableState assignments = new TableState();
     public TableState reports = new TableState();
     public TableState archiveAssign = new TableState();
@@ -1674,6 +1723,7 @@ public class Analyster extends JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JButton jSwitchDebugMode;
     private javax.swing.JButton jSwitchEditMode;
     private javax.swing.JTabbedPane jTabbedPanel1;
@@ -1686,6 +1736,7 @@ public class Analyster extends JFrame {
     private javax.swing.JTable reportTable;
     private javax.swing.JButton search;
     private javax.swing.JTextField textForSearch;
+    private javax.swing.JTable viewerTable;
     // End of variables declaration//GEN-END:variables
     // @formatter:on
 }

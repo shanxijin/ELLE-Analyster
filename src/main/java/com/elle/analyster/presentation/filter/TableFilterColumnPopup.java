@@ -133,7 +133,6 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
         filter.saveFilterCriteria(checked);
         filter.setColumnIndex(mColumnIndex);
         GUI.columnFilterStatus(mColumnIndex, filter.getTable());
-        setEnabled(false);
         return true;
     }
 
