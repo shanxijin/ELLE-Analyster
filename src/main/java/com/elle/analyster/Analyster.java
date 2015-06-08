@@ -9,6 +9,7 @@ import com.elle.analyster.service.Connection;
 import com.elle.analyster.service.DeleteRecord;
 import com.elle.analyster.service.TableService;
 import com.elle.analyster.service.UploadRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -50,6 +51,16 @@ public class Analyster extends JFrame {
     private static int numberAssignmentInit;
     private static int numberReportsInit;
     private static int numberArchiveAssignInit;
+    @Autowired
+    private UploadRecord uploadRecordService;
+
+    public UploadRecord getUploadRecordService() {
+        return uploadRecordService;
+    }
+
+    public void setUploadRecordService(UploadRecord uploadRecordService) {
+        this.uploadRecordService = uploadRecordService;
+    }
 
     public ITableFilter<?> getFilterTempArchive() {
         return filterTempArchive;
@@ -149,6 +160,8 @@ public class Analyster extends JFrame {
         tableService.setReportTable(reportTable);
         tableService.setArchiveAssignTable(archiveAssignTable);
         tableService.setViewerTable(assignmentTable);
+        jScrollPane5.setVisible(false);
+        
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {// Allow to TAB-
 
             @Override
@@ -194,6 +207,7 @@ public class Analyster extends JFrame {
         }
         );
         instance = this;
+
     }
 
     /**
@@ -1041,22 +1055,6 @@ public class Analyster extends JFrame {
             GUI.columnFilterStatus(filterTempArchive.getColumnIndex(), archiveAssignTable);
         }
     }
-//Filter is generated everytime that table is selected.
-    private void jTabbedPanel1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPanel1StateChanged
-
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        TableState ts = getTableState();
-        changeTabbedPanelState(selectedTab);
-        String[] field = ts.getSearchFields();
-        if (field == null) {
-            jField.setModel(new DefaultComboBoxModel(new String[]{"Symbol", "Analyst"}));
-        } else {
-            jField.setModel(new DefaultComboBoxModel(field));
-        }
-
-        modifiedDataList.clear();    // when selected table changed, clear former edit history
-    }//GEN-LAST:event_jTabbedPanel1StateChanged
-
     private void changeTabbedPanelState(String selectedTab) {
         //To remember previous filter or create a filter if the table is not filtered.//
         assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
@@ -1218,6 +1216,8 @@ public class Analyster extends JFrame {
                 GUI.cleanAllColumnFilterStatus(archiveAssignTable);
                 break;
         }
+        modifiedDataList.clear();
+
     }
 
     private void jMenuItemOthersLoadDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOthersLoadDataActionPerformed
@@ -1248,6 +1248,22 @@ public class Analyster extends JFrame {
         tableService.activateRecords();
 
     }//GEN-LAST:event_jActivateRecordActionPerformed
+
+//Filter is generated everytime that table is selected.
+    private void jTabbedPanel1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPanel1StateChanged
+
+        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
+        TableState ts = getTableState();
+        changeTabbedPanelState(selectedTab);
+        String[] field = ts.getSearchFields();
+        if (field == null) {
+            jField.setModel(new DefaultComboBoxModel(new String[]{"Symbol", "Analyst"}));
+        } else {
+            jField.setModel(new DefaultComboBoxModel(field));
+        }
+
+        modifiedDataList.clear();    // when selected table changed, clear former edit history
+    }//GEN-LAST:event_jTabbedPanel1StateChanged
 
     private void jTableChanged(TableModelEvent e) {
 
@@ -1521,57 +1537,40 @@ public class Analyster extends JFrame {
 
     // Keep the float in Table Editor by separating editing part out here
     public void batchEdit(TableEditor editor) {
-
-        int row[], col = 1, i, j, num;
-        TableState ts = getTableState();
-        JTable table = getSelectedTable();   // current table
-        final JTable tableView = table;
-        Vector data = ts.getData();
-        Vector newRow = new Vector(), temp2 = new Vector();    // used for updating the vector
+        
+        int row[], id, col = 1, i, j, num;
+        JTable table = getSelectedTable();   // current Table
         String newString, columnName;
-
+        table.setAutoCreateRowSorter(false);
         List<ModifiedData> modifiedDataBatchEdit = new ArrayList<>();
         newString = editor.newString;
-        row = tableView.getSelectedRows();
-        num = tableView.getSelectedRowCount();
+        row = table.getSelectedRows();
+        num = table.getSelectedRowCount();
         columnName = editor.category;
-        for (i = 0; i < 30; i++) {
+        for (i = 0; i < table.getColumnCount(); i++) {
             if (columnName.equals(table.getColumnName(i))) {
                 col = i;
                 break;
             }
         }
-
-        if (i <= 29) {    // the last for loop works fine with a break
             for (i = 0; i <= num - 1; i++) {
-                for (j = 0; j <= tableView.getColumnCount() - 1; j++) {
-                    newRow.add(tableView.getValueAt(i, j));
-                }
-                tableView.setValueAt(newString, row[i], col);
-                newRow.set(col, newString);
-                temp2.add(newRow);
-                data.size();// insert all elements into a new 2d vector temp2
-                data.set(row[i], newRow);
+                int row2 = table.convertRowIndexToModel(row[i]);
+                id = (Integer)table.getModel().getValueAt(row2,0);
                 ModifiedData modifiedData = new ModifiedData();
                 modifiedData.setColumnIndex(col);
                 modifiedData.setTableName(table.getName());
-                modifiedData.setId((Integer) tableView.getValueAt(i, 0));
+                modifiedData.setId(id);
                 modifiedData.setValueModified(newString);
                 modifiedDataBatchEdit.add(modifiedData);
-                newRow = new Vector();  // vanish former storage
-                temp2 = new Vector();
             }
-            ts.setData(data);
-            table.setAutoCreateRowSorter(false);
-
             updateTable(table, modifiedDataBatchEdit);
-        }
+
     }
 
     private void updateTable(JTable table, List<ModifiedData> modifiedDataList) {
         table.getModel().addTableModelListener(table);
         try {
-            String uploadQuery = new UploadRecord().uploadRecord(table, modifiedDataList);
+            String uploadQuery = uploadRecordService.uploadRecord(table, modifiedDataList);
             loadPrevious(table.getName());
 
             JOptionPane.showMessageDialog(null, "Edits uploaded!");

@@ -120,13 +120,17 @@ public class LoginWindow extends javax.swing.JFrame {
 
         jPassword.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jPassword.setText("DanielaMaria$$$$");
+        jPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordActionPerformed(evt);
+            }
+        });
         jPassword.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jPasswordKeyPressed(evt);
             }
         });
 
-        jUsername.setText("Daniela");
         jUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jUsernameActionPerformed(evt);
@@ -293,6 +297,10 @@ public class LoginWindow extends javax.swing.JFrame {
     private void jUsernameActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jUsernameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jUsernameActionPerformed
+
+    private void jPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordActionPerformed
 
     public void loadList() {
         String temp = null;

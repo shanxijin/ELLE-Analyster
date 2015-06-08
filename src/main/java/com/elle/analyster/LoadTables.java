@@ -43,8 +43,8 @@ public class LoadTables {
         connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
         ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-//        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
-//        ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
+        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
+        ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(assignmentTable.getRowCount());
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
