@@ -270,16 +270,16 @@ public class Analyster extends JFrame {
         jMenuFind = new javax.swing.JMenu();
         jMenuReport = new javax.swing.JMenu();
         jMenuView = new javax.swing.JMenu();
-        jMenuItemViewLog = new javax.swing.JMenuItem();
-        jMenuItemViewSQL = new javax.swing.JMenuItem();
         jMenuItemViewAssig = new javax.swing.JMenuItem();
         jMenuItemViewReports = new javax.swing.JMenuItem();
         jMenuItemViewAllAssig = new javax.swing.JMenuItem();
         jMenuItemViewActiveAssig = new javax.swing.JMenuItem();
         jMenuOther = new javax.swing.JMenu();
-        jMenuItemOtherReport = new javax.swing.JMenuItem();
         jMenuItemOthersLoadData = new javax.swing.JMenuItem();
+        jMenuItemViewLog = new javax.swing.JMenuItem();
+        jMenuItemViewSQL = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
+        jMenuItemOtherReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(894, 557));
@@ -761,17 +761,6 @@ public class Analyster extends JFrame {
 
         jMenuView.setText("View");
 
-        jMenuItemViewLog.setText("Log");
-        jMenuItemViewLog.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemViewLogActionPerformed(evt);
-            }
-        });
-        jMenuView.add(jMenuItemViewLog);
-
-        jMenuItemViewSQL.setText("SQL Command");
-        jMenuView.add(jMenuItemViewSQL);
-
         jMenuItemViewAssig.setText("View Assignments Columns");
         jMenuView.add(jMenuItemViewAssig);
 
@@ -798,14 +787,6 @@ public class Analyster extends JFrame {
 
         jMenuOther.setText("Tools");
 
-        jMenuItemOtherReport.setText("Report a bug/suggestion");
-        jMenuItemOtherReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemOtherReportActionPerformed(evt);
-            }
-        });
-        jMenuOther.add(jMenuItemOtherReport);
-
         jMenuItemOthersLoadData.setText("Reload data");
         jMenuItemOthersLoadData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -814,9 +795,29 @@ public class Analyster extends JFrame {
         });
         jMenuOther.add(jMenuItemOthersLoadData);
 
+        jMenuItemViewLog.setText("Log");
+        jMenuItemViewLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemViewLogActionPerformed(evt);
+            }
+        });
+        jMenuOther.add(jMenuItemViewLog);
+
+        jMenuItemViewSQL.setText("SQL Command");
+        jMenuOther.add(jMenuItemViewSQL);
+
         menuBar.add(jMenuOther);
 
         jMenuHelp.setText("Help");
+
+        jMenuItemOtherReport.setText("Report a bug/suggestion");
+        jMenuItemOtherReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemOtherReportActionPerformed(evt);
+            }
+        });
+        jMenuHelp.add(jMenuItemOtherReport);
+
         menuBar.add(jMenuHelp);
 
         setJMenuBar(menuBar);

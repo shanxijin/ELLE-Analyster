@@ -19,3 +19,10 @@ Start to connect local database...
 2015-06-10 05:47:15 PM: Connect successfully!
 
 
+-------------------------2015-06-10 06:16:14 PM-------------------------
+-------------------------2015-06-10 06:16:14 PM-------------------------
+2015-06-10 06:16:33 PM: 
+Start to connect local database...
+2015-06-10 06:16:34 PM: Connect successfully!
+
+
