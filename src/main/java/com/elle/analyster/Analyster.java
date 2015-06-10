@@ -276,8 +276,8 @@ public class Analyster extends JFrame {
         jMenuItemViewActiveAssig = new javax.swing.JMenuItem();
         jMenuOther = new javax.swing.JMenu();
         jMenuItemOthersLoadData = new javax.swing.JMenuItem();
-        jMenuItemViewLog = new javax.swing.JMenuItem();
         jMenuItemViewSQL = new javax.swing.JMenuItem();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemOtherReport = new javax.swing.JMenuItem();
 
@@ -795,16 +795,18 @@ public class Analyster extends JFrame {
         });
         jMenuOther.add(jMenuItemOthersLoadData);
 
-        jMenuItemViewLog.setText("Log");
-        jMenuItemViewLog.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemViewLogActionPerformed(evt);
-            }
-        });
-        jMenuOther.add(jMenuItemViewLog);
-
         jMenuItemViewSQL.setText("SQL Command");
         jMenuOther.add(jMenuItemViewSQL);
+
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("Log");
+        jCheckBoxMenuItem1.setEnabled(false);
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenuOther.add(jCheckBoxMenuItem1);
 
         menuBar.add(jMenuOther);
 
@@ -849,11 +851,6 @@ public class Analyster extends JFrame {
                 + "2015-05-29" + "\n"
                 + "Version: " + "0.6.2e");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
-
-    private void jMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemViewLogActionPerformed
-
-        logwind.showLogWindow();
-    }//GEN-LAST:event_jMenuItemViewLogActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
 
@@ -1261,6 +1258,11 @@ public class Analyster extends JFrame {
 
         modifiedDataList.clear();    // when selected table changed, clear former edit history
     }//GEN-LAST:event_jTabbedPanel1StateChanged
+
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        logwind.showLogWindow();
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
 
     private void jTableChanged(TableModelEvent e) {
 
@@ -1681,6 +1683,7 @@ public class Analyster extends JFrame {
     private javax.swing.JButton jBatchEdit;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonClearAllFilter;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JButton jDebugCancel;
     private javax.swing.JButton jDebugEnter;
     private javax.swing.JMenuItem jDeleteRecord;
@@ -1705,7 +1708,6 @@ public class Analyster extends JFrame {
     private javax.swing.JMenuItem jMenuItemViewActiveAssig;
     private javax.swing.JMenuItem jMenuItemViewAllAssig;
     private javax.swing.JMenuItem jMenuItemViewAssig;
-    private javax.swing.JMenuItem jMenuItemViewLog;
     private javax.swing.JMenuItem jMenuItemViewReports;
     private javax.swing.JMenuItem jMenuItemViewSQL;
     private javax.swing.JMenu jMenuOther;
