@@ -798,9 +798,7 @@ public class Analyster extends JFrame {
         jMenuItemViewSQL.setText("SQL Command");
         jMenuOther.add(jMenuItemViewSQL);
 
-        jCheckBoxMenuItemViewLog.setSelected(true);
         jCheckBoxMenuItemViewLog.setText("Log");
-        jCheckBoxMenuItemViewLog.setEnabled(false);
         jCheckBoxMenuItemViewLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxMenuItemViewLogActionPerformed(evt);
@@ -1261,7 +1259,11 @@ public class Analyster extends JFrame {
 
     private void jCheckBoxMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewLogActionPerformed
         // TODO add your handling code here:
+        if(jCheckBoxMenuItemViewLog.isSelected()){
         logwind.showLogWindow();
+        }else{
+            logwind.closeLogWindow();
+        }
     }//GEN-LAST:event_jCheckBoxMenuItemViewLogActionPerformed
 
     private void jTableChanged(TableModelEvent e) {

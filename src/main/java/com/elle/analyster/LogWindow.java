@@ -122,6 +122,11 @@ public class LogWindow extends JPanel {
 	public void showLogWindow() {
 		frame.setVisible(true);
 	}
+        
+        // closes log window by setting visible to false
+        public void closeLogWindow() {
+		frame.setVisible(false);
+	}
 
 }
 
