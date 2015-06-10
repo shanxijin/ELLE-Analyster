@@ -276,10 +276,10 @@ public class Analyster extends JFrame {
         jMenuItemViewReports = new javax.swing.JMenuItem();
         jMenuItemViewAllAssig = new javax.swing.JMenuItem();
         jMenuItemViewActiveAssig = new javax.swing.JMenuItem();
-        jMenuHelp = new javax.swing.JMenu();
         jMenuOther = new javax.swing.JMenu();
         jMenuItemOtherReport = new javax.swing.JMenuItem();
         jMenuItemOthersLoadData = new javax.swing.JMenuItem();
+        jMenuHelp = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(894, 557));
@@ -304,8 +304,6 @@ public class Analyster extends JFrame {
                 searchActionPerformed(evt);
             }
         });
-
-        numOfRecords2.setSize(new java.awt.Dimension(220, 15));
 
         jField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "symbol", "analyster" }));
 
@@ -376,7 +374,6 @@ public class Analyster extends JFrame {
         });
 
         jTabbedPanel1.setPreferredSize(new java.awt.Dimension(800, 450));
-        jTabbedPanel1.setSize(getPreferredSize());
         jTabbedPanel1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jTabbedPanel1StateChanged(evt);
@@ -539,7 +536,6 @@ public class Analyster extends JFrame {
         });
 
         jLabelEdit.setText("OFF");
-        jLabelEdit.setSize(new java.awt.Dimension(24, 16));
 
         jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -800,9 +796,6 @@ public class Analyster extends JFrame {
 
         menuBar.add(jMenuView);
 
-        jMenuHelp.setText("Help");
-        menuBar.add(jMenuHelp);
-
         jMenuOther.setText("Tools");
 
         jMenuItemOtherReport.setText("Report a bug/suggestion");
@@ -822,6 +815,9 @@ public class Analyster extends JFrame {
         jMenuOther.add(jMenuItemOthersLoadData);
 
         menuBar.add(jMenuOther);
+
+        jMenuHelp.setText("Help");
+        menuBar.add(jMenuHelp);
 
         setJMenuBar(menuBar);
 
