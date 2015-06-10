@@ -277,7 +277,7 @@ public class Analyster extends JFrame {
         jMenuOther = new javax.swing.JMenu();
         jMenuItemOthersLoadData = new javax.swing.JMenuItem();
         jMenuItemViewSQL = new javax.swing.JMenuItem();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItemViewLog = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemOtherReport = new javax.swing.JMenuItem();
 
@@ -798,15 +798,15 @@ public class Analyster extends JFrame {
         jMenuItemViewSQL.setText("SQL Command");
         jMenuOther.add(jMenuItemViewSQL);
 
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText("Log");
-        jCheckBoxMenuItem1.setEnabled(false);
-        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jCheckBoxMenuItemViewLog.setSelected(true);
+        jCheckBoxMenuItemViewLog.setText("Log");
+        jCheckBoxMenuItemViewLog.setEnabled(false);
+        jCheckBoxMenuItemViewLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMenuItem1ActionPerformed(evt);
+                jCheckBoxMenuItemViewLogActionPerformed(evt);
             }
         });
-        jMenuOther.add(jCheckBoxMenuItem1);
+        jMenuOther.add(jCheckBoxMenuItemViewLog);
 
         menuBar.add(jMenuOther);
 
@@ -1259,10 +1259,10 @@ public class Analyster extends JFrame {
         modifiedDataList.clear();    // when selected table changed, clear former edit history
     }//GEN-LAST:event_jTabbedPanel1StateChanged
 
-    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+    private void jCheckBoxMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewLogActionPerformed
         // TODO add your handling code here:
         logwind.showLogWindow();
-    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+    }//GEN-LAST:event_jCheckBoxMenuItemViewLogActionPerformed
 
     private void jTableChanged(TableModelEvent e) {
 
@@ -1683,7 +1683,7 @@ public class Analyster extends JFrame {
     private javax.swing.JButton jBatchEdit;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonClearAllFilter;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemViewLog;
     private javax.swing.JButton jDebugCancel;
     private javax.swing.JButton jDebugEnter;
     private javax.swing.JMenuItem jDeleteRecord;
