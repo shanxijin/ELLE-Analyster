@@ -376,7 +376,7 @@ public class Analyster extends JFrame {
             }
         });
 
-        jTabbedPanel1.setPreferredSize(new java.awt.Dimension(894, 557));
+        jTabbedPanel1.setPreferredSize(new java.awt.Dimension(800, 450));
         jTabbedPanel1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jTabbedPanel1StateChanged(evt);
@@ -1273,6 +1273,7 @@ public class Analyster extends JFrame {
     }//GEN-LAST:event_jTabbedPanel1StateChanged
 
     private void jCheckBoxMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewLogActionPerformed
+
         if(jCheckBoxMenuItemViewLog.isSelected()){
             logwind.showLogWindow();
             logwind.removeCheckOnHideLogWindow(jCheckBoxMenuItemViewLog);
