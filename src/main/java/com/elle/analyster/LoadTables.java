@@ -3,8 +3,11 @@ package com.elle.analyster;
 import com.elle.analyster.presentation.filter.DistinctColumnItem;
 import com.elle.analyster.presentation.filter.ITableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.sql.SQLException;
 import java.util.Collection;
 
 import static com.elle.analyster.service.Connection.connection;
@@ -21,7 +24,7 @@ public class LoadTables {
     JTable reportTable = ana.getReportTable();
     JTable archiveAssignTable = ana.getArchiveAssignTable();
     JTable viewerTable = ana.getViewerTable();
-
+    Logger log = LoggerFactory.getLogger(LoadTables.class);
 
     public void loadTables() {
         loadAssignmentTable();
@@ -40,7 +43,11 @@ public class LoadTables {
 
     public void loadAssignmentTable() {
 
-        connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
+        try {
+            connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
+        } catch (SQLException e) {
+            log.error("Error", e);
+        }
         ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
         ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
@@ -56,7 +63,11 @@ public class LoadTables {
 
     public void loadAssignmentTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
 
-        connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
+        try {
+            connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
+        } catch (SQLException e) {
+            log.error("Error", e);
+        }
         ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
         ITableFilter<?> filter = TableRowFilterSupport
@@ -81,7 +92,11 @@ public class LoadTables {
 
     public void loadArchiveAssignTable() {
 
-        connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
+        try {
+            connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
+        } catch (SQLException e) {
+            log.error("Error", e);
+        }
         ana.setColumnFormat(ana.columnWidthPercentage1, archiveAssignTable);
         ana.getArchiveAssign().init(archiveAssignTable, new String[]{"Symbol", "Analyst"});
         ana.setTerminalsFunction(archiveAssignTable);
@@ -89,7 +104,11 @@ public class LoadTables {
     }
     public void loadArchiveTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
 
-        connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
+        try {
+            connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
+        } catch (SQLException e) {
+            log.error("Error", e);
+        }
         ana.setColumnFormat(ana.columnWidthPercentage1, archiveAssignTable);
         ana.getAssignments().init(archiveAssignTable, new String[]{"Symbol", "Analyst"});
         ITableFilter<?> filter = TableRowFilterSupport
@@ -112,15 +131,23 @@ public class LoadTables {
 
     }
       public void loadReportTable() {
-        connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
-        ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
+          try {
+              connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
+          } catch (SQLException e) {
+              log.error("Error", e);
+          }
+          ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
         ana.getReports().init(reportTable, new String[]{"Symbol", "Author"});
         Analyster.setNumberReportsInit(reportTable.getRowCount());
     }
 
     public void loadReportTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
 
-        connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
+        try {
+            connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
+        } catch (SQLException e) {
+            log.error("Error", e);
+        }
         ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
         ana.getAssignments().init(reportTable, new String[]{"Symbol", "Author"});
         ITableFilter<?> filter = TableRowFilterSupport
@@ -142,7 +169,11 @@ public class LoadTables {
         filter.setColumnIndex(columnIndex);
     }
     public void loadViewerTable(){
-        connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), viewerTable);
+        try {
+            connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), viewerTable);
+        } catch (SQLException e) {
+            log.error("Error", e);
+        }
         ana.setColumnFormat(ana.columnWidthPercentage1, viewerTable);
         ana.getViewer().init(viewerTable, new String[]{"Symbol", "Analyst"});
         ana.setFilterTempAssignment(TableRowFilterSupport.forTable(viewerTable).actions(true).apply());

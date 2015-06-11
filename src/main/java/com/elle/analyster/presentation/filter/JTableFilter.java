@@ -12,10 +12,9 @@ public class JTableFilter extends AbstractTableFilter<JTable> {
 
     private static final long serialVersionUID = 1L;
     private final TableRowFilter filter = new TableRowFilter();
-    private JTable tableFilteredPreviousState;
     private TableModel tableModelPreviousState;
     private int columnIndex = -1;
-    private TableModel  myTableModelInitial;
+    private final TableModel  myTableModelInitial;
     private Collection <DistinctColumnItem> itemChecked;
     public JTableFilter(JTable table) {
         super(table);

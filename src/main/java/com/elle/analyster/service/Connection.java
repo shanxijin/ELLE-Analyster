@@ -4,6 +4,8 @@ import com.elle.analyster.Analyster;
 import com.elle.analyster.GUI;
 import com.elle.analyster.LoginWindow;
 import com.elle.analyster.TableState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.sql.ResultSet;
@@ -12,15 +14,15 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 /**
- * Created with IntelliJ IDEA.
- * User: danielabecker
- * Date: 5/28/15
- * Time: 2:23 PM
+ * Created with IntelliJ IDEA. User: danielabecker Date: 5/28/15 Time: 2:23 PM
  * To change this template use File | Settings | File Templates.
  */
 public class Connection {
 
-    public static void connection(String sql, JTable table) {
+    private static Logger log = LoggerFactory.getLogger(Connection.class);
+
+    public static String connection(String sql, JTable table) throws SQLException {
+
         Analyster ana = Analyster.getInstance();
         Vector data = new Vector();
         Vector columnNames = new Vector();
@@ -39,7 +41,7 @@ public class Connection {
             rs = GUI.getStmt().executeQuery(sql);
             metaData = rs.getMetaData();
         } catch (Exception ex) {
-            System.out.println("Error: " + ex);
+            log.error("Error: ", ex);
         }
         try {
             columns = metaData.getColumnCount();
@@ -56,20 +58,15 @@ public class Connection {
             rs.close();
 
         } catch (SQLException ex) {
-            ana.getLogwind().sendMessages(ex.getMessage());
-            ana.getLogwind().sendMessages(ex.getSQLState() + "\n");
-
-            System.out.println("Error: " + ex);
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex);
-            ana.getLogwind().sendMessages(ex.getMessage());
-            ana.getLogwind().sendMessages(ex.getMessage());
+            log.error("Error: ", ex);
+            throw ex;
         }
 
         ana.tableReload(table, data, columnNames);  // Table model (table visualization) set up
-        System.out.println("table added successfully");
+        log.info("Table added succesfully");
         ts.setRowsNumber(data.size());   // update number of rows displayed
-
+        return null;
     }
+
 
 }

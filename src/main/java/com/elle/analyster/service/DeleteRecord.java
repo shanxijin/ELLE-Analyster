@@ -5,9 +5,10 @@
  */
 package com.elle.analyster.service;
 
-import com.elle.analyster.Analyster;
 import com.elle.analyster.GUI;
 import com.elle.analyster.LoadTables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,33 +19,37 @@ import java.sql.SQLException;
  */
 //Delete from DataBase record selected
 public class DeleteRecord {
-    public LoadTables loadTables =new LoadTables();
-    Analyster ana = Analyster.getInstance();
+    private Logger log = LoggerFactory.getLogger(DeleteRecord.class);
+    String sqlDelete =null;
 
-    public void deleteRecordSelected( JTable table) throws HeadlessException {
+    public String deleteRecordSelected( JTable table) throws HeadlessException {
         String tableName = table.getName();
         int rowsSelected = table.getSelectedRows().length;
         if (rowsSelected != -1) {
             for (int i = 0; i < rowsSelected; i++) {
                 int row = table.getSelectedRows()[i];
                 Integer selectedTask = (Integer) table.getValueAt(row, 0); // Add Note to selected taskID
-                String sqlDelete = "DELETE FROM " + GUI.getDatabase() + "." + tableName + " where ID=" + selectedTask;
+                sqlDelete = "DELETE FROM " + GUI.getDatabase() + "." + tableName + " where ID=" + selectedTask;
                 try {
                     GUI.getStmt().executeUpdate(sqlDelete);
-                    ana.logwind.sendMessages(sqlDelete);
                 } catch (SQLException e) {
-                    e.printStackTrace();
-                    System.out.println(e.toString());
+                    log.info(e.getMessage());
                 }
             }
-            if (tableName.equals(ana.getAssignmentsTableName())) {
-                new LoadTables().loadAssignmentTable();
-            } else if (tableName.equals(ana.getReportsTableName())) {
-                new LoadTables().loadReportTable();
-            } else {
-                new LoadTables().loadArchiveAssignTable();
+            switch (tableName) {
+                case "Assignments":
+                    new LoadTables().loadAssignmentTable();
+                    break;
+                case "Reports":
+                    new LoadTables().loadReportTable();
+                    break;
+                default:
+                    new LoadTables().loadArchiveAssignTable();
+                    break;
             }
             JOptionPane.showMessageDialog(null, rowsSelected + " Record(s) Deleted");
         }
+        return sqlDelete;
     }
+    
 }
