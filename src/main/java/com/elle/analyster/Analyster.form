@@ -159,17 +159,20 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemOthersLoadDataActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemViewSQL">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="SQL Command"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItemViewLog">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Log"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMenuItemViewLogActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItemViewSQL">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="SQL Command"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxMenuItemViewSQLActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

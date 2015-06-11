@@ -137,3 +137,20 @@ Start to connect local database...
 2015-06-11 06:14:45 PM: Connect successfully!
 
 
+-------------------------2015-06-11 06:19:19 PM-------------------------
+-------------------------2015-06-11 06:19:20 PM-------------------------
+2015-06-11 06:19:34 PM: 
+Start to connect local database...
+2015-06-11 06:19:35 PM: Connect successfully!
+
+
+-------------------------2015-06-11 07:02:51 PM-------------------------
+-------------------------2015-06-11 07:02:51 PM-------------------------
+2015-06-11 07:03:49 PM: 
+Start to connect local database...
+2015-06-11 07:03:52 PM: Access denied for user 'Carlos'@'c-73-218-140-128.hsd1.ma.comcast.net' (using password: YES)
+2015-06-11 07:04:05 PM: 
+Start to connect local database...
+2015-06-11 07:04:06 PM: Connect successfully!
+
+

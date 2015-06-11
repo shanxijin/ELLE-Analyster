@@ -279,8 +279,8 @@ public class Analyster extends JFrame {
         jMenuItemViewActiveAssig = new javax.swing.JMenuItem();
         jMenuOther = new javax.swing.JMenu();
         jMenuItemOthersLoadData = new javax.swing.JMenuItem();
-        jMenuItemViewSQL = new javax.swing.JMenuItem();
         jCheckBoxMenuItemViewLog = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItemViewSQL = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemOtherReport = new javax.swing.JMenuItem();
 
@@ -798,9 +798,6 @@ public class Analyster extends JFrame {
         });
         jMenuOther.add(jMenuItemOthersLoadData);
 
-        jMenuItemViewSQL.setText("SQL Command");
-        jMenuOther.add(jMenuItemViewSQL);
-
         jCheckBoxMenuItemViewLog.setText("Log");
         jCheckBoxMenuItemViewLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -808,6 +805,14 @@ public class Analyster extends JFrame {
             }
         });
         jMenuOther.add(jCheckBoxMenuItemViewLog);
+
+        jCheckBoxMenuItemViewSQL.setText("SQL Command");
+        jCheckBoxMenuItemViewSQL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItemViewSQLActionPerformed(evt);
+            }
+        });
+        jMenuOther.add(jCheckBoxMenuItemViewSQL);
 
         menuBar.add(jMenuOther);
 
@@ -1282,6 +1287,10 @@ public class Analyster extends JFrame {
         }
     }//GEN-LAST:event_jCheckBoxMenuItemViewLogActionPerformed
 
+    private void jCheckBoxMenuItemViewSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewSQLActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItemViewSQLActionPerformed
+
     private void jTableChanged(TableModelEvent e) {
 
         int row = e.getFirstRow();
@@ -1709,6 +1718,7 @@ public class Analyster extends JFrame {
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonClearAllFilter;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemViewLog;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemViewSQL;
     private javax.swing.JButton jDebugCancel;
     private javax.swing.JButton jDebugEnter;
     private javax.swing.JMenuItem jDeleteRecord;
@@ -1734,7 +1744,6 @@ public class Analyster extends JFrame {
     private javax.swing.JMenuItem jMenuItemViewAllAssig;
     private javax.swing.JMenuItem jMenuItemViewAssig;
     private javax.swing.JMenuItem jMenuItemViewReports;
-    private javax.swing.JMenuItem jMenuItemViewSQL;
     private javax.swing.JMenu jMenuOther;
     private javax.swing.JMenu jMenuPrint;
     private javax.swing.JMenu jMenuReport;
