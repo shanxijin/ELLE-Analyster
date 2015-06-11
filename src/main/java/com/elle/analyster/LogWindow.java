@@ -13,6 +13,8 @@ package com.elle.analyster;
 
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
@@ -123,9 +125,24 @@ public class LogWindow extends JPanel {
 		frame.setVisible(true);
 	}
         
-        // closes log window by setting visible to false
-        public void closeLogWindow() {
+        /**
+         * hides log window by setting visible to false
+         */
+        public void hideLogWindow() {
 		frame.setVisible(false);
+	}
+        
+        /**
+         * listens if window was closed and removes check from checkbox of log menu item
+         * @param JCheckBoxMenuItem
+         */
+        public void removeCheckOnHideLogWindow(JCheckBoxMenuItem checkMenuBox) {
+		frame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e){
+                        checkMenuBox.setSelected(false);
+                    }
+                });
 	}
 
 }

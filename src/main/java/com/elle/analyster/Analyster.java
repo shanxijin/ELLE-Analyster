@@ -21,6 +21,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -1258,11 +1261,12 @@ public class Analyster extends JFrame {
     }//GEN-LAST:event_jTabbedPanel1StateChanged
 
     private void jCheckBoxMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewLogActionPerformed
-        // TODO add your handling code here:
+        
         if(jCheckBoxMenuItemViewLog.isSelected()){
-        logwind.showLogWindow();
+            logwind.showLogWindow();
+            logwind.removeCheckOnHideLogWindow(jCheckBoxMenuItemViewLog);
         }else{
-            logwind.closeLogWindow();
+            logwind.hideLogWindow();
         }
     }//GEN-LAST:event_jCheckBoxMenuItemViewLogActionPerformed
 
