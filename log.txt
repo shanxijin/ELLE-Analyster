@@ -380,3 +380,27 @@ Start to connect local database...
 2015-06-12 04:54:20 PM: Connect successfully!
 
 
+-------------------------2015-06-12 04:59:08 PM-------------------------
+-------------------------2015-06-12 04:59:09 PM-------------------------
+2015-06-12 04:59:25 PM: 
+Start to connect local database...
+2015-06-12 04:59:28 PM: Access denied for user 'Carlos '@'c-73-218-140-128.hsd1.ma.comcast.net' (using password: YES)
+2015-06-12 04:59:33 PM: 
+Start to connect local database...
+2015-06-12 04:59:35 PM: Access denied for user 'Carlos '@'c-73-218-140-128.hsd1.ma.comcast.net' (using password: YES)
+2015-06-12 04:59:47 PM: 
+Start to connect local database...
+2015-06-12 04:59:48 PM: Connect successfully!
+
+
+2015-06-12 05:00:53 PM: UPDATE Assignments SET notes = 'change notes test' WHERE ID = 135;
+2015-06-12 05:01:10 PM: UPDATE Assignments SET notes = null WHERE ID = 228;
+2015-06-12 05:01:22 PM: UPDATE Assignments SET notes = 'Please enter new value' WHERE ID = 135;
+2015-06-12 05:01:34 PM: UPDATE Assignments SET notes = null WHERE ID = 135;
+-------------------------2015-06-12 06:19:12 PM-------------------------
+-------------------------2015-06-12 06:19:13 PM-------------------------
+2015-06-12 06:19:41 PM: 
+Start to connect local database...
+2015-06-12 06:19:43 PM: Connect successfully!
+
+

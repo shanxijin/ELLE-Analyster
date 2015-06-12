@@ -22,7 +22,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class LogWindow extends JPanel {
+public class LogWindow {
 
 	private final JFrame frame;
 	private final JScrollPane scrollPane;
