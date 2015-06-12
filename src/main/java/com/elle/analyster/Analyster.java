@@ -149,14 +149,15 @@ public class Analyster extends JFrame {
 
     public Analyster() {
         initComponents();
-        jTextArea.setVisible(false);
+        jTextArea.setVisible(true);
 
         // set the interface to the middle of the window
         this.setLocationRelativeTo(null);
         this.setTitle("Analyster");
         jUpload.setVisible(false);
-        jDebugEnter.setVisible(false);
-        jDebugCancel.setVisible(false);
+        jPanelSQL.setVisible(false);
+        jDebugEnter.setVisible(true);
+        jDebugCancel.setVisible(true);
         jButtonCancel.setVisible(false);
         jBatchEdit.setVisible(true);
         tableService.setAssignmentTable(assignmentTable);
@@ -252,9 +253,7 @@ public class Analyster extends JFrame {
         jTextArea = new javax.swing.JTextArea();
         jDebugEnter = new javax.swing.JButton();
         jDebugCancel = new javax.swing.JButton();
-        jSwitchDebugMode = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabelDebug = new javax.swing.JLabel();
+        closeDebugPanelBtn = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuItemFileVersion = new javax.swing.JMenuItem();
@@ -632,28 +631,20 @@ public class Analyster extends JFrame {
             }
         });
 
-        jSwitchDebugMode.setText("Switch");
-        jSwitchDebugMode.addActionListener(new java.awt.event.ActionListener() {
+        closeDebugPanelBtn.setText("Close");
+        closeDebugPanelBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jSwitchDebugModeActionPerformed(evt);
+                closeDebugPanelBtnActionPerformed(evt);
             }
         });
-
-        jLabel1.setText("Debug Mode:");
-
-        jLabelDebug.setText("OFF");
 
         javax.swing.GroupLayout jPanelSQLLayout = new javax.swing.GroupLayout(jPanelSQL);
         jPanelSQL.setLayout(jPanelSQLLayout);
         jPanelSQLLayout.setHorizontalGroup(
             jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSQLLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelDebug)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSwitchDebugMode)
+                .addGap(131, 131, 131)
+                .addComponent(closeDebugPanelBtn)
                 .addGap(58, 58, 58)
                 .addComponent(jDebugEnter)
                 .addGap(59, 59, 59)
@@ -669,9 +660,7 @@ public class Analyster extends JFrame {
                 .addGroup(jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jDebugEnter)
                     .addComponent(jDebugCancel)
-                    .addComponent(jSwitchDebugMode)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabelDebug))
+                    .addComponent(closeDebugPanelBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -806,7 +795,6 @@ public class Analyster extends JFrame {
         });
         jMenuOther.add(jCheckBoxMenuItemViewLog);
 
-        jCheckBoxMenuItemViewSQL.setSelected(true);
         jCheckBoxMenuItemViewSQL.setText("SQL Command");
         jCheckBoxMenuItemViewSQL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -973,20 +961,11 @@ public class Analyster extends JFrame {
                 .setDocumentFilter(new CreateDocumentFilter(33));
     }//GEN-LAST:event_jDebugCancelActionPerformed
 
-    private void jSwitchDebugModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSwitchDebugModeActionPerformed
+    private void closeDebugPanelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeDebugPanelBtnActionPerformed
 
-        if (jLabelDebug.getText().equals("OFF")) {
-            jTextArea.setVisible(true);
-            jLabelDebug.setText("ON ");
-            jDebugEnter.setVisible(true);
-            jDebugCancel.setVisible(true);
-        } else {
-            jTextArea.setVisible(false);
-            jLabelDebug.setText("OFF");
-            jDebugEnter.setVisible(false);
-            jDebugCancel.setVisible(false);
-        }
-    }//GEN-LAST:event_jSwitchDebugModeActionPerformed
+        jPanelSQL.setVisible(false);
+        jCheckBoxMenuItemViewSQL.setSelected(false);
+    }//GEN-LAST:event_closeDebugPanelBtnActionPerformed
 
     private void jSwitchEditModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSwitchEditModeActionPerformed
 
@@ -1717,6 +1696,7 @@ public class Analyster extends JFrame {
     private javax.swing.JPanel addPanel_control;
     private javax.swing.JTable archiveAssignTable;
     private javax.swing.JTable assignmentTable;
+    private javax.swing.JButton closeDebugPanelBtn;
     private javax.swing.JMenuItem jActivateRecord;
     private javax.swing.JMenuItem jArchiveRecord;
     private javax.swing.JButton jBatchAdd;
@@ -1729,9 +1709,7 @@ public class Analyster extends JFrame {
     private javax.swing.JButton jDebugEnter;
     private javax.swing.JMenuItem jDeleteRecord;
     private javax.swing.JComboBox jField;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabelDebug;
     private javax.swing.JLabel jLabelEdit;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenuItem jMenuEditDB;
@@ -1762,7 +1740,6 @@ public class Analyster extends JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JButton jSwitchDebugMode;
     private javax.swing.JButton jSwitchEditMode;
     private javax.swing.JTabbedPane jTabbedPanel1;
     private javax.swing.JTextArea jTextArea;
