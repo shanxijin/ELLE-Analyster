@@ -366,3 +366,10 @@ Start to connect local database...
 2015-06-12 03:29:17 PM: Connect successfully!
 
 
+-------------------------2015-06-12 04:37:33 PM-------------------------
+-------------------------2015-06-12 04:37:34 PM-------------------------
+2015-06-12 04:37:42 PM: 
+Start to connect local database...
+2015-06-12 04:37:43 PM: Connect successfully!
+
+

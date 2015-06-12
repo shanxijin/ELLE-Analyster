@@ -56,7 +56,12 @@ public class TableEditor extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "symbol", "analyst", "priority", "dateAssigned" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "analyst", "priority", "dateAssigned", "notes", "symbol", " ", " ", " " }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jString.setText("Please enter new value");
         jString.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -170,6 +175,10 @@ public class TableEditor extends javax.swing.JFrame {
     private void jStringFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jStringFocusGained
         jString.setText("");
     }//GEN-LAST:event_jStringFocusGained
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
