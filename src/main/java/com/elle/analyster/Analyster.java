@@ -232,7 +232,6 @@ public class Analyster extends JFrame {
         jTimeLastUpdate = new javax.swing.JLabel();
         jButtonClearAllFilter = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        jUpload = new javax.swing.JButton();
         jTabbedPanel1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         assignmentTable = new javax.swing.JTable();
@@ -242,12 +241,14 @@ public class Analyster extends JFrame {
         archiveAssignTable = new javax.swing.JTable();
         jScrollPane5 = new javax.swing.JScrollPane();
         viewerTable = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jSwitchEditMode = new javax.swing.JButton();
-        jLabelEdit = new javax.swing.JLabel();
-        jButtonCancel = new javax.swing.JButton();
+        jPanelEdit = new javax.swing.JPanel();
         jBatchEdit = new javax.swing.JButton();
         jBatchAdd = new javax.swing.JButton();
+        jUpload = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
+        jSwitchEditMode = new javax.swing.JButton();
+        jLabelEdit = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanelSQL = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea = new javax.swing.JTextArea();
@@ -365,15 +366,6 @@ public class Analyster extends JFrame {
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 0, 153)));
-
-        jUpload.setText("Upload Changes");
-        jUpload.setMaximumSize(new java.awt.Dimension(95, 30));
-        jUpload.setMinimumSize(new java.awt.Dimension(95, 30));
-        jUpload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jUploadActionPerformed(evt);
-            }
-        });
 
         jTabbedPanel1.setPreferredSize(new java.awt.Dimension(800, 450));
         jTabbedPanel1.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -528,24 +520,6 @@ public class Analyster extends JFrame {
 
         jTabbedPanel1.addTab("Viewer", jScrollPane5);
 
-        jLabel2.setText("Edit Mode:");
-
-        jSwitchEditMode.setText("Switch");
-        jSwitchEditMode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jSwitchEditModeActionPerformed(evt);
-            }
-        });
-
-        jLabelEdit.setText("OFF");
-
-        jButtonCancel.setText("Cancel");
-        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCancelActionPerformed(evt);
-            }
-        });
-
         jBatchEdit.setText("Batch Edit");
         jBatchEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -560,12 +534,38 @@ public class Analyster extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        jUpload.setText("Upload Changes");
+        jUpload.setMaximumSize(new java.awt.Dimension(95, 30));
+        jUpload.setMinimumSize(new java.awt.Dimension(95, 30));
+        jUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jUploadActionPerformed(evt);
+            }
+        });
+
+        jButtonCancel.setText("Cancel");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+
+        jSwitchEditMode.setText("Switch");
+        jSwitchEditMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSwitchEditModeActionPerformed(evt);
+            }
+        });
+
+        jLabelEdit.setText("OFF");
+
+        jLabel2.setText("Edit Mode:");
+
+        javax.swing.GroupLayout jPanelEditLayout = new javax.swing.GroupLayout(jPanelEdit);
+        jPanelEdit.setLayout(jPanelEditLayout);
+        jPanelEditLayout.setHorizontalGroup(
+            jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEditLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -582,12 +582,11 @@ public class Analyster extends JFrame {
                 .addComponent(jBatchEdit)
                 .addGap(26, 26, 26))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        jPanelEditLayout.setVerticalGroup(
+            jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEditLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jSwitchEditMode)
@@ -595,7 +594,23 @@ public class Analyster extends JFrame {
                     .addComponent(jButtonCancel)
                     .addComponent(jBatchEdit)
                     .addComponent(jBatchAdd))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jPanelEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPanel1.getAccessibleContext().setAccessibleName("Reports");
@@ -643,12 +658,12 @@ public class Analyster extends JFrame {
         jPanelSQLLayout.setHorizontalGroup(
             jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSQLLayout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(closeDebugPanelBtn)
-                .addGap(58, 58, 58)
+                .addGap(213, 213, 213)
                 .addComponent(jDebugEnter)
-                .addGap(59, 59, 59)
+                .addGap(71, 71, 71)
                 .addComponent(jDebugCancel)
+                .addGap(65, 65, 65)
+                .addComponent(closeDebugPanelBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane2)
         );
@@ -832,7 +847,7 @@ public class Analyster extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(addPanel_control, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1734,6 +1749,7 @@ public class Analyster extends JFrame {
     private javax.swing.JMenu jMenuSelectConn;
     private javax.swing.JMenu jMenuView;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanelEdit;
     private javax.swing.JPanel jPanelSQL;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

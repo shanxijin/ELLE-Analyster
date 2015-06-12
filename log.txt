@@ -228,3 +228,10 @@ Start to connect local database...
 2015-06-12 01:05:46 PM: Connect successfully!
 
 
+-------------------------2015-06-12 01:28:42 PM-------------------------
+-------------------------2015-06-12 01:28:42 PM-------------------------
+2015-06-12 01:29:10 PM: 
+Start to connect local database...
+2015-06-12 01:29:12 PM: Connect successfully!
+
+
