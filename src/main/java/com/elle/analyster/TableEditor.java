@@ -219,7 +219,7 @@ public class TableEditor extends javax.swing.JFrame {
     
     String newString;
     String category;
-    String[] reportsList = {"symbol", "author", "analysisDate", "notes"};
+    String[] reportsList = {"author", "analysisDate", "notes", "symbol"};
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jClear;
