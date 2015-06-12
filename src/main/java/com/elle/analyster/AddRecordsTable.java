@@ -19,13 +19,7 @@ public class AddRecordsTable {
     @Autowired
     private Analyster ana;
     private TableService tableService;
-    
-    AddRecordsTable() {
-        // to do
-    }
-    
-   
-    
+
     public void update(String table, Analyster a) {
         tableService = new TableService();
         tableService.setAssignmentTable(a.getassignmentTable());

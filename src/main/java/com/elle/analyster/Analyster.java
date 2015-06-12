@@ -9,6 +9,8 @@ import com.elle.analyster.service.Connection;
 import com.elle.analyster.service.DeleteRecord;
 import com.elle.analyster.service.TableService;
 import com.elle.analyster.service.UploadRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
@@ -51,6 +53,7 @@ public class Analyster extends JFrame {
     private static int numberAssignmentInit;
     private static int numberReportsInit;
     private static int numberArchiveAssignInit;
+    private Logger log = LoggerFactory.getLogger(Analyster.class);
     @Autowired
     private UploadRecord uploadRecordService;
 
@@ -160,7 +163,7 @@ public class Analyster extends JFrame {
         tableService.setReportTable(reportTable);
         tableService.setArchiveAssignTable(archiveAssignTable);
         tableService.setViewerTable(assignmentTable);
-        jScrollPane5.setVisible(false);
+       
         
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {// Allow to TAB-
 
@@ -244,7 +247,7 @@ public class Analyster extends JFrame {
         jButtonCancel = new javax.swing.JButton();
         jBatchEdit = new javax.swing.JButton();
         jBatchAdd = new javax.swing.JButton();
-        jPanel6 = new javax.swing.JPanel();
+        jPanelSQL = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea = new javax.swing.JTextArea();
         jDebugEnter = new javax.swing.JButton();
@@ -270,16 +273,16 @@ public class Analyster extends JFrame {
         jMenuFind = new javax.swing.JMenu();
         jMenuReport = new javax.swing.JMenu();
         jMenuView = new javax.swing.JMenu();
-        jMenuItemViewLog = new javax.swing.JMenuItem();
-        jMenuItemViewSQL = new javax.swing.JMenuItem();
         jMenuItemViewAssig = new javax.swing.JMenuItem();
         jMenuItemViewReports = new javax.swing.JMenuItem();
         jMenuItemViewAllAssig = new javax.swing.JMenuItem();
         jMenuItemViewActiveAssig = new javax.swing.JMenuItem();
-        jMenuHelp = new javax.swing.JMenu();
         jMenuOther = new javax.swing.JMenu();
-        jMenuItemOtherReport = new javax.swing.JMenuItem();
         jMenuItemOthersLoadData = new javax.swing.JMenuItem();
+        jCheckBoxMenuItemViewLog = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItemViewSQL = new javax.swing.JCheckBoxMenuItem();
+        jMenuHelp = new javax.swing.JMenu();
+        jMenuItemOtherReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(894, 557));
@@ -304,8 +307,6 @@ public class Analyster extends JFrame {
                 searchActionPerformed(evt);
             }
         });
-
-        numOfRecords2.setSize(new java.awt.Dimension(220, 15));
 
         jField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "symbol", "analyster" }));
 
@@ -376,7 +377,6 @@ public class Analyster extends JFrame {
         });
 
         jTabbedPanel1.setPreferredSize(new java.awt.Dimension(800, 450));
-        jTabbedPanel1.setSize(getPreferredSize());
         jTabbedPanel1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jTabbedPanel1StateChanged(evt);
@@ -539,7 +539,6 @@ public class Analyster extends JFrame {
         });
 
         jLabelEdit.setText("OFF");
-        jLabelEdit.setSize(new java.awt.Dimension(24, 16));
 
         jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -588,7 +587,7 @@ public class Analyster extends JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
@@ -603,7 +602,7 @@ public class Analyster extends JFrame {
         jTabbedPanel1.getAccessibleContext().setAccessibleName("Reports");
         jTabbedPanel1.getAccessibleContext().setAccessibleParent(jTabbedPanel1);
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 51, 51)));
+        jPanelSQL.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 51, 51)));
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 102, 0)));
 
@@ -644,11 +643,11 @@ public class Analyster extends JFrame {
 
         jLabelDebug.setText("OFF");
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelSQLLayout = new javax.swing.GroupLayout(jPanelSQL);
+        jPanelSQL.setLayout(jPanelSQLLayout);
+        jPanelSQLLayout.setHorizontalGroup(
+            jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSQLLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -662,12 +661,12 @@ public class Analyster extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane2)
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+        jPanelSQLLayout.setVerticalGroup(
+            jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSQLLayout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jDebugEnter)
                     .addComponent(jDebugCancel)
                     .addComponent(jSwitchDebugMode)
@@ -765,17 +764,6 @@ public class Analyster extends JFrame {
 
         jMenuView.setText("View");
 
-        jMenuItemViewLog.setText("Log");
-        jMenuItemViewLog.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemViewLogActionPerformed(evt);
-            }
-        });
-        jMenuView.add(jMenuItemViewLog);
-
-        jMenuItemViewSQL.setText("SQL Command");
-        jMenuView.add(jMenuItemViewSQL);
-
         jMenuItemViewAssig.setText("View Assignments Columns");
         jMenuView.add(jMenuItemViewAssig);
 
@@ -800,18 +788,7 @@ public class Analyster extends JFrame {
 
         menuBar.add(jMenuView);
 
-        jMenuHelp.setText("Help");
-        menuBar.add(jMenuHelp);
-
         jMenuOther.setText("Tools");
-
-        jMenuItemOtherReport.setText("Report a bug/suggestion");
-        jMenuItemOtherReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemOtherReportActionPerformed(evt);
-            }
-        });
-        jMenuOther.add(jMenuItemOtherReport);
 
         jMenuItemOthersLoadData.setText("Reload data");
         jMenuItemOthersLoadData.addActionListener(new java.awt.event.ActionListener() {
@@ -821,7 +798,36 @@ public class Analyster extends JFrame {
         });
         jMenuOther.add(jMenuItemOthersLoadData);
 
+        jCheckBoxMenuItemViewLog.setText("Log");
+        jCheckBoxMenuItemViewLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItemViewLogActionPerformed(evt);
+            }
+        });
+        jMenuOther.add(jCheckBoxMenuItemViewLog);
+
+        jCheckBoxMenuItemViewSQL.setSelected(true);
+        jCheckBoxMenuItemViewSQL.setText("SQL Command");
+        jCheckBoxMenuItemViewSQL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItemViewSQLActionPerformed(evt);
+            }
+        });
+        jMenuOther.add(jCheckBoxMenuItemViewSQL);
+
         menuBar.add(jMenuOther);
+
+        jMenuHelp.setText("Help");
+
+        jMenuItemOtherReport.setText("Report a bug/suggestion");
+        jMenuItemOtherReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemOtherReportActionPerformed(evt);
+            }
+        });
+        jMenuHelp.add(jMenuItemOtherReport);
+
+        menuBar.add(jMenuHelp);
 
         setJMenuBar(menuBar);
 
@@ -831,7 +837,7 @@ public class Analyster extends JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(addPanel_control, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelSQL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -840,7 +846,7 @@ public class Analyster extends JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanelSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -849,14 +855,9 @@ public class Analyster extends JFrame {
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-05-29" + "\n"
-                + "Version: " + "0.6.2e");
+                + "2015-06-08" + "\n"
+                + "Version: " + "0.6.2f.d");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
-
-    private void jMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemViewLogActionPerformed
-
-        logwind.showLogWindow();
-    }//GEN-LAST:event_jMenuItemViewLogActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
 
@@ -894,12 +895,18 @@ public class Analyster extends JFrame {
     }
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
 
-        System.out.println("Connection");
-        String sqlC = "select * from " + ASSIGNMENTS_TABLE_NAME;
-        Connection.connection(sqlC, assignmentTable);
-        System.out.println("Connection");
-        String sqlD = "select * from " + REPORTS_TABLE_NAME;
-        Connection.connection(sqlD, reportTable);
+        log.info("Connection");
+
+        try{
+            String sqlC = "select * from " + ASSIGNMENTS_TABLE_NAME;
+            Connection.connection(sqlC, assignmentTable);
+            log.info("Connection");
+            String sqlD = "select * from " + REPORTS_TABLE_NAME;
+            Connection.connection(sqlD, reportTable);
+        } catch (SQLException ex) {
+            logwind.sendMessages(ex.getMessage());
+        }
+
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadActionPerformed
@@ -947,7 +954,11 @@ public class Analyster extends JFrame {
 
     private void jDebugEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDebugEnterActionPerformed
         if (enterButton.isCreateTable(jTextArea)) {
-            Connection.connection(enterButton.getCommand(jTextArea), assignmentTable);
+            try {
+                Connection.connection(enterButton.getCommand(jTextArea), assignmentTable);
+            } catch (SQLException e) {
+                logwind.sendMessages(e.getMessage());  //To change body of catch statement use File | Settings | File Templates.
+            }
         } else {
             ExecuteSQLStatement.updateDatabase(GUI.con,
                     enterButton.getCommand(jTextArea));
@@ -1157,6 +1168,7 @@ public class Analyster extends JFrame {
         DeleteRecord deleteRecord = new DeleteRecord();
         JTable table = null;
         String tableName = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
+        String sqlDelete;
 
         if (null != tableName) {
             switch (tableName) {
@@ -1171,7 +1183,8 @@ public class Analyster extends JFrame {
                     break;
             }
         }
-        deleteRecord.deleteRecordSelected(table);
+       sqlDelete = deleteRecord.deleteRecordSelected(table);
+       logwind.sendMessages(sqlDelete);
     }
 
 
@@ -1264,6 +1277,25 @@ public class Analyster extends JFrame {
 
         modifiedDataList.clear();    // when selected table changed, clear former edit history
     }//GEN-LAST:event_jTabbedPanel1StateChanged
+
+    private void jCheckBoxMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewLogActionPerformed
+
+        if(jCheckBoxMenuItemViewLog.isSelected()){
+            logwind.showLogWindow();
+            logwind.removeCheckOnHideLogWindow(jCheckBoxMenuItemViewLog);
+        }else{
+            logwind.hideLogWindow();
+        }
+    }//GEN-LAST:event_jCheckBoxMenuItemViewLogActionPerformed
+
+    private void jCheckBoxMenuItemViewSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewSQLActionPerformed
+        // Open and close debug window pane and a check in check box when open
+        if(jCheckBoxMenuItemViewSQL.isSelected()){
+            jPanelSQL.setVisible(true);
+        }else{
+            jPanelSQL.setVisible(false);
+        }
+    }//GEN-LAST:event_jCheckBoxMenuItemViewSQLActionPerformed
 
     private void jTableChanged(TableModelEvent e) {
 
@@ -1411,15 +1443,20 @@ public class Analyster extends JFrame {
     }
 
     public String sqlQuery(String tableName) { //Creat Query to select * from DB.
-        System.out.println("Connection");
+        log.info("Connection");
         String SqlQuery = "SELECT * FROM " + tableName + " ORDER BY symbol ASC";
         return SqlQuery;
     }
 
     public void loadActiveData() {// load only active data from analyst
-        System.out.println("Connection");
+        log.info("Connection");
         String sqlC = "select A.* from Assignments A left join t_analysts T\n" + "on A.analyst = T.analyst\n" + "where T.active = 1\n" + "order by A.symbol";
-        Connection.connection(sqlC, assignmentTable);
+        try {
+            Connection.connection(sqlC, assignmentTable);
+        } catch (SQLException e) {
+            logwind.sendMessages(e.getMessage());  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         setColumnFormat(columnWidthPercentage1, assignmentTable);
         assignments.init(assignmentTable, new String[]{"Symbol", "Analyst"});
         numOfRecords1.setText("Number of records in Assignments:" + assignments.getRowsNumber());
@@ -1618,9 +1655,11 @@ public class Analyster extends JFrame {
             return reports;
         } else if (table == archiveAssignTable) {
             return archiveAssign;
-        } else if (table == viewerTable) {
+        } 
+        else if (table == viewerTable) {
             return viewer;
-        } else {
+        } 
+        else {
             JOptionPane.showMessageDialog(null, "TableState not found!");
             return null;
         }
@@ -1684,6 +1723,8 @@ public class Analyster extends JFrame {
     private javax.swing.JButton jBatchEdit;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonClearAllFilter;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemViewLog;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemViewSQL;
     private javax.swing.JButton jDebugCancel;
     private javax.swing.JButton jDebugEnter;
     private javax.swing.JMenuItem jDeleteRecord;
@@ -1708,16 +1749,14 @@ public class Analyster extends JFrame {
     private javax.swing.JMenuItem jMenuItemViewActiveAssig;
     private javax.swing.JMenuItem jMenuItemViewAllAssig;
     private javax.swing.JMenuItem jMenuItemViewAssig;
-    private javax.swing.JMenuItem jMenuItemViewLog;
     private javax.swing.JMenuItem jMenuItemViewReports;
-    private javax.swing.JMenuItem jMenuItemViewSQL;
     private javax.swing.JMenu jMenuOther;
     private javax.swing.JMenu jMenuPrint;
     private javax.swing.JMenu jMenuReport;
     private javax.swing.JMenu jMenuSelectConn;
     private javax.swing.JMenu jMenuView;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanelSQL;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

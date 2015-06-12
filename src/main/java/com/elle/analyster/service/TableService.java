@@ -147,7 +147,6 @@ public class TableService {
                         + " notes= \'Previous " + analyst + "' " + "where ID=" + selectedTask;
                 try {
                     GUI.getStmt().executeUpdate(sqlDelete);
-//                    logwind.sendMessages(sqlDelete);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

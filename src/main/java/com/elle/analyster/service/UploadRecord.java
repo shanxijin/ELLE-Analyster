@@ -10,12 +10,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA. User: danielabecker Date: 5/28/15 Time: 2:56 PM
+ * Created with IntelliJ IDEA. User: DanielaBecker Date: 5/28/15 Time: 2:56 PM
  * To change this template use File | Settings | File Templates.
  */
 public class UploadRecord {
 
-    private Logger log = LoggerFactory.getLogger(UploadRecord.class);
+    private final Logger log = LoggerFactory.getLogger(UploadRecord.class);
 
     public String uploadRecord(JTable table, List<ModifiedData> modifiedDataList) throws SQLException {
         int id, col;
