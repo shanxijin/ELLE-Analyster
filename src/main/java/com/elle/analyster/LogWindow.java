@@ -42,13 +42,52 @@ public class LogWindow {
 		logText = new TextArea(5, 30);
 		logText.setEditable(false);
 		scrollPane = new JScrollPane(logText);
-		scrollPane.setPreferredSize(new Dimension(450, 110));
+		//scrollPane.setPreferredSize(new Dimension(450, 110));
 		writeToTextFile("-------------------------" + dateFormat.format(date)
 				+ "-------------------------");
 		readMessages();
+                
+                
+                // change layout of frame
+                frame.setLayout(new GridBagLayout());
+                
+                // set constraints for the scroll panel
+                GridBagConstraints scrollPanelConstraints = new GridBagConstraints();
+                scrollPanelConstraints.fill = GridBagConstraints.BOTH;
+                scrollPanelConstraints.weightx = 1; // takes up whole x axis
+                scrollPanelConstraints.weighty = 1; // takes up most y axis with room for buttons
+                scrollPanelConstraints.gridx = 0; // first col cell
+                scrollPanelConstraints.gridy = 0; // first row cell
+                
+                // add scroll panel to frame
+		frame.add(scrollPane, scrollPanelConstraints);
+                
+                // create a panel for buttons
+                JPanel jPanelLogWindowButtons = new JPanel();
+                //jPanelLogWindowButtons.setLayout(new GridLayout(1,2)); // 1 row 2 col
+                //jPanelLogWindowButtons.setPreferredSize(new Dimension(450, 110));
+                
+                // create buttons
+                JButton jBtnClearAll = new JButton("Clear All");
+                JButton jBtnClearAllButToday = new JButton("Clear All But Today");
+                
+                // add buttons to panel
+                jPanelLogWindowButtons.add(jBtnClearAll);
+                jPanelLogWindowButtons.add(jBtnClearAllButToday);
+                
+                // set constraints for the buttons panel
+                GridBagConstraints buttonsPanelConstraints = new GridBagConstraints();
+                buttonsPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+                buttonsPanelConstraints.weightx = 1; // takes up whole x axis
+                buttonsPanelConstraints.weighty = 0; // takes up enough y axis just for buttons
+                buttonsPanelConstraints.gridx = 0; // first col cell
+                buttonsPanelConstraints.gridy = 1; // second row cell
+                
+                // add panel to the frame
+                frame.add(jPanelLogWindowButtons,buttonsPanelConstraints);
+                
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		frame.add(scrollPane);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(false);
 	}
