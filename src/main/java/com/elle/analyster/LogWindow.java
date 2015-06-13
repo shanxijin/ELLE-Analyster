@@ -13,6 +13,7 @@ package com.elle.analyster;
 
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -28,6 +29,7 @@ public class LogWindow {
 	private final JScrollPane scrollPane;
 	private final TextArea logText;
 	private final String FILENAME;
+        private final ArrayList<String> messages = new ArrayList<>();
 
 	public LogWindow() {
 		Date date = new Date();
@@ -67,8 +69,23 @@ public class LogWindow {
                 
                 // create buttons 
                 JButton jBtnClearAll = new JButton("Clear All");
+                jBtnClearAll.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jBtnClearAllActionPerformed(evt);
+                    }
+                });
                 JButton jBtnClearAllButToday = new JButton("Clear All But Today");
+                jBtnClearAllButToday.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jBtnClearAllButTodayActionPerformed(evt);
+                    }
+                });
                 JCheckBox jCheckBoxOrder = new JCheckBox();
+                jCheckBoxOrder.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jCheckBoxOrderActionPerformed(evt);
+                    }
+                });
                 JLabel jLabelOrder = new JLabel("Order");
                 
                 // add buttons to panel
@@ -130,6 +147,7 @@ public class LogWindow {
 			while (line != null) {
 				logText.append(line);
 				logText.append("\n");
+                                messages.add(line); // store messages in an array for ordering
 				line = bufferedReader.readLine();
 			}
 			bufferedReader.close();
@@ -174,7 +192,7 @@ public class LogWindow {
 	}
         
         /**
-         * listens if window was closed and removes check from checkbox of log menu item
+         * listens if window was closed and removes check from check-box of log menu item
          * @param JCheckBoxMenuItem
          */
         public void removeCheckOnHideLogWindow(JCheckBoxMenuItem checkMenuBox) {
@@ -185,5 +203,31 @@ public class LogWindow {
                     }
                 });
 	}
+        
+        /**
+         * Clear all button: When the Clear all button is clicked, 
+         * all the messages are removed from the scroll pane text box.
+         */
+        private void jBtnClearAllActionPerformed(ActionEvent evt) {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+        /**
+         * Clear all but today button action performed: 
+         * When the Clear all but today button is clicked, 
+         * all the messages are removed from the scroll pane text box,
+         * except todays.
+         */
+        private void jBtnClearAllButTodayActionPerformed(ActionEvent evt) {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+        /**
+         * Order check box: When the order check box is checked, 
+         * all the messages are reversed in order in the scroll pane text box.
+         */
+        private void jCheckBoxOrderActionPerformed(ActionEvent evt) {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
 }
 
