@@ -30,6 +30,11 @@ public class LogWindow {
 	private final TextArea logText;
 	private final String FILENAME;
         private final ArrayList<String> messages = new ArrayList<>();
+        private final JPanel jPanelLogWindowButtons;
+        private final JButton jBtnClearAll;
+        private final JButton jBtnClearAllButToday;
+        private final JCheckBox jCheckBoxOrder;
+        private final JLabel jLabelOrder;
 
 	public LogWindow() {
 		Date date = new Date();
@@ -65,28 +70,28 @@ public class LogWindow {
 		frame.add(scrollPane, scrollPanelConstraints);
                 
                 // create a panel for buttons
-                JPanel jPanelLogWindowButtons = new JPanel();
+                jPanelLogWindowButtons = new JPanel();
                 
                 // create buttons 
-                JButton jBtnClearAll = new JButton("Clear All");
+                jBtnClearAll = new JButton("Clear All");
                 jBtnClearAll.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jBtnClearAllActionPerformed(evt);
                     }
                 });
-                JButton jBtnClearAllButToday = new JButton("Clear All But Today");
+                jBtnClearAllButToday = new JButton("Clear All But Today");
                 jBtnClearAllButToday.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jBtnClearAllButTodayActionPerformed(evt);
                     }
                 });
-                JCheckBox jCheckBoxOrder = new JCheckBox();
+                jCheckBoxOrder = new JCheckBox();
                 jCheckBoxOrder.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jCheckBoxOrderActionPerformed(evt);
                     }
                 });
-                JLabel jLabelOrder = new JLabel("Order");
+                jLabelOrder = new JLabel("Order");
                 
                 // add buttons to panel
                 jPanelLogWindowButtons.add(jBtnClearAll);
@@ -108,7 +113,7 @@ public class LogWindow {
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		frame.pack();
-		frame.setVisible(false);
+		frame.setVisible(false);      
 	}
 
 	public String fillSQLCommand(String str) {
@@ -209,7 +214,8 @@ public class LogWindow {
          * all the messages are removed from the scroll pane text box.
          */
         private void jBtnClearAllActionPerformed(ActionEvent evt) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            logText.setText(""); // clear all text from text box
+            /*************** Bug: Does not clear until resize  ***********************/
         }
         
         /**
