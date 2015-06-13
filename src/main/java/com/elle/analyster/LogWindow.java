@@ -42,7 +42,7 @@ public class LogWindow {
 		logText = new TextArea(5, 30);
 		logText.setEditable(false);
 		scrollPane = new JScrollPane(logText);
-		//scrollPane.setPreferredSize(new Dimension(450, 110));
+		
 		writeToTextFile("-------------------------" + dateFormat.format(date)
 				+ "-------------------------");
 		readMessages();
@@ -64,16 +64,18 @@ public class LogWindow {
                 
                 // create a panel for buttons
                 JPanel jPanelLogWindowButtons = new JPanel();
-                //jPanelLogWindowButtons.setLayout(new GridLayout(1,2)); // 1 row 2 col
-                //jPanelLogWindowButtons.setPreferredSize(new Dimension(450, 110));
                 
-                // create buttons
+                // create buttons 
                 JButton jBtnClearAll = new JButton("Clear All");
                 JButton jBtnClearAllButToday = new JButton("Clear All But Today");
+                JCheckBox jCheckBoxOrder = new JCheckBox();
+                JLabel jLabelOrder = new JLabel("Order");
                 
                 // add buttons to panel
                 jPanelLogWindowButtons.add(jBtnClearAll);
                 jPanelLogWindowButtons.add(jBtnClearAllButToday);
+                jPanelLogWindowButtons.add(jCheckBoxOrder);
+                jPanelLogWindowButtons.add(jLabelOrder);
                 
                 // set constraints for the buttons panel
                 GridBagConstraints buttonsPanelConstraints = new GridBagConstraints();
