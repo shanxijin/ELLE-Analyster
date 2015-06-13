@@ -222,7 +222,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="addPanel_control" max="32767" attributes="0"/>
-          <Component id="jPanel5" pref="894" max="32767" attributes="0"/>
+          <Component id="jPanel5" max="32767" attributes="0"/>
           <Component id="jPanelSQL" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
@@ -231,7 +231,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="addPanel_control" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel5" min="-2" pref="431" max="-2" attributes="0"/>
+              <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanelSQL" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
