@@ -20,26 +20,28 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 import java.io.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LogWindow extends JFrame{
     
 	private final JScrollPane scrollPane;
 	private final TextArea logText;
-	private final String FILENAME;
-        private final ArrayList<String> messages = new ArrayList<>();
+	private final String FILENAME = "log.txt";
+        private final ArrayList<LogMessage> logMessages = new ArrayList<>();
         private final JPanel jPanelLogWindowButtons;
         private final JButton jBtnClearAll;
         private final JButton jBtnClearAllButToday;
         private final JCheckBox jCheckBoxOrder;
         private final JLabel jLabelOrder;
+        private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
 
+        // constructor
 	public LogWindow() {
-		Date date = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd hh:mm:ss a");
-		FILENAME = "log.txt";
+		
 		this.setTitle("Log Window");
 		ImageIcon imag = new ImageIcon(
 				"Images/elle gui image.jpg");
@@ -49,11 +51,6 @@ public class LogWindow extends JFrame{
 		logText.setEditable(false);
 		scrollPane = new JScrollPane(logText);
 		
-		writeToTextFile("-------------------------" + dateFormat.format(date) + "-------------------------"); // this is being called twice
-                
-		readMessages();
-                
-                
                 // change layout of frame
                 this.setLayout(new GridBagLayout());
                 
@@ -112,7 +109,17 @@ public class LogWindow extends JFrame{
                 this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		this.pack();
-		this.setVisible(false);      
+		this.setVisible(false);    
+                
+                // write to log file
+                Date date = new Date();
+                writeToTextFile("-------------------------" + dateFormat.format(date) + "-------------------------"); 
+                
+                // read log messages from the log file
+		readMessages();
+                
+                // store log messages in an array of log messages
+                storeLogMessages();
 	}
 
 	public String fillSQLCommand(String str) {
@@ -151,7 +158,6 @@ public class LogWindow extends JFrame{
 			while (line != null) {
 				logText.append(line);
 				logText.append("\n");
-                                messages.add(line); // store messages in an array for ordering
 				line = bufferedReader.readLine();
 			}
 			bufferedReader.close();
@@ -234,7 +240,107 @@ public class LogWindow extends JFrame{
          * all the messages are reversed in order in the scroll pane text box.
          */
         private void jCheckBoxOrderActionPerformed(ActionEvent evt) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            
+            // sort log messages
+            if(jCheckBoxOrder.isSelected()){
+                // sorts by most recent date first
+                Collections.sort(logMessages, new LogMessage.SortByMostRecentDateFirst());
+            }else if(!jCheckBoxOrder.isSelected()){
+                // sorts by least recent date first
+                Collections.sort(logMessages, new LogMessage.SortByLeastRecentDateFirst());
+            }
+            
+            logText.setText(logMessages.get(0).getDate().toString());// clear text box
+            
+            // print log messages to log window text box
+            for (LogMessage logMessage : logMessages) {
+                logText.setText("-------------------------" + logMessage.getDate() + "-------------------------");
+                logText.setText(logMessage.getMessage());
+            }
         }
+        
+        /**
+         * storeLogMessages: Method
+         * Stores each LogMessage object in an array. 
+         * This is to be able to easily retrieve specific data according to specific times or dates.
+         */
+        private void storeLogMessages(){
+            
+            File file = new File(FILENAME);
+            String FIELD_SEP = "-------------------------";
+            logMessages.clear(); // clear array of any elements
+            Date date = new Date();
+            String message = "";
+		
+            if (file.exists())  // prevent the FileNotFoundException
+            {
+                try
+                {
+                    
+                    BufferedReader in = 
+                         new BufferedReader(
+                         new FileReader(FILENAME));
+
+                    // read all log messages stored in the log file
+                    // and store them into the array list
+                    String line = in.readLine(); // start while loop if not empty
+                    while(line != null)
+                    {
+                        if(line.startsWith("----")){
+                            String[] columns = line.split(FIELD_SEP);
+                            date = dateFormat.parse(columns[1]);
+                            message = ""; // reset message string
+                            
+                            line = in.readLine();
+                        }
+                        else{
+                            message = message + "\n" + line;
+                            line = in.readLine();
+                            if(line == null || line.startsWith("----")){
+                                logMessages.add(new LogMessage(date, message));  
+                            }
+                        }                  
+                    }
+
+                    in.close(); // close the input stream
+                }
+                catch(IOException e){e.printStackTrace();} 
+                catch (ParseException ex) { ex.printStackTrace();} 
+            }  
+        }
+
+    /**
+     * LogMessages class
+     * this class stores log message information
+     */
+    private static class LogMessage {
+
+        private final Date date;
+        private final String message;
+        
+        public LogMessage(Date date, String message) {
+            this.date = date;
+            this.message = message;
+        }
+        
+        public Date getDate(){ return date;}
+        public String getMessage(){return message;}
+        
+        public static class SortByMostRecentDateFirst implements Comparator<LogMessage>
+        {
+            @Override
+            public int compare(LogMessage c, LogMessage c1) {
+                return c.getDate().compareTo(c1.getDate());
+            }    
+        }
+        
+        public static class SortByLeastRecentDateFirst implements Comparator<LogMessage>
+        {
+            @Override
+            public int compare(LogMessage c, LogMessage c1) {
+                return c1.getDate().compareTo(c.getDate());
+            }    
+        }
+    }
 }
 
