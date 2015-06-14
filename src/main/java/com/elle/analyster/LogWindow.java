@@ -250,12 +250,11 @@ public class LogWindow extends JFrame{
                 Collections.sort(logMessages, new LogMessage.SortByLeastRecentDateFirst());
             }
             
-            logText.setText(logMessages.get(0).getDate().toString());// clear text box
-            
+            logText.setText("");// clear text box
             // print log messages to log window text box
             for (LogMessage logMessage : logMessages) {
-                logText.setText("-------------------------" + logMessage.getDate() + "-------------------------");
-                logText.setText(logMessage.getMessage());
+                logText.append("-------------------------" + dateFormat.format(logMessage.getDate()) + "-------------------------");
+                logText.append(logMessage.getMessage());
             }
         }
         
