@@ -54,6 +54,15 @@ public class Analyster extends JFrame {
     private static int numberReportsInit;
     private static int numberArchiveAssignInit;
     private Logger log = LoggerFactory.getLogger(Analyster.class);
+    private LogWindow logwind = new LogWindow(); 
+    public TableState viewer = new TableState();
+    public TableState assignments = new TableState();
+    public TableState reports = new TableState();
+    public TableState archiveAssign = new TableState();
+    public EnterButton enterButton = new EnterButton();
+    protected static boolean isFiltering = true;
+    private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
+    
     @Autowired
     private UploadRecord uploadRecordService;
 
@@ -1697,16 +1706,7 @@ public class Analyster extends JFrame {
     public ITableFilter<?> getFilterTempAssignment() {
         return filterTempAssignment;
     }
-    public TableState viewer = new TableState();
-    public TableState assignments = new TableState();
-    public TableState reports = new TableState();
-    public TableState archiveAssign = new TableState();
-
-    public EnterButton enterButton = new EnterButton();
-    private LogWindow logwind = new LogWindow();
-
-    protected static boolean isFiltering = true;
-    private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
+    
     // @formatter:off
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel addPanel_control;

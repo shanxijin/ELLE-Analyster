@@ -23,9 +23,8 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class LogWindow {
-
-	private final JFrame frame;
+public class LogWindow extends JFrame{
+    
 	private final JScrollPane scrollPane;
 	private final TextArea logText;
 	private final String FILENAME;
@@ -41,22 +40,22 @@ public class LogWindow {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd hh:mm:ss a");
 		FILENAME = "log.txt";
-		frame = new JFrame("Log Window");
+		this.setTitle("Log Window");
 		ImageIcon imag = new ImageIcon(
 				"Images/elle gui image.jpg");
-		frame.setIconImage(imag.getImage());
+		this.setIconImage(imag.getImage());
 
 		logText = new TextArea(5, 30);
 		logText.setEditable(false);
 		scrollPane = new JScrollPane(logText);
 		
-		writeToTextFile("-------------------------" + dateFormat.format(date)
-				+ "-------------------------");
+		writeToTextFile("-------------------------" + dateFormat.format(date) + "-------------------------"); // this is being called twice
+                
 		readMessages();
                 
                 
                 // change layout of frame
-                frame.setLayout(new GridBagLayout());
+                this.setLayout(new GridBagLayout());
                 
                 // set constraints for the scroll panel
                 GridBagConstraints scrollPanelConstraints = new GridBagConstraints();
@@ -67,7 +66,7 @@ public class LogWindow {
                 scrollPanelConstraints.gridy = 0; // first row cell
                 
                 // add scroll panel to frame
-		frame.add(scrollPane, scrollPanelConstraints);
+		this.add(scrollPane, scrollPanelConstraints);
                 
                 // create a panel for buttons
                 jPanelLogWindowButtons = new JPanel();
@@ -108,12 +107,12 @@ public class LogWindow {
                 buttonsPanelConstraints.gridy = 1; // second row cell
                 
                 // add panel to the frame
-                frame.add(jPanelLogWindowButtons,buttonsPanelConstraints);
+                this.add(jPanelLogWindowButtons,buttonsPanelConstraints);
                 
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		frame.pack();
-		frame.setVisible(false);      
+		this.pack();
+		this.setVisible(false);      
 	}
 
 	public String fillSQLCommand(String str) {
@@ -157,10 +156,10 @@ public class LogWindow {
 			}
 			bufferedReader.close();
 		} catch (IOException ex) {
-			JOptionPane.showMessageDialog(frame,
+			JOptionPane.showMessageDialog(this,
 					"Error: Fail to read the log file");
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(frame, "Unknown error");
+			JOptionPane.showMessageDialog(this, "Unknown error");
 		}
 	}
 
@@ -178,22 +177,22 @@ public class LogWindow {
 				bufferedWriter.newLine();
 			bufferedWriter.close();
 		} catch (IOException ex) {
-			JOptionPane.showMessageDialog(frame,
+			JOptionPane.showMessageDialog(this,
 					"Error: Fail to write the log file");
 		} catch (Exception ex) {
-			JOptionPane.showConfirmDialog(frame, "Unknow error");
+			JOptionPane.showConfirmDialog(this, "Unknow error");
 		}
 	}
 
 	public void showLogWindow() {
-		frame.setVisible(true);
+		this.setVisible(true);
 	}
         
         /**
          * hides log window by setting visible to false
          */
         public void hideLogWindow() {
-		frame.setVisible(false);
+		this.setVisible(false);
 	}
         
         /**
@@ -201,7 +200,7 @@ public class LogWindow {
          * @param JCheckBoxMenuItem
          */
         public void removeCheckOnHideLogWindow(JCheckBoxMenuItem checkMenuBox) {
-		frame.addWindowListener(new WindowAdapter() {
+		this.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e){
                         checkMenuBox.setSelected(false);
@@ -216,6 +215,8 @@ public class LogWindow {
         private void jBtnClearAllActionPerformed(ActionEvent evt) {
             logText.setText(""); // clear all text from text box
             /*************** Bug: Does not clear until resize  ***********************/
+            /* I have tested everything I can think of. It could just a be a linux issue ? */
+            /* I wll come back to this*/
         }
         
         /**
