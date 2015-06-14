@@ -117,9 +117,6 @@ public class LogWindow extends JFrame{
                 
                 // read log messages from the log file
 		readMessages();
-                
-                // store log messages in an array of log messages
-                storeLogMessages();
 	}
 
 	public String fillSQLCommand(String str) {
@@ -219,10 +216,7 @@ public class LogWindow extends JFrame{
          * all the messages are removed from the scroll pane text box.
          */
         private void jBtnClearAllActionPerformed(ActionEvent evt) {
-            logText.setText(""); // clear all text from text box
-            /*************** Bug: Does not clear until resize  ***********************/
-            /* I have tested everything I can think of. It could just a be a linux issue ? */
-            /* I wll come back to this*/
+            logText.setText(""); 
         }
         
         /**
@@ -233,6 +227,19 @@ public class LogWindow extends JFrame{
          */
         private void jBtnClearAllButTodayActionPerformed(ActionEvent evt) {
             
+            // store log messages in an array of log messages
+            storeLogMessages(); // get most current messages to array
+            
+            // get the order of messages
+            if(jCheckBoxOrder.isSelected()){
+                // sorts by most recent date first
+                Collections.sort(logMessages, new LogMessage.SortByMostRecentDateFirst());
+            }else if(!jCheckBoxOrder.isSelected()){
+                // sorts by least recent date first
+                Collections.sort(logMessages, new LogMessage.SortByLeastRecentDateFirst());
+            }
+                
+            // compare date with todays date and print to screen
             Date date = new Date(); // get todays date
             logText.setText(""); // clear text box
             for(LogMessage logMessage : logMessages){
@@ -251,6 +258,9 @@ public class LogWindow extends JFrame{
          * all the messages are reversed in order in the scroll pane text box.
          */
         private void jCheckBoxOrderActionPerformed(ActionEvent evt) {
+            
+            // store log messages in an array of log messages
+            storeLogMessages(); // get most current messages to array
             
             // sort log messages
             if(jCheckBoxOrder.isSelected()){
