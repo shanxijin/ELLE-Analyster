@@ -23,6 +23,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -54,6 +56,15 @@ public class Analyster extends JFrame {
     private static int numberReportsInit;
     private static int numberArchiveAssignInit;
     private Logger log = LoggerFactory.getLogger(Analyster.class);
+    private LogWindow logwind = new LogWindow(); 
+    public TableState viewer = new TableState();
+    public TableState assignments = new TableState();
+    public TableState reports = new TableState();
+    public TableState archiveAssign = new TableState();
+    public EnterButton enterButton = new EnterButton();
+    protected static boolean isFiltering = true;
+    private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
+    
     @Autowired
     private UploadRecord uploadRecordService;
 
@@ -149,14 +160,15 @@ public class Analyster extends JFrame {
 
     public Analyster() {
         initComponents();
-        jTextArea.setVisible(false);
+        jTextArea.setVisible(true);
 
         // set the interface to the middle of the window
         this.setLocationRelativeTo(null);
         this.setTitle("Analyster");
         jUpload.setVisible(false);
-        jDebugEnter.setVisible(false);
-        jDebugCancel.setVisible(false);
+        jPanelSQL.setVisible(false);
+        jDebugEnter.setVisible(true);
+        jDebugCancel.setVisible(true);
         jButtonCancel.setVisible(false);
         jBatchEdit.setVisible(true);
         tableService.setAssignmentTable(assignmentTable);
@@ -231,7 +243,6 @@ public class Analyster extends JFrame {
         jTimeLastUpdate = new javax.swing.JLabel();
         jButtonClearAllFilter = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        jUpload = new javax.swing.JButton();
         jTabbedPanel1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         assignmentTable = new javax.swing.JTable();
@@ -241,20 +252,20 @@ public class Analyster extends JFrame {
         archiveAssignTable = new javax.swing.JTable();
         jScrollPane5 = new javax.swing.JScrollPane();
         viewerTable = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jSwitchEditMode = new javax.swing.JButton();
-        jLabelEdit = new javax.swing.JLabel();
-        jButtonCancel = new javax.swing.JButton();
+        jPanelEdit = new javax.swing.JPanel();
         jBatchEdit = new javax.swing.JButton();
         jBatchAdd = new javax.swing.JButton();
+        jUpload = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
+        jSwitchEditMode = new javax.swing.JButton();
+        jLabelEdit = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanelSQL = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea = new javax.swing.JTextArea();
         jDebugEnter = new javax.swing.JButton();
         jDebugCancel = new javax.swing.JButton();
-        jSwitchDebugMode = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabelDebug = new javax.swing.JLabel();
+        closeDebugPanelBtn = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuItemFileVersion = new javax.swing.JMenuItem();
@@ -367,15 +378,6 @@ public class Analyster extends JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 0, 153)));
 
-        jUpload.setText("Upload Changes");
-        jUpload.setMaximumSize(new java.awt.Dimension(95, 30));
-        jUpload.setMinimumSize(new java.awt.Dimension(95, 30));
-        jUpload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jUploadActionPerformed(evt);
-            }
-        });
-
         jTabbedPanel1.setPreferredSize(new java.awt.Dimension(800, 450));
         jTabbedPanel1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -426,6 +428,7 @@ public class Analyster extends JFrame {
         assignmentTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         assignmentTable.setMinimumSize(new java.awt.Dimension(10, 240));
         assignmentTable.setName(""); // NOI18N
+        assignmentTable.setRequestFocusEnabled(false);
         jScrollPane1.setViewportView(assignmentTable);
 
         jTabbedPanel1.addTab("Assignments", jScrollPane1);
@@ -529,24 +532,6 @@ public class Analyster extends JFrame {
 
         jTabbedPanel1.addTab("Viewer", jScrollPane5);
 
-        jLabel2.setText("Edit Mode:");
-
-        jSwitchEditMode.setText("Switch");
-        jSwitchEditMode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jSwitchEditModeActionPerformed(evt);
-            }
-        });
-
-        jLabelEdit.setText("OFF");
-
-        jButtonCancel.setText("Cancel");
-        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCancelActionPerformed(evt);
-            }
-        });
-
         jBatchEdit.setText("Batch Edit");
         jBatchEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -561,12 +546,38 @@ public class Analyster extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        jUpload.setText("Upload Changes");
+        jUpload.setMaximumSize(new java.awt.Dimension(95, 30));
+        jUpload.setMinimumSize(new java.awt.Dimension(95, 30));
+        jUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jUploadActionPerformed(evt);
+            }
+        });
+
+        jButtonCancel.setText("Cancel");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+
+        jSwitchEditMode.setText("Switch");
+        jSwitchEditMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSwitchEditModeActionPerformed(evt);
+            }
+        });
+
+        jLabelEdit.setText("OFF");
+
+        jLabel2.setText("Edit Mode:");
+
+        javax.swing.GroupLayout jPanelEditLayout = new javax.swing.GroupLayout(jPanelEdit);
+        jPanelEdit.setLayout(jPanelEditLayout);
+        jPanelEditLayout.setHorizontalGroup(
+            jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEditLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -583,12 +594,11 @@ public class Analyster extends JFrame {
                 .addComponent(jBatchEdit)
                 .addGap(26, 26, 26))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        jPanelEditLayout.setVerticalGroup(
+            jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelEditLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jSwitchEditMode)
@@ -596,7 +606,22 @@ public class Analyster extends JFrame {
                     .addComponent(jButtonCancel)
                     .addComponent(jBatchEdit)
                     .addComponent(jBatchAdd))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
+            .addComponent(jPanelEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jTabbedPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPanel1.getAccessibleContext().setAccessibleName("Reports");
@@ -632,32 +657,24 @@ public class Analyster extends JFrame {
             }
         });
 
-        jSwitchDebugMode.setText("Switch");
-        jSwitchDebugMode.addActionListener(new java.awt.event.ActionListener() {
+        closeDebugPanelBtn.setText("Close");
+        closeDebugPanelBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jSwitchDebugModeActionPerformed(evt);
+                closeDebugPanelBtnActionPerformed(evt);
             }
         });
-
-        jLabel1.setText("Debug Mode:");
-
-        jLabelDebug.setText("OFF");
 
         javax.swing.GroupLayout jPanelSQLLayout = new javax.swing.GroupLayout(jPanelSQL);
         jPanelSQL.setLayout(jPanelSQLLayout);
         jPanelSQLLayout.setHorizontalGroup(
             jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSQLLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelDebug)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSwitchDebugMode)
-                .addGap(58, 58, 58)
+                .addGap(213, 213, 213)
                 .addComponent(jDebugEnter)
-                .addGap(59, 59, 59)
+                .addGap(71, 71, 71)
                 .addComponent(jDebugCancel)
+                .addGap(65, 65, 65)
+                .addComponent(closeDebugPanelBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane2)
         );
@@ -669,9 +686,7 @@ public class Analyster extends JFrame {
                 .addGroup(jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jDebugEnter)
                     .addComponent(jDebugCancel)
-                    .addComponent(jSwitchDebugMode)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabelDebug))
+                    .addComponent(closeDebugPanelBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -806,7 +821,6 @@ public class Analyster extends JFrame {
         });
         jMenuOther.add(jCheckBoxMenuItemViewLog);
 
-        jCheckBoxMenuItemViewSQL.setSelected(true);
         jCheckBoxMenuItemViewSQL.setText("SQL Command");
         jCheckBoxMenuItemViewSQL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -844,9 +858,10 @@ public class Analyster extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(addPanel_control, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanelSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -855,8 +870,8 @@ public class Analyster extends JFrame {
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-06-12" + "\n"
-                + "Version: " + "0.6.2g");
+                + "2015-06-08" + "\n"
+                + "Version: " + "0.6.2f.d");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
@@ -973,20 +988,11 @@ public class Analyster extends JFrame {
                 .setDocumentFilter(new CreateDocumentFilter(33));
     }//GEN-LAST:event_jDebugCancelActionPerformed
 
-    private void jSwitchDebugModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSwitchDebugModeActionPerformed
+    private void closeDebugPanelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeDebugPanelBtnActionPerformed
 
-        if (jLabelDebug.getText().equals("OFF")) {
-            jTextArea.setVisible(true);
-            jLabelDebug.setText("ON ");
-            jDebugEnter.setVisible(true);
-            jDebugCancel.setVisible(true);
-        } else {
-            jTextArea.setVisible(false);
-            jLabelDebug.setText("OFF");
-            jDebugEnter.setVisible(false);
-            jDebugCancel.setVisible(false);
-        }
-    }//GEN-LAST:event_jSwitchDebugModeActionPerformed
+        jPanelSQL.setVisible(false);
+        jCheckBoxMenuItemViewSQL.setSelected(false);
+    }//GEN-LAST:event_closeDebugPanelBtnActionPerformed
 
     private void jSwitchEditModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSwitchEditModeActionPerformed
 
@@ -1281,10 +1287,19 @@ public class Analyster extends JFrame {
     private void jCheckBoxMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewLogActionPerformed
 
         if(jCheckBoxMenuItemViewLog.isSelected()){
-            logwind.showLogWindow();
-            logwind.removeCheckOnHideLogWindow(jCheckBoxMenuItemViewLog);
+            
+            logwind.setVisible(true); // show log window
+            
+            // remove check if window is closed from the window
+            logwind.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e){
+                        jCheckBoxMenuItemViewLog.setSelected(false);
+                    }
+                });
         }else{
-            logwind.hideLogWindow();
+            // hide log window
+            logwind.setVisible(false);
         }
     }//GEN-LAST:event_jCheckBoxMenuItemViewLogActionPerformed
 
@@ -1702,21 +1717,13 @@ public class Analyster extends JFrame {
     public ITableFilter<?> getFilterTempAssignment() {
         return filterTempAssignment;
     }
-    public TableState viewer = new TableState();
-    public TableState assignments = new TableState();
-    public TableState reports = new TableState();
-    public TableState archiveAssign = new TableState();
-
-    public EnterButton enterButton = new EnterButton();
-    public LogWindow logwind = new LogWindow();
-
-    protected static boolean isFiltering = true;
-    private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
+    
     // @formatter:off
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel addPanel_control;
     private javax.swing.JTable archiveAssignTable;
     private javax.swing.JTable assignmentTable;
+    private javax.swing.JButton closeDebugPanelBtn;
     private javax.swing.JMenuItem jActivateRecord;
     private javax.swing.JMenuItem jArchiveRecord;
     private javax.swing.JButton jBatchAdd;
@@ -1729,9 +1736,7 @@ public class Analyster extends JFrame {
     private javax.swing.JButton jDebugEnter;
     private javax.swing.JMenuItem jDeleteRecord;
     private javax.swing.JComboBox jField;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabelDebug;
     private javax.swing.JLabel jLabelEdit;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenuItem jMenuEditDB;
@@ -1756,13 +1761,13 @@ public class Analyster extends JFrame {
     private javax.swing.JMenu jMenuSelectConn;
     private javax.swing.JMenu jMenuView;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanelEdit;
     private javax.swing.JPanel jPanelSQL;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JButton jSwitchDebugMode;
     private javax.swing.JButton jSwitchEditMode;
     private javax.swing.JTabbedPane jTabbedPanel1;
     private javax.swing.JTextArea jTextArea;

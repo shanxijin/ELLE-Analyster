@@ -371,9 +371,9 @@ public class LoginWindow extends javax.swing.JFrame {
         try {
             Class.forName(jdbc_driver);
             //connect to the local database for test now
-            logwind.sendMessages("\nStart to connect local database...");
+            analyster.getLogwind().sendMessages("\nStart to connect local database...");
             GUI.con = DriverManager.getConnection(GUI.db_url, GUI.username, GUI.password);
-            logwind.sendMessages("Connect successfully!\n");
+            analyster.getLogwind().sendMessages("Connect successfully!\n");
             GUI.stmt = GUI.con.createStatement();
             System.out.println("Connection successfully");
             GUI.status = true;
@@ -388,7 +388,7 @@ public class LoginWindow extends javax.swing.JFrame {
 
             System.out.println("Cannot open local database -- make sure it is configured properly.");
             ex.printStackTrace();
-            logwind.sendMessages(ex.getMessage());
+            analyster.getLogwind().sendMessages(ex.getMessage());
             GUI.password = "";
             jPassword.setText("");
         }
@@ -429,7 +429,7 @@ public class LoginWindow extends javax.swing.JFrame {
 //            }
 //        });
 //    }
-    public LogWindow logwind = new LogWindow();
+    
     private Analyster analyster;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jButtonPanel;
