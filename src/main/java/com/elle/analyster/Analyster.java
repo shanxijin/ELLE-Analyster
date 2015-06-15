@@ -23,6 +23,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -1285,10 +1287,19 @@ public class Analyster extends JFrame {
     private void jCheckBoxMenuItemViewLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewLogActionPerformed
 
         if(jCheckBoxMenuItemViewLog.isSelected()){
-            logwind.showLogWindow();
-            logwind.removeCheckOnHideLogWindow(jCheckBoxMenuItemViewLog);
+            
+            logwind.setVisible(true); // show log window
+            
+            // remove check if window is closed from the window
+            logwind.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e){
+                        jCheckBoxMenuItemViewLog.setSelected(false);
+                    }
+                });
         }else{
-            logwind.hideLogWindow();
+            // hide log window
+            logwind.setVisible(false);
         }
     }//GEN-LAST:event_jCheckBoxMenuItemViewLogActionPerformed
 

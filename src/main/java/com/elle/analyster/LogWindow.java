@@ -186,30 +186,6 @@ public class LogWindow extends JFrame{
 			JOptionPane.showConfirmDialog(this, "Unknow error");
 		}
 	}
-
-	public void showLogWindow() {
-		this.setVisible(true);
-	}
-        
-        /**
-         * hides log window by setting visible to false
-         */
-        public void hideLogWindow() {
-		this.setVisible(false);
-	}
-        
-        /**
-         * listens if window was closed and removes check from check-box of log menu item
-         * @param JCheckBoxMenuItem
-         */
-        public void removeCheckOnHideLogWindow(JCheckBoxMenuItem checkMenuBox) {
-		this.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e){
-                        checkMenuBox.setSelected(false);
-                    }
-                });
-	}
         
         /**
          * Clear all button: When the Clear all button is clicked, 
