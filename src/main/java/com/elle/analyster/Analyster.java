@@ -166,7 +166,7 @@ public class Analyster extends JFrame {
         this.setLocationRelativeTo(null);
         this.setTitle("Analyster");
         jUpload.setVisible(false);
-        jPanelSQL.setVisible(false);
+        jPanelSQL.setVisible(false); 
         jDebugEnter.setVisible(true);
         jDebugCancel.setVisible(true);
         jButtonCancel.setVisible(false);
@@ -296,7 +296,8 @@ public class Analyster extends JFrame {
         jMenuItemOtherReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(894, 557));
+        setPreferredSize(new java.awt.Dimension(894, 680));
+        setResizable(false);
 
         addPanel_control.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
