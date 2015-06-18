@@ -600,7 +600,7 @@ public class Analyster extends JFrame {
         jPanelEditLayout.setVerticalGroup(
             jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelEditLayout.createSequentialGroup()
-                .addGap(0, 4, Short.MAX_VALUE)
+                .addGap(0, 5, Short.MAX_VALUE)
                 .addGroup(jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
@@ -877,8 +877,8 @@ public class Analyster extends JFrame {
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-06-16" + "\n"
-                + "Version: " + "0.6.3a");
+                + "2015-06-18" + "\n"
+                + "Version: " + "0.6.3b");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
@@ -1312,10 +1312,33 @@ public class Analyster extends JFrame {
 
     private void jCheckBoxMenuItemViewSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemViewSQLActionPerformed
  
+        /**
+         * ************* Strange behavior *************************
+         * The jPanelSQL.getHeight() is the height before 
+         * the jCheckBoxMenuItemViewSQLActionPerformed method was called.
+         * 
+         * The jPanelSQL.setVisible() does not change the size 
+         * of the sql panel after it is executed.
+         * 
+         * The jPanel size will only change after 
+         * the jCheckBoxMenuItemViewSQLActionPerformed is finished.
+         * 
+         * That is why the the actual integer is used rather than  getHeight().
+         * 
+         * Example:
+         * jPanelSQL.setVisible(true);
+         * jPanelSQL.getHeight(); // this returns 0
+         */
+        
         if(jCheckBoxMenuItemViewSQL.isSelected()){
+            
+            // show sql panel
             jPanelSQL.setVisible(true);
-            this.setSize(this.getWidth(), this.getHeight() + 150); // when this is called and jPanelSQL is false, jPanelSQL.getHeight() = 0
+            this.setSize(this.getWidth(), this.getHeight() + 150); 
+            
         }else{
+            
+            // hide sql panel
             jPanelSQL.setVisible(false);
             this.setSize(this.getWidth(), this.getHeight() - jPanelSQL.getHeight());
         }
