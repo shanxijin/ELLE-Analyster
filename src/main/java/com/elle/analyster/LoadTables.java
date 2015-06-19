@@ -23,7 +23,7 @@ public class LoadTables {
     JTable assignmentTable = ana.getassignmentTable();
     JTable reportTable = ana.getReportTable();
     JTable archiveAssignTable = ana.getArchiveAssignTable();
-    JTable viewerTable = ana.getViewerTable();
+//    JTable viewerTable = ana.getViewerTable();
     Logger log = LoggerFactory.getLogger(LoadTables.class);
 
     public void loadTables() {
@@ -37,7 +37,7 @@ public class LoadTables {
         loadArchiveAssignTable();
         ana.setTerminalsFunction(ana.getArchiveAssignTable());
 
-        loadViewerTable();
+//        loadViewerTable();
         ana.setLastUpdateTime();
     }
 
@@ -168,20 +168,20 @@ public class LoadTables {
         filter.saveFilterCriteria(filterCriteria);
         filter.setColumnIndex(columnIndex);
     }
-    public void loadViewerTable(){
-        try {
-            connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), viewerTable);
-        } catch (SQLException e) {
-            log.error("Error", e);
-        }
-        ana.setColumnFormat(ana.columnWidthPercentage1, viewerTable);
-        ana.getViewer().init(viewerTable, new String[]{"Symbol", "Analyst"});
-        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(viewerTable).actions(true).apply());
-        ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
-        Analyster.setNumberAssignmentInit(viewerTable.getRowCount());
-        ana.getjActivateRecord().setEnabled(false);
-        ana.getjArchiveRecord().setEnabled(true);
-    }
+//    public void loadViewerTable(){
+//        try {
+//            connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), viewerTable);
+//        } catch (SQLException e) {
+//            log.error("Error", e);
+//        }
+//        ana.setColumnFormat(ana.columnWidthPercentage1, viewerTable);
+//        ana.getViewer().init(viewerTable, new String[]{"Symbol", "Analyst"});
+//        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(viewerTable).actions(true).apply());
+//        ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
+//        Analyster.setNumberAssignmentInit(viewerTable.getRowCount());
+//        ana.getjActivateRecord().setEnabled(false);
+//        ana.getjArchiveRecord().setEnabled(true);
+//    }
   
 
 }
