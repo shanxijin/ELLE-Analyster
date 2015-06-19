@@ -142,9 +142,9 @@ public class Analyster extends JFrame {
     public JTable getArchiveAssignTable() {
         return archiveAssignTable;
     }
-     JTable getViewerTable() {
-        return viewerTable;
-    }
+//     JTable getViewerTable() {
+//        return viewerTable;
+//    }
 
     public JTabbedPane getjTabbedPanel1() {
         return jTabbedPanel1;
@@ -250,8 +250,6 @@ public class Analyster extends JFrame {
         reportTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         archiveAssignTable = new javax.swing.JTable();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        viewerTable = new javax.swing.JTable();
         jPanelEdit = new javax.swing.JPanel();
         jBatchEdit = new javax.swing.JButton();
         jBatchAdd = new javax.swing.JButton();
@@ -296,8 +294,6 @@ public class Analyster extends JFrame {
         jMenuItemOtherReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(894, 552));
-        setSize(new java.awt.Dimension(0, 0));
 
         addPanel_control.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -512,24 +508,6 @@ public class Analyster extends JFrame {
         jScrollPane3.setViewportView(archiveAssignTable);
 
         jTabbedPanel1.addTab("Assignments_Archived", jScrollPane3);
-
-        viewerTable.setAutoCreateRowSorter(true);
-        viewerTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "symbol", "analyst", "priority", "dateAssigned", "dateDone", "notes"
-            }
-        ));
-        viewerTable.setMinimumSize(new java.awt.Dimension(10, 240));
-        viewerTable.setName("ViewerTable"); // NOI18N
-        jScrollPane5.setViewportView(viewerTable);
-
-        jTabbedPanel1.addTab("Viewer", jScrollPane5);
 
         jPanelEdit.setPreferredSize(new java.awt.Dimension(636, 180));
 
@@ -1025,7 +1003,7 @@ public class Analyster extends JFrame {
             ((MyTableModel) assignmentTable.getModel()).setReadOnly(true);
             ((MyTableModel) reportTable.getModel()).setReadOnly(true);
             ((MyTableModel) archiveAssignTable.getModel()).setReadOnly(true);
-            ((MyTableModel) viewerTable.getModel()).setReadOnly(true);
+//            ((MyTableModel) viewerTable.getModel()).setReadOnly(true);
         }
     }
 
@@ -1123,8 +1101,8 @@ public class Analyster extends JFrame {
             case "Viewer":
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(true);
-                viewerTable = assignmentTable;
-                viewerTable.setVisible(true);
+//                viewerTable = assignmentTable;
+//                viewerTable.setVisible(true);
                 numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
                 numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
                 break;
@@ -1698,9 +1676,9 @@ public class Analyster extends JFrame {
         } else if (table == archiveAssignTable) {
             return archiveAssign;
         } 
-        else if (table == viewerTable) {
-            return viewer;
-        } 
+//        else if (table == viewerTable) {
+//            return viewer;
+//        } 
         else {
             JOptionPane.showMessageDialog(null, "TableState not found!");
             return null;
@@ -1794,7 +1772,6 @@ public class Analyster extends JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JButton jSwitchEditMode;
     private javax.swing.JTabbedPane jTabbedPanel1;
     private javax.swing.JTextArea jTextArea;
@@ -1806,7 +1783,6 @@ public class Analyster extends JFrame {
     private javax.swing.JTable reportTable;
     private javax.swing.JButton search;
     private javax.swing.JTextField textForSearch;
-    private javax.swing.JTable viewerTable;
     // End of variables declaration//GEN-END:variables
     // @formatter:on
 }
