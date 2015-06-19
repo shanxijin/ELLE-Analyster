@@ -598,7 +598,7 @@ public class Analyster extends JFrame {
         jPanelEditLayout.setVerticalGroup(
             jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelEditLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 1, Short.MAX_VALUE)
                 .addGroup(jPanelEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
@@ -662,15 +662,14 @@ public class Analyster extends JFrame {
             jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSQLLayout.createSequentialGroup()
                 .addGap(4, 4, 4)
-                .addComponent(jDebugEnter)
-                .addGap(4, 4, 4)
-                .addComponent(jDebugCancel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(closeDebugPanelBtn)
-                .addGap(4, 4, 4))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSQLLayout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(jScrollPane2)
+                .addGroup(jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelSQLLayout.createSequentialGroup()
+                        .addComponent(jDebugEnter)
+                        .addGap(4, 4, 4)
+                        .addComponent(jDebugCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(closeDebugPanelBtn))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(4, 4, 4))
         );
 
@@ -956,8 +955,8 @@ public class Analyster extends JFrame {
                 case (ARCHIVE_TABLE_NAME):
                     loadTables.loadArchiveAssignTable();
                     break;
-                case ("Viewer"):
-                    loadTables.loadAssignmentTable();
+//                case ("Viewer"):
+//                    loadTables.loadAssignmentTable();
             }
         }
         getModifiedDataList().clear();    // reset the arraylist to record future changes
