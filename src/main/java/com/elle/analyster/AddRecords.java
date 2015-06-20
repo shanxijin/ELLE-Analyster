@@ -34,7 +34,7 @@ public class AddRecords extends javax.swing.JFrame {
         ana = a;
         log = l;
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(a);
         info.update(jTables.getSelectedItem().toString(), ana);
         initTable(6);   // without this, date column in assignments will be object with no type (instead of string object)
         /*

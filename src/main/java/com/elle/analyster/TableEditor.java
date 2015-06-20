@@ -22,7 +22,7 @@ public class TableEditor extends javax.swing.JFrame {
         initComponents();
         analyster = a;
         // set the interface to the middle of the window
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(a);
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         
         this.setTitle("Table Editor");

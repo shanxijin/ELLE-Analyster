@@ -851,8 +851,8 @@ public class Analyster extends JFrame {
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-06-18" + "\n"
-                + "Version: " + "0.6.3b");
+                + "2015-06-19" + "\n"
+                + "Version: " + "0.6.3d");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
@@ -863,8 +863,8 @@ public class Analyster extends JFrame {
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
         String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
         filterBySearchButton(selectedTab);
-
     }//GEN-LAST:event_searchActionPerformed
+    
     public void filterBySearchButton(String selectedTab) {
         int columnIndex;
         if (jField.getSelectedItem().toString().equals(SYMBOL_COLUMN_NAME)) {
@@ -1135,7 +1135,7 @@ public class Analyster extends JFrame {
     private void jMenuItemLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogOffActionPerformed
         Object[] options = {"Reconnect", "Log Out"};  // the titles of buttons
 
-        int n = JOptionPane.showOptionDialog(null, "Would you like to reconnect?", "Log off",
+        int n = JOptionPane.showOptionDialog(this, "Would you like to reconnect?", "Log off",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null, //do not use a custom Icon
                 options, //the titles of buttons
