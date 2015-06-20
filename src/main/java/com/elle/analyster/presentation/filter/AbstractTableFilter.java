@@ -66,7 +66,7 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
 
     @Override
     public boolean apply(int col, Collection<DistinctColumnItem> items) {
-        setFilterState(col, items);
+        setFilterState(col, items); 
         boolean result = false;
         if (result = execute(col, items)) {
             fireFilterChange();

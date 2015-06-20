@@ -8,7 +8,7 @@ public class DistinctColumnItem implements Comparable<DistinctColumnItem>, IValu
     private final int row;
 
     public DistinctColumnItem( Object value, int row) {
-        this.value = value;
+        this.value = value.toString().toLowerCase();
         this.row = row;
     }
 

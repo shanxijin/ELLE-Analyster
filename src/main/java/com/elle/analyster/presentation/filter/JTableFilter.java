@@ -16,6 +16,8 @@ public class JTableFilter extends AbstractTableFilter<JTable> {
     private int columnIndex = -1;
     private final TableModel  myTableModelInitial;
     private Collection <DistinctColumnItem> itemChecked;
+    
+    // constructor
     public JTableFilter(JTable table) {
         super(table);
         myTableModelInitial  = copyTableModel(table);
