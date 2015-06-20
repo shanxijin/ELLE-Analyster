@@ -871,7 +871,7 @@ public class Analyster extends JFrame {
         } else {
             columnIndex = 2;
         }
-        Object selectedField = textForSearch.getText();         //Search is case sensitive!!!!
+        String selectedField = textForSearch.getText();         //Search is case sensitive!!!!
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
                 TableRowFilterSupport.forTable(assignmentTable).actions(true).apply().apply(columnIndex, selectedField);
