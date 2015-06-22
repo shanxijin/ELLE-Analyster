@@ -897,17 +897,22 @@ public class Analyster extends JFrame {
         textForSearch.setText(null);
     }//GEN-LAST:event_textForSearchMouseClicked
 
+    /**
+     * This method is called when the search button is pressed
+     * @param evt 
+     */
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        filterBySearchButton(selectedTab);
+       filterBySearch();
     }//GEN-LAST:event_searchActionPerformed
     
     /**
      * This method is called by the searchActionPerformed method
      * and the textForSearchKeyPressed method
-     * @param selectedTab 
      */
-    public void filterBySearchButton(String selectedTab) {
+    public void filterBySearch() {
+        
+        String selectedTab; // store the selected tab
+        selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
         
         int columnIndex; // the column of the table
         
@@ -1177,10 +1182,17 @@ public class Analyster extends JFrame {
         new AddRecords(this, logwind).setVisible(true);
     }//GEN-LAST:event_jBatchAddActionPerformed
 
+    /**
+     * This method listens if the enter key was pressed in the search text box.
+     * This allows the value to be entered without having to click the 
+     * search button.
+     * @param evt 
+     */
     private void textForSearchKeyPressed(KeyEvent evt) {//GEN-FIRST:event_textForSearchKeyPressed
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
+        
+        // if the enter key is pressed call the filterBySearch method.
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            filterBySearchButton(selectedTab);
+            filterBySearch();
         }
     }//GEN-LAST:event_textForSearchKeyPressed
 
