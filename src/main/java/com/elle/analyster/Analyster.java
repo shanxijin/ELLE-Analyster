@@ -300,12 +300,6 @@ public class Analyster extends JFrame {
 
         jTimeLastUpdate.setText("Last updated: ");
 
-        recordLabelPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153)));
-
-        numOfRecords1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 102, 102)));
-
-        numOfRecords2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 204, 102)));
-
         javax.swing.GroupLayout recordLabelPanelLayout = new javax.swing.GroupLayout(recordLabelPanel);
         recordLabelPanel.setLayout(recordLabelPanelLayout);
         recordLabelPanelLayout.setHorizontalGroup(
@@ -326,8 +320,6 @@ public class Analyster extends JFrame {
                 .addComponent(numOfRecords2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        searchPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 255, 102)));
 
         search.setText("Search");
         search.addActionListener(new java.awt.event.ActionListener() {
