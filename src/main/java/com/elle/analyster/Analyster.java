@@ -305,11 +305,14 @@ public class Analyster extends JFrame {
         recordLabelPanelLayout.setHorizontalGroup(
             recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(recordLabelPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(numOfRecords1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(numOfRecords2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(recordLabelPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(numOfRecords1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(recordLabelPanelLayout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(numOfRecords2, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         recordLabelPanelLayout.setVerticalGroup(
             recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -359,8 +362,7 @@ public class Analyster extends JFrame {
                     .addGroup(searchPanelLayout.createSequentialGroup()
                         .addComponent(jButtonClearAllFilter)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(87, 87, 87))
+                        .addComponent(jField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(searchPanelLayout.createSequentialGroup()
                         .addGap(202, 202, 202)
                         .addComponent(textForSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -394,7 +396,7 @@ public class Analyster extends JFrame {
                     .addGroup(addPanel_controlLayout.createSequentialGroup()
                         .addGap(258, 258, 258)
                         .addComponent(jTimeLastUpdate)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         addPanel_controlLayout.setVerticalGroup(
             addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -900,30 +902,45 @@ public class Analyster extends JFrame {
         filterBySearchButton(selectedTab);
     }//GEN-LAST:event_searchActionPerformed
     
+    /**
+     * This method is called by the searchActionPerformed method
+     * and the textForSearchKeyPressed method
+     * @param selectedTab 
+     */
     public void filterBySearchButton(String selectedTab) {
-        int columnIndex;
+        
+        int columnIndex; // the column of the table
+        
         if (jField.getSelectedItem().toString().equals(SYMBOL_COLUMN_NAME)) {
-            columnIndex = 1;
+            columnIndex = 1; // first column is the symbol column
         } else {
-            columnIndex = 2;
+            columnIndex = 2; // the second column is the analyst column
         }
-        String selectedField = textForSearch.getText();         //Search is case sensitive!!!!
+        
+        String selectedField = textForSearch.getText();  // store string from text box
+        
+        JTable selectedTable; // store selected JTable
+        ITableFilter<?> selectedTableFilter; // store selected table filter
+        
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
-                TableRowFilterSupport.forTable(assignmentTable).actions(true).apply().apply(columnIndex, selectedField);
-                GUI.columnFilterStatus(columnIndex, filterTempAssignment.getTable());
+                selectedTable = assignmentTable;
+                selectedTableFilter = filterTempAssignment;
                 break;
             case REPORTS_TABLE_NAME:
-                TableRowFilterSupport.forTable(reportTable).actions(true).apply().apply(columnIndex, selectedField);
-                GUI.columnFilterStatus(columnIndex, filterTempReport.getTable());
+                selectedTable = reportTable;
+                selectedTableFilter = filterTempReport;
                 break;
             default:
-                TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply().apply(columnIndex, selectedField);
-                GUI.columnFilterStatus(columnIndex, filterTempArchive.getTable());
+                selectedTable = archiveAssignTable;
+                selectedTableFilter = filterTempArchive;
                 break;
         }
-
+        
+        TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
+        GUI.columnFilterStatus(columnIndex, selectedTableFilter.getTable());
     }
+    
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
 
         log.info("Connection");
