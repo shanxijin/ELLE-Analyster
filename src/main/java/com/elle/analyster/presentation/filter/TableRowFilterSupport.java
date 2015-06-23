@@ -15,11 +15,24 @@ public final class TableRowFilterSupport {
     private int filterIconPlacement = SwingConstants.LEADING;
     private boolean useTableRenderers = false;
 
+    /**
+     * 
+     * @param filter 
+     */
     public TableRowFilterSupport( ITableFilter<?> filter ) {
         if ( filter == null ) throw new NullPointerException();
         this.filter = filter;
     }
+    
+    
+    public TableRowFilterSupport( JTable table ) {
+        if ( table == null ) throw new NullPointerException();
+        this.filter = new JTableFilter(table);
+    }
 
+    /**
+     * this method does not make sense, the constructor should just be called
+     * */
     public static TableRowFilterSupport forTable( JTable table ) {
         return new TableRowFilterSupport(new JTableFilter(table));
     }
