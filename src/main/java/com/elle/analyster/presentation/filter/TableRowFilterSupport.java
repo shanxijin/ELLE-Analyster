@@ -75,15 +75,8 @@ public class TableRowFilterSupport {
         TableFilterColumnPopup filterPopup = new TableFilterColumnPopup(filter);
         filterPopup.setEnabled(true);
         filterPopup.setActionsVisible(actionsVisible);
-        
-        // this class does not set the translator to anything
-        // the one created in TableFilterComumnPopup should work just the same.
-        //filterPopup.setSearchTranslator(translator);
-        
         filterPopup.setUseTableRenderers( useTableRenderers );
 
-        // setupTableHeader(); // why call this?
-        // I moved this code here
         JTable table = filter.getTable();
         
 
@@ -96,49 +89,21 @@ public class TableRowFilterSupport {
             }
         });
         
-        // this below is not my comment
-        // make sure that search component is reset after table model changes
-        // setupHeaderRenderers(table.getModel(), true ); // why call this?
-        // I copied the code here
-        
-        //JTable table =  filter.getTable(); this is called too many times
-        
 
         FilterTableHeaderRenderer headerRenderer =
                 new FilterTableHeaderRenderer(filter, filterIconPlacement);
-        //filter.modelChanged( newModel ); 
-        filter.modelChanged( table.getModel() ); // this was a passed param
+        
+        filter.modelChanged( table.getModel() ); 
 
         for( TableColumn c:  Collections.list( table.getColumnModel().getColumns()) ) {
             c.setHeaderRenderer( headerRenderer );
         }
 
-        //if ( !fullSetup ) return;
-        boolean fullSetup = true; // this was a passed param
-        
-        // this code never makes it to the listener
-        if ( !fullSetup ) return; 
-
         table.addPropertyChangeListener("model", new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent e) {
-                
-                //setupHeaderRenderers( (TableModel) e.getNewValue(), false );
-                filter.modelChanged( (TableModel) e.getNewValue() ); // this was a passed param
-                
-                boolean fullSetup = false; // this was a passed param
-
-                // this makes no sense either
-                // after the listener is called which it never is
-                // then it says to call it.
-                // it seems backwards
-                if ( !fullSetup ) return; 
-            }
-            
-        });
-        
-        //return filter; // why return filter?
-    }
-
+                filter.modelChanged( (TableModel) e.getNewValue() ); 
+            } 
+        }); // end addPropertyChangeListener
+    } // end apply
 }
