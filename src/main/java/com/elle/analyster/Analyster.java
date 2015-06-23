@@ -951,7 +951,7 @@ public class Analyster extends JFrame {
         // TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
         
         // TableRowFilterSupport.forTable(selectedTable)
-        TableRowFilterSupport tableRowFilterSupport = new TableRowFilterSupport(new JTableFilter(selectedTable));
+        TableRowFilterSupport tableRowFilterSupport = new TableRowFilterSupport(selectedTable);
         
         // TableRowFilterSupport.actions(true)
         tableRowFilterSupport.actions(true);
