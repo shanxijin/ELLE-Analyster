@@ -6,6 +6,7 @@ import com.elle.analyster.presentation.filter.CreateDocumentFilter;
 import com.elle.analyster.presentation.filter.ITableFilter;
 import com.elle.analyster.presentation.filter.JTableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
+import com.elle.analyster.presentation.filter.TableRowFilterSupportTest;
 import com.elle.analyster.service.Connection;
 import com.elle.analyster.service.DeleteRecord;
 import com.elle.analyster.service.TableService;
@@ -951,16 +952,16 @@ public class Analyster extends JFrame {
         // TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
         
         // TableRowFilterSupport.forTable(selectedTable)
-        TableRowFilterSupport tableRowFilterSupport = new TableRowFilterSupport(selectedTable);
+        TableRowFilterSupportTest tableRowFilterSupport = new TableRowFilterSupportTest(selectedTable);
         
         // TableRowFilterSupport.actions(true)
-        tableRowFilterSupport.actions(true);
+        tableRowFilterSupport.setActionsVisible(true);
         
         // TableRowFilterSupport.apply()
-        ITableFilter<?> tempTableFilter = tableRowFilterSupport.apply();
+        tableRowFilterSupport.apply();
         
         // ITableFilter.apply(columnIndex, selectedField)
-        tempTableFilter.apply(columnIndex, selectedField);
+        tableRowFilterSupport.getFilter().apply(columnIndex, selectedField);
         
         // this just calls one method
         GUI.columnFilterStatus(columnIndex, selectedTableFilter.getTable());

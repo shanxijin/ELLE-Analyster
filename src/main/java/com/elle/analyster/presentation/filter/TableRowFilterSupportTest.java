@@ -11,7 +11,7 @@ import java.util.Collections;
 public class TableRowFilterSupportTest {
     
     // class attributes
-    private final ITableFilter<?> filter;
+    private ITableFilter<?> filter;
     private boolean actionsVisible;
     private int filterIconPlacement;
     private boolean useTableRenderers;
@@ -29,15 +29,13 @@ public class TableRowFilterSupportTest {
         filterIconPlacement = SwingConstants.LEADING;
         useTableRenderers = false;
     }
-
-    /**
-     * Additional actions visible in column filter list
-     * @param visible
-     * @return
-     */
-    public void setActionsVisible( boolean visible ) {
-        actionsVisible = visible;
-    }
+    
+    /************************************************************************
+     ************************ Setters ***************************************
+     ************************************************************************/
+    
+    public void setFilter(ITableFilter<?> filter){this.filter = filter;}
+    public void setActionsVisible( boolean visible ) {actionsVisible = visible;}
 
     /**
      * Set the placement of the filter icon with respect to the existing icon
@@ -56,10 +54,21 @@ public class TableRowFilterSupportTest {
         this.filterIconPlacement = filterIconPlacement;
     }
 
-    public void useTableRenderers( boolean value ) {
-        useTableRenderers = value;
-    }
+    public void useTableRenderers( boolean value ) { useTableRenderers = value;}
 
+    /************************************************************************
+     ************************ Getters ***************************************
+     ************************************************************************/
+    
+    public ITableFilter<?> getFilter(){return filter;}
+    public boolean getActionsVisible(){return actionsVisible;}
+    public int getFilterIconPlacement(){return filterIconPlacement;}
+    public boolean getUseTableRenderers(){return useTableRenderers;}
+            
+    /************************************************************************
+     ************************ Methods ***************************************
+     ************************************************************************/        
+            
     public void apply() {
 
         // this should not be called and set here
