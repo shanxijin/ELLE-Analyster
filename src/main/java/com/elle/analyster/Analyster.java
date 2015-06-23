@@ -889,7 +889,7 @@ public class Analyster extends JFrame {
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
                 + "2015-06-23" + "\n"
-                + "Version: " + "0.6.4");
+                + "Version: " + "0.6.4b");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
