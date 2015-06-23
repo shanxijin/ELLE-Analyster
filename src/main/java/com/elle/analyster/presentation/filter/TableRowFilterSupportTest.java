@@ -8,14 +8,13 @@ import java.beans.PropertyChangeListener;
 import java.util.Collections;
 //This class it was design to assign table data to filter./////
 
-public final class TableRowFilterSupportTest {
+public class TableRowFilterSupportTest {
     
     // class attributes
-    private IObjectToStringTranslator translator;
     private final ITableFilter<?> filter;
-    private boolean actionsVisible = true;
-    private int filterIconPlacement = SwingConstants.LEADING;
-    private boolean useTableRenderers = false;
+    private boolean actionsVisible;
+    private int filterIconPlacement;
+    private boolean useTableRenderers;
 
 
     /**
@@ -25,13 +24,6 @@ public final class TableRowFilterSupportTest {
     public TableRowFilterSupportTest( JTable table ) {
         
         // initialize class variables
-        translator = new IObjectToStringTranslator() {
-
-            @Override
-            public String translate(Object obj) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
         filter = new JTableFilter(table);
         actionsVisible = true; // this should start at false and turned on
         filterIconPlacement = SwingConstants.LEADING;
@@ -64,11 +56,6 @@ public final class TableRowFilterSupportTest {
         this.filterIconPlacement = filterIconPlacement;
     }
 
-
-    public void searchTransalator( IObjectToStringTranslator translator ) {
-        this.translator = translator;
-    }
-
     public void useTableRenderers( boolean value ) {
         useTableRenderers = value;
     }
@@ -79,7 +66,11 @@ public final class TableRowFilterSupportTest {
         TableFilterColumnPopup filterPopup = new TableFilterColumnPopup(filter);
         filterPopup.setEnabled(true);
         filterPopup.setActionsVisible(actionsVisible);
-        filterPopup.setSearchTranslator(translator);
+        
+        // this class does not set the translator to anything
+        // the one created in TableFilterComumnPopup should work just the same.
+        //filterPopup.setSearchTranslator(translator);
+        
         filterPopup.setUseTableRenderers( useTableRenderers );
 
         // setupTableHeader(); // why call this?
