@@ -15,7 +15,7 @@ public final class TableRowFilterSupport {
     private int filterIconPlacement = SwingConstants.LEADING;
     private boolean useTableRenderers = false;
 
-    private TableRowFilterSupport( ITableFilter<?> filter ) {
+    public TableRowFilterSupport( ITableFilter<?> filter ) {
         if ( filter == null ) throw new NullPointerException();
         this.filter = filter;
     }
@@ -24,6 +24,9 @@ public final class TableRowFilterSupport {
         return new TableRowFilterSupport(new JTableFilter(table));
     }
 
+    /**
+     * this method does not make sense, the constructor should just be called
+     * */
     public static TableRowFilterSupport forFilter( ITableFilter<?> filter ) {
         return new TableRowFilterSupport(filter);
     }

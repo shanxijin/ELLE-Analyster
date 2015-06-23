@@ -4,6 +4,7 @@ import com.elle.analyster.db.ExecuteSQLStatement;
 import com.elle.analyster.domain.ModifiedData;
 import com.elle.analyster.presentation.filter.CreateDocumentFilter;
 import com.elle.analyster.presentation.filter.ITableFilter;
+import com.elle.analyster.presentation.filter.JTableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
 import com.elle.analyster.service.Connection;
 import com.elle.analyster.service.DeleteRecord;
@@ -888,8 +889,8 @@ public class Analyster extends JFrame {
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-06-20" + "\n"
-                + "Version: " + "0.6.3f");
+                + "2015-06-23" + "\n"
+                + "Version: " + "0.6.4");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
@@ -908,6 +909,8 @@ public class Analyster extends JFrame {
     /**
      * This method is called by the searchActionPerformed method
      * and the textForSearchKeyPressed method
+     * This method is performed when the search button is pressed
+     * or if the user presses the enter key while in the search text box.
      */
     public void filterBySearch() {
         
@@ -942,7 +945,24 @@ public class Analyster extends JFrame {
                 break;
         }
         
-        TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
+        /***************** REFACTORING *******************************/
+        
+        // original code
+        // TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
+        
+        // TableRowFilterSupport.forTable(selectedTable)
+        TableRowFilterSupport tableRowFilterSupport = new TableRowFilterSupport(new JTableFilter(selectedTable));
+        
+        // TableRowFilterSupport.actions(true)
+        tableRowFilterSupport.actions(true);
+        
+        // TableRowFilterSupport.apply()
+        ITableFilter<?> tempTableFilter = tableRowFilterSupport.apply();
+        
+        // ITableFilter.apply(columnIndex, selectedField)
+        tempTableFilter.apply(columnIndex, selectedField);
+        
+        // this just calls one method
         GUI.columnFilterStatus(columnIndex, selectedTableFilter.getTable());
     }
     
