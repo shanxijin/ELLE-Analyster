@@ -50,7 +50,11 @@ public class LoadTables {
         }
         ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
+        //ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
+        TableRowFilterSupport support = new TableRowFilterSupport(assignmentTable);
+        support.setActionsVisible(true);
+        support.apply();
+        ana.setFilterTempAssignment(support.getFilter());
         ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(assignmentTable.getRowCount());
         ana.getjActivateRecord().setEnabled(false);
@@ -70,10 +74,14 @@ public class LoadTables {
         }
         ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-        ITableFilter<?> filter = TableRowFilterSupport
-                                        .forTable(assignmentTable)
-                                        .actions(true)
-                                        .apply();
+        //ITableFilter<?> filter = TableRowFilterSupport
+                                        //.forTable(assignmentTable)
+                                        //.actions(true)
+                                        //.apply();
+        TableRowFilterSupport support = new TableRowFilterSupport(assignmentTable);
+        support.setActionsVisible(true);
+        support.apply();
+        ITableFilter<?> filter = support.getFilter();
         ana.setFilterTempAssignment(filter);
         ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(assignmentTable.getRowCount());
@@ -111,10 +119,14 @@ public class LoadTables {
         }
         ana.setColumnFormat(ana.columnWidthPercentage1, archiveAssignTable);
         ana.getAssignments().init(archiveAssignTable, new String[]{"Symbol", "Analyst"});
-        ITableFilter<?> filter = TableRowFilterSupport
-                .forTable(archiveAssignTable)
-                .actions(true)
-                .apply();
+        //ITableFilter<?> filter = TableRowFilterSupport
+                //.forTable(archiveAssignTable)
+                //.actions(true)
+                //.apply();
+        TableRowFilterSupport support = new TableRowFilterSupport(archiveAssignTable);
+        support.setActionsVisible(true);
+        support.apply();
+        ITableFilter<?> filter = support.getFilter();
         ana.setFilterTempArchive(filter);
         ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(archiveAssignTable.getRowCount());
@@ -150,10 +162,14 @@ public class LoadTables {
         }
         ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
         ana.getAssignments().init(reportTable, new String[]{"Symbol", "Author"});
-        ITableFilter<?> filter = TableRowFilterSupport
-                .forTable(reportTable)
-                .actions(true)
-                .apply();
+        //ITableFilter<?> filter = TableRowFilterSupport
+                //.forTable(reportTable)
+                //.actions(true)
+                //.apply();
+        TableRowFilterSupport support = new TableRowFilterSupport(reportTable);
+        support.setActionsVisible(true);
+        support.apply();
+        ITableFilter<?> filter = support.getFilter();
         ana.setFilterTempReport(filter);
         ana.getFilterTempReport().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(reportTable.getRowCount());

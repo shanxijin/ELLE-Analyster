@@ -8,51 +8,34 @@ import java.beans.PropertyChangeListener;
 import java.util.Collections;
 //This class it was design to assign table data to filter./////
 
-public final class TableRowFilterSupport {
-    private IObjectToStringTranslator translator;
-    private final ITableFilter<?> filter;
-    private boolean actionsVisible = true;
-    private int filterIconPlacement = SwingConstants.LEADING;
-    private boolean useTableRenderers = false;
+public class TableRowFilterSupport {
+    
+    // class attributes
+    private ITableFilter<?> filter;
+    private boolean actionsVisible;
+    private int filterIconPlacement;
+    private boolean useTableRenderers;
+
 
     /**
-     * 
-     * @param filter 
+     * CONSTRUCTOR
+     * @param table 
      */
-    public TableRowFilterSupport( ITableFilter<?> filter ) {
-        if ( filter == null ) throw new NullPointerException();
-        this.filter = filter;
-    }
-    
-    
     public TableRowFilterSupport( JTable table ) {
-        if ( table == null ) throw new NullPointerException();
-        this.filter = new JTableFilter(table);
+        
+        // initialize class variables
+        filter = new JTableFilter(table);
+        actionsVisible = true; // this should start at false and turned on
+        filterIconPlacement = SwingConstants.LEADING;
+        useTableRenderers = false;
     }
-
-    /**
-     * this method does not make sense, the constructor should just be called
-     * */
-    public static TableRowFilterSupport forTable( JTable table ) {
-        return new TableRowFilterSupport(new JTableFilter(table));
-    }
-
-    /**
-     * this method does not make sense, the constructor should just be called
-     * */
-    public static TableRowFilterSupport forFilter( ITableFilter<?> filter ) {
-        return new TableRowFilterSupport(filter);
-    }
-
-    /**
-     * Additional actions visible in column filter list
-     * @param visible
-     * @return
-     */
-    public TableRowFilterSupport actions( boolean visible ) {
-        this.actionsVisible = visible;
-        return this;
-    }
+    
+    /************************************************************************
+     ************************ Setters ***************************************
+     ************************************************************************/
+    
+    public void setFilter(ITableFilter<?> filter){this.filter = filter;}
+    public void setActionsVisible( boolean visible ) {actionsVisible = visible;}
 
     /**
      * Set the placement of the filter icon with respect to the existing icon
@@ -60,9 +43,8 @@ public final class TableRowFilterSupport {
      *
      * @param filterIconPlacement either SwingConstants.LEADING or
      *         SwingConstants.TRAILING.
-     * @return this
      */
-    public TableRowFilterSupport filterIconPlacement(int filterIconPlacement) {
+    public void filterIconPlacement(int filterIconPlacement) {
         if (filterIconPlacement != SwingConstants.LEADING &&
                 filterIconPlacement != SwingConstants.TRAILING) {
             throw new UnsupportedOperationException("The filter icon " +         
@@ -70,37 +52,39 @@ public final class TableRowFilterSupport {
                     "SwingConstants.LEADING or SwingConstants.TRAILING");
         }
         this.filterIconPlacement = filterIconPlacement;
-        return this;
     }
 
+    public void useTableRenderers( boolean value ) { useTableRenderers = value;}
 
-    public TableRowFilterSupport searchTransalator( IObjectToStringTranslator translator ) {
-        this.translator = translator;
-        return this;
-    }
+    /************************************************************************
+     ************************ Getters ***************************************
+     ************************************************************************/
+    
+    public ITableFilter<?> getFilter(){return filter;}
+    public boolean getActionsVisible(){return actionsVisible;}
+    public int getFilterIconPlacement(){return filterIconPlacement;}
+    public boolean getUseTableRenderers(){return useTableRenderers;}
+            
+    /************************************************************************
+     ************************ Methods ***************************************
+     ************************************************************************/        
+            
+    public void apply() {
 
-    public TableRowFilterSupport useTableRenderers( boolean value ) {
-        this.useTableRenderers = value;
-        return this;
-    }
-
-    public ITableFilter<?> apply() {
-
-        final TableFilterColumnPopup filterPopup = new TableFilterColumnPopup(filter);
+        // this should not be called and set here
+        TableFilterColumnPopup filterPopup = new TableFilterColumnPopup(filter);
         filterPopup.setEnabled(true);
         filterPopup.setActionsVisible(actionsVisible);
-        filterPopup.setSearchTranslator(translator);
+        
+        // this class does not set the translator to anything
+        // the one created in TableFilterComumnPopup should work just the same.
+        //filterPopup.setSearchTranslator(translator);
+        
         filterPopup.setUseTableRenderers( useTableRenderers );
 
-        setupTableHeader();
-        
-        return filter;
-    }
-
-
-    private void setupTableHeader() {
-
-        final JTable table = filter.getTable();
+        // setupTableHeader(); // why call this?
+        // I moved this code here
+        JTable table = filter.getTable();
         
 
         filter.addChangeListener(new IFilterChangeListener() {
@@ -112,39 +96,49 @@ public final class TableRowFilterSupport {
             }
         });
         
-
+        // this below is not my comment
         // make sure that search component is reset after table model changes
-        setupHeaderRenderers(table.getModel(), true );
-
-    }
-
-    private void setupHeaderRenderers( TableModel newModel, boolean fullSetup ) {
-
-        JTable table =  filter.getTable();
+        // setupHeaderRenderers(table.getModel(), true ); // why call this?
+        // I copied the code here
+        
+        //JTable table =  filter.getTable(); this is called too many times
         
 
         FilterTableHeaderRenderer headerRenderer =
                 new FilterTableHeaderRenderer(filter, filterIconPlacement);
-        filter.modelChanged( newModel );
+        //filter.modelChanged( newModel ); 
+        filter.modelChanged( table.getModel() ); // this was a passed param
 
         for( TableColumn c:  Collections.list( table.getColumnModel().getColumns()) ) {
             c.setHeaderRenderer( headerRenderer );
         }
 
-        if ( !fullSetup ) return;
+        //if ( !fullSetup ) return;
+        boolean fullSetup = true; // this was a passed param
+        
+        // this code never makes it to the listener
+        if ( !fullSetup ) return; 
 
         table.addPropertyChangeListener("model", new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent e) {
-                setupHeaderRenderers( (TableModel) e.getNewValue(), false );
+                
+                //setupHeaderRenderers( (TableModel) e.getNewValue(), false );
+                filter.modelChanged( (TableModel) e.getNewValue() ); // this was a passed param
+                
+                boolean fullSetup = false; // this was a passed param
+
+                // this makes no sense either
+                // after the listener is called which it never is
+                // then it says to call it.
+                // it seems backwards
+                if ( !fullSetup ) return; 
             }
             
         });
-
         
-
+        //return filter; // why return filter?
     }
-
 
 }

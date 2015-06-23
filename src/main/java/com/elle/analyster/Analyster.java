@@ -4,9 +4,7 @@ import com.elle.analyster.db.ExecuteSQLStatement;
 import com.elle.analyster.domain.ModifiedData;
 import com.elle.analyster.presentation.filter.CreateDocumentFilter;
 import com.elle.analyster.presentation.filter.ITableFilter;
-import com.elle.analyster.presentation.filter.JTableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
-import com.elle.analyster.presentation.filter.TableRowFilterSupportTest;
 import com.elle.analyster.service.Connection;
 import com.elle.analyster.service.DeleteRecord;
 import com.elle.analyster.service.TableService;
@@ -952,7 +950,7 @@ public class Analyster extends JFrame {
         // TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
         
         // TableRowFilterSupport.forTable(selectedTable)
-        TableRowFilterSupportTest tableRowFilterSupport = new TableRowFilterSupportTest(selectedTable);
+        TableRowFilterSupport tableRowFilterSupport = new TableRowFilterSupport(selectedTable);
         
         // TableRowFilterSupport.actions(true)
         tableRowFilterSupport.setActionsVisible(true);
@@ -1136,6 +1134,8 @@ public class Analyster extends JFrame {
         assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
         reportTable.setName(REPORTS_TABLE_NAME);
         archiveAssignTable.setName(ARCHIVE_TABLE_NAME);
+        
+        TableRowFilterSupport support; // to store a TableRowFilterSupport Object
 
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
@@ -1144,9 +1144,12 @@ public class Analyster extends JFrame {
                 if (GUI.filterAssignmentIsActive == true) {
                     assignmentTable = assignmentFiltered;
                 } else {
-                    filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
-                            .apply();
-                    assignmentFiltered = filterTempAssignment.getTable();
+                    //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
+                            //.apply();
+                    //assignmentFiltered = filterTempAssignment.getTable();
+                    support = new TableRowFilterSupport(assignmentTable);
+                    support.apply();
+                    assignmentFiltered = support.getFilter().getTable();
                 }
                 numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
                 numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
@@ -1155,9 +1158,12 @@ public class Analyster extends JFrame {
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(false);
                 if (GUI.filterReportIstActive == false) {
-                    filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true)
-                            .apply();
-                    reportFiltered = filterTempReport.getTable();
+                    //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true)
+                            //.apply();
+                    //reportFiltered = filterTempReport.getTable();
+                    support = new TableRowFilterSupport(reportTable);
+                    support.apply();
+                    reportFiltered = support.getFilter().getTable();
                 } else {
                     reportTable = reportFiltered;
                 }
@@ -1168,9 +1174,12 @@ public class Analyster extends JFrame {
                 jActivateRecord.setEnabled(true);
                 jArchiveRecord.setEnabled(false);
                 if (GUI.filterArchiveIsActive == false) {
-                    filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true)
-                            .apply();
-                    archiveAssignFiltered = filterTempArchive.getTable();
+                    //filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true)
+                            //.apply();
+                    //archiveAssignFiltered = filterTempArchive.getTable();
+                    support = new TableRowFilterSupport(archiveAssignTable);
+                    support.apply();
+                    archiveAssignFiltered = support.getFilter().getTable();
                 } else {
                     archiveAssignTable = archiveAssignFiltered;
                 }
@@ -1275,6 +1284,9 @@ public class Analyster extends JFrame {
     }//GEN-LAST:event_jButtonClearAllFilterActionPerformed
 
     private void clearAllFilters() {
+        
+        TableRowFilterSupport support; // to store a TableRowFilterSupport Object
+        
         switch (jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex())) {
             case ASSIGNMENTS_TABLE_NAME:
 
@@ -1287,15 +1299,25 @@ public class Analyster extends JFrame {
                 loadTables.loadReportTable();
                 numOfRecords1.setText("Number of records in Report: " + reportTable.getRowCount());
                 numOfRecords2.setText("Number of records shown: " + reportTable.getRowCount());
-                filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
-                filterTempReport.getTable();
+                //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
+                //filterTempReport.getTable();
+                support = new TableRowFilterSupport(reportTable);
+                support.setActionsVisible(true);
+                support.apply();
+                filterTempReport = support.getFilter();
+                filterTempReport.getTable(); // says get table but not stored?
                 GUI.cleanAllColumnFilterStatus(reportTable);
                 break;
             case ARCHIVE_TABLE_NAME:
                 GUI.filterArchiveIsActive = false;
                 loadTables.loadArchiveAssignTable();
-                filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply();//
-                filterTempArchive.getTable();
+                //filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply();//
+                //filterTempArchive.getTable();
+                support = new TableRowFilterSupport(archiveAssignTable);
+                support.setActionsVisible(true);
+                support.apply();
+                filterTempArchive = support.getFilter();
+                filterTempArchive.getTable(); // says get table but not stored?
                 numOfRecords1.setText("Number of records in Assignments Archive: " + archiveAssignTable.getRowCount());
                 numOfRecords2.setText("Number of records shown: " + archiveAssignTable.getRowCount());
                 GUI.cleanAllColumnFilterStatus(archiveAssignTable);
@@ -1306,6 +1328,9 @@ public class Analyster extends JFrame {
     }
 
     private void jMenuItemOthersLoadDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOthersLoadDataActionPerformed
+        
+        TableRowFilterSupport support; // to store a TableRowFilterSupport Object
+        
         String titleAt = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
         if (titleAt.equals(ASSIGNMENTS_TABLE_NAME)) {
             loadTables.loadAssignmentTable();
@@ -1313,12 +1338,24 @@ public class Analyster extends JFrame {
             loadTables.loadReportTable();
             numOfRecords1.setText("Number of records in Report: " + reportTable.getRowCount());
             numOfRecords2.setText("Number of records shown: " + reportTable.getRowCount());
-            filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
-            filterTempReport.getTable();
+            //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
+            //filterTempReport.getTable();
+            support = new TableRowFilterSupport(reportTable);
+            support.setActionsVisible(true);
+            support.apply();
+            filterTempReport = support.getFilter();
+            filterTempReport.getTable(); // says get table but not stored?
+            numOfRecords1.setText("Number of records in Assignments Archive: " + archiveAssignTable.getRowCount());
+            numOfRecords2.setText("Number of records shown: " + archiveAssignTable.getRowCount());
         } else {
             loadTables.loadArchiveAssignTable();
-            filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply();//
-            filterTempArchive.getTable();
+            //filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply();
+            //filterTempArchive.getTable();
+            support = new TableRowFilterSupport(archiveAssignTable);
+            support.setActionsVisible(true);
+            support.apply();
+            filterTempArchive = support.getFilter();
+            filterTempArchive.getTable(); // says get table but not stored?
             numOfRecords1.setText("Number of records in Assignments Archive: " + archiveAssignTable.getRowCount());
             numOfRecords2.setText("Number of records shown: " + archiveAssignTable.getRowCount());
         }
@@ -1436,9 +1473,13 @@ public class Analyster extends JFrame {
     public void loadData() {
         loadTables = new LoadTables();
         loadTables.loadTables();
-         filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
-                            .apply();
-                    assignmentFiltered = filterTempAssignment.getTable(); 
+        //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
+                            //.apply();
+        //assignmentFiltered = filterTempAssignment.getTable(); 
+        TableRowFilterSupport support = new TableRowFilterSupport(assignmentTable);
+        support.setActionsVisible(true);
+        support.apply();
+        assignmentFiltered = support.getFilter().getTable();
     }
 
     public void setTerminalsFunction(final JTable table) { //set all listenner for JTable.
@@ -1504,24 +1545,38 @@ public class Analyster extends JFrame {
 
     public void filterByDoubleClick(JTable table) {
 
+        TableRowFilterSupport support; // to store a TableRowFilterSupport Object
+        
         int[] columnIndex = table.getColumnModel().getSelectedColumns();
         int rowIndex = table.getSelectedRow();
         if (rowIndex != -1) {
             Object selectedField = table.getValueAt(rowIndex, columnIndex[0]);
             if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
-                filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
+                //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
+                support = new TableRowFilterSupport(assignmentTable);
+                support.setActionsVisible(true);
+                support.apply();
+                filterTempAssignment = support.getFilter();
                 filterTempAssignment.apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], filterTempAssignment.getTable());
                 numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
             } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
-                filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true) // D, Delete if you want to have multiple filters (for example: Symbol + analyster at the same time)
-                        .apply();
+                //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true) // D, Delete if you want to have multiple filters (for example: Symbol + analyster at the same time)
+                        //.apply();
+                support = new TableRowFilterSupport(reportTable);
+                support.setActionsVisible(true);
+                support.apply();
+                filterTempReport = support.getFilter();
                 filterTempReport.apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], filterTempReport.getTable());
                 numOfRecords1.setText("Number of records in Reports: " + numberReportsInit);
             } else {
-                filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true) // D, Delete if you want to have multiple filters (for example: Symbol + analyster at the same time)
-                        .apply();
+                //filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true) // D, Delete if you want to have multiple filters (for example: Symbol + analyster at the same time)
+                        //.apply();
+                support = new TableRowFilterSupport(archiveAssignTable);
+                support.setActionsVisible(true);
+                support.apply();
+                filterTempArchive = support.getFilter();
                 filterTempArchive.apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], filterTempArchive.getTable());
                 numOfRecords1.setText("Number of records in Archive: " + numberArchiveAssignInit);
