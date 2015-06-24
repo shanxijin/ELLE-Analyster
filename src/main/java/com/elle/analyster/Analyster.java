@@ -4,6 +4,7 @@ import com.elle.analyster.db.ExecuteSQLStatement;
 import com.elle.analyster.domain.ModifiedData;
 import com.elle.analyster.presentation.filter.CreateDocumentFilter;
 import com.elle.analyster.presentation.filter.ITableFilter;
+import com.elle.analyster.presentation.filter.JTableFilterTest;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
 import com.elle.analyster.service.Connection;
 import com.elle.analyster.service.DeleteRecord;
@@ -1550,7 +1551,7 @@ public class Analyster extends JFrame {
         int[] columnIndex = table.getColumnModel().getSelectedColumns();
         int rowIndex = table.getSelectedRow();
         if (rowIndex != -1) {
-            Object selectedField = table.getValueAt(rowIndex, columnIndex[0]);
+            String selectedField = table.getValueAt(rowIndex, columnIndex[0]).toString();
             if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
                 //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
                 support = new TableRowFilterSupport(assignmentTable);

@@ -47,7 +47,7 @@ public interface ITableFilter<T extends JTable> extends Serializable {
      */
     boolean apply(int col, Collection<DistinctColumnItem> items);
 
-    boolean apply(int col, Object selectField);
+    boolean apply(int col, String selectField);
 
     void addChangeListener(IFilterChangeListener listener);
 

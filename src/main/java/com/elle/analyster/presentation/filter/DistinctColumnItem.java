@@ -2,18 +2,18 @@ package com.elle.analyster.presentation.filter;
 
 import java.math.BigDecimal;
 
-public class DistinctColumnItem implements Comparable<DistinctColumnItem>, IValueWrapper<Object> {
+public class DistinctColumnItem implements Comparable<DistinctColumnItem> {
 
-    private final Object value;
+    private final String value;
     private final int row;
 
-    public DistinctColumnItem( Object value, int row) {
-        this.value = value.toString().toLowerCase();
+    public DistinctColumnItem( String value, int row) {
+        this.value = value.toLowerCase();
         this.row = row;
     }
 
-    @Override
-    public Object getValue() {
+    //@Override
+    public String getValue() {
         return value;
     }
 
@@ -24,7 +24,7 @@ public class DistinctColumnItem implements Comparable<DistinctColumnItem>, IValu
 
     @Override
     public String toString() {
-        return value == null? "":  value.toString();
+        return value == null? "":  value;
     }
 
     @Override
@@ -63,15 +63,16 @@ public class DistinctColumnItem implements Comparable<DistinctColumnItem>, IValu
 
         if ( value.getClass() == o.value.getClass() ) {
             if ( value instanceof Comparable) {
-                return ((Comparable<Object>)value).compareTo(o.value);
+                return (value).compareTo(o.value);
             } else {
                 return value.toString().compareTo(o.value.toString());
             }
         } else {
 
-            if ( value instanceof Number && o.value instanceof Number) {
-                BigDecimal a = new BigDecimal(value.toString());
-                BigDecimal b = new BigDecimal(o.value.toString());
+            // not sure why they did this but I will cast to object
+            if ( (Object)value instanceof Number && (Object)o.value instanceof Number) {
+                BigDecimal a = new BigDecimal(value);
+                BigDecimal b = new BigDecimal(o.value);
                 return a.compareTo(b);
             }
 
