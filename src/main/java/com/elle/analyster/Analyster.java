@@ -34,12 +34,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-public class Analyster extends JFrame {
+public class Analyster extends JFrame implements ITableNameConstants{
 
     private static final String SYMBOL_COLUMN_NAME = "Symbol";
-    private static final String ASSIGNMENTS_TABLE_NAME = "Assignments";
-    private static final String REPORTS_TABLE_NAME = "Reports";
-    private static final String ARCHIVE_TABLE_NAME = "Assignments_Archived";
     private final TableService tableService = new TableService();
     private final Connection con = new Connection();
     private LoadTables loadTables;
@@ -312,7 +309,7 @@ public class Analyster extends JFrame {
                         .addComponent(numOfRecords1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(recordLabelPanelLayout.createSequentialGroup()
                         .addGap(61, 61, 61)
-                        .addComponent(numOfRecords2, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)))
+                        .addComponent(numOfRecords2, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         recordLabelPanelLayout.setVerticalGroup(
@@ -320,9 +317,9 @@ public class Analyster extends JFrame {
             .addGroup(recordLabelPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(numOfRecords1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(numOfRecords2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(numOfRecords2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         search.setText("Search");
@@ -391,23 +388,26 @@ public class Analyster extends JFrame {
                 .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addPanel_controlLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22)
-                        .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(addPanel_controlLayout.createSequentialGroup()
                         .addGap(258, 258, 258)
                         .addComponent(jTimeLastUpdate)))
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         addPanel_controlLayout.setVerticalGroup(
             addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addPanel_controlLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTimeLastUpdate)
+                .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addPanel_controlLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTimeLastUpdate))
+                    .addGroup(addPanel_controlLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1300,6 +1300,15 @@ public class Analyster extends JFrame {
                 loadTables.loadReportTable();
                 numOfRecords1.setText("Number of records in Report: " + reportTable.getRowCount());
                 numOfRecords2.setText("Number of records shown: " + reportTable.getRowCount());
+                
+                /********************************* TESTING ***************
+                 * 
+                 */
+                
+                numOfRecords2.setText( new DisplayRecordLabels(REPORTS_TABLE_NAME, reportTable.getRowCount(), reportTable.getRowCount()).toString());
+                System.out.println( new DisplayRecordLabels(REPORTS_TABLE_NAME, reportTable.getRowCount(), reportTable.getRowCount()).toString());
+                
+                
                 //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
                 //filterTempReport.getTable();
                 support = new TableRowFilterSupport(reportTable);
@@ -1308,6 +1317,9 @@ public class Analyster extends JFrame {
                 filterTempReport = support.getFilter();
                 filterTempReport.getTable(); // says get table but not stored?
                 GUI.cleanAllColumnFilterStatus(reportTable);
+                numOfRecords2.setText( new DisplayRecordLabels(REPORTS_TABLE_NAME, reportTable.getRowCount(), reportTable.getRowCount()).toString());
+                //String  sText  = "<html>Line1 <br/> Line2 <br/> Line3</html>";
+                //numOfRecords2.setText (sText);
                 break;
             case ARCHIVE_TABLE_NAME:
                 GUI.filterArchiveIsActive = false;
@@ -1863,6 +1875,13 @@ public class Analyster extends JFrame {
 
     public ITableFilter<?> getFilterTempAssignment() {
         return filterTempAssignment;
+    }
+    
+    /**
+     * single method for updating record labels
+     */
+    public void getRecordLabels(){
+        
     }
     
     // @formatter:off
