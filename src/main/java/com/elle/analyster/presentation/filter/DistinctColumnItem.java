@@ -65,7 +65,7 @@ public class DistinctColumnItem implements Comparable<DistinctColumnItem> {
             if ( value instanceof Comparable) {
                 return (value).compareTo(o.value);
             } else {
-                return value.toString().compareTo(o.value.toString());
+                return value.compareTo(o.value);
             }
         } else {
 
