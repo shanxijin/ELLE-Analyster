@@ -1,11 +1,8 @@
 package com.elle.analyster.presentation.filter;
 
+import com.elle.analyster.MyTableModel;
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.*;
 
 /**
@@ -18,137 +15,104 @@ import java.util.*;
  * @param <T>
  */
 @SuppressWarnings("serial")
-public abstract class AbstractTableFilterTest<T extends JTable> implements ITableFilter<T> {
+public class AbstractTableFilterTest<T extends JTable> implements ITableFilter<T> {
 
-    private final Set<IFilterChangeListener> listeners = Collections.synchronizedSet(new HashSet<IFilterChangeListener>());
 
-    private final Map<Integer, Collection<DistinctColumnItem>> distinctItemCache
-            = Collections.synchronizedMap(new HashMap<Integer, Collection<DistinctColumnItem>>());
+    /*************** This code was never implemented ***********************/
 
-    private final T table;
-    private final TableFilterState filterState = new TableFilterState();
-
-    public AbstractTableFilterTest(T table) {
-        this.table = table;
-        setupDistinctItemCacheRefresh();
+    @Override
+    public void modelChanged(TableModel model) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void setupDistinctItemCacheRefresh() {
-        clearDistinctItemCache();
-        this.table.addPropertyChangeListener("model", new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                clearDistinctItemCache();
-                TableModel model = (TableModel) e.getNewValue();
-                if (model != null) {
-                    model.addTableModelListener(new TableModelListener() {
-
-                        @Override
-                        public void tableChanged(TableModelEvent e) {
-                            clearDistinctItemCache();
-                        }
-                    });
-                }
-            }
-        });
+    @Override
+    public void saveTableState() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void clearDistinctItemCache() {
-        distinctItemCache.clear();
+    @Override
+    public MyTableModel getTableModelPreviousState() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void saveFilterCriteria(Collection collection) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Collection<DistinctColumnItem> getFilterCriteria() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getColumnIndex() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setColumnIndex(int mcolumnIndex) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public TableModel getMyTableModelInitial() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    /************************* These were used ******************************/
+    
+    
+    
     @Override
     public T getTable() {
-        return table;
-    }
-
-    protected abstract boolean execute(int col, Collection<DistinctColumnItem> items);
-
-    @Override
-    public boolean apply(int col, Collection<DistinctColumnItem> items) {
-        setFilterState(col, items); 
-        boolean result = false;
-        if (result = execute(col, items)) {
-            fireFilterChange();
-        }
-        return result;
-    }
-
-    @Override
-    public boolean apply(int col, Object selectField) { //Create Collection from selected fields 
-        Collection<DistinctColumnItem> item = new ArrayList<>();
-        DistinctColumnItem distinctColumnItem =new DistinctColumnItem(selectField, col);
-        item.add(distinctColumnItem);
-        return apply(col, item);
-    }
-    @Override
-    public final void addChangeListener(IFilterChangeListener listener) {
-        if (listener != null) {
-            listeners.add(listener);
-        }
-    }
-
-    @Override
-    public final void removeChangeListener(IFilterChangeListener listener) {
-        if (listener != null) {
-            listeners.remove(listener);
-        }
-    }
-
-    public final void fireFilterChange() {
-        for (IFilterChangeListener l : listeners) {
-            l.filterChanged(AbstractTableFilterTest.this);
-        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Collection<DistinctColumnItem> getDistinctColumnItems(int column) {
-        Collection<DistinctColumnItem> result = distinctItemCache.get(column);
-        if (result == null) {
-            result = collectDistinctColumnItems(column);
-            distinctItemCache.put(column, result);
-        }
-        return result;
-
-    }
-
-    private Collection<DistinctColumnItem> collectDistinctColumnItems(int column) {
-        Set<DistinctColumnItem> result = new TreeSet<DistinctColumnItem>(); // to collect unique items
-        for (int row = 0; row < table.getModel().getRowCount(); row++) {
-            Object value = table.getModel().getValueAt(row, column);
-            result.add(new DistinctColumnItem(value, row));
-        }
-        return result;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Collection<DistinctColumnItem> getFilterState(int column) {
-        return filterState.getValues(column);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean isFiltered(int column) {
-        Collection<DistinctColumnItem> checks = getFilterState(column);
-        return !(CollectionUtils.isEmpty(checks)) && getDistinctColumnItems(column).size() != checks.size();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean includeRow(ITableFilter.Row row) {
-        return filterState.include(row);
+    public boolean includeRow(Row entry) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void setFilterState(int column, Collection<DistinctColumnItem> values) {
-        filterState.setValues(column, values);
+    @Override
+    public boolean apply(int col, Collection<DistinctColumnItem> items) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean apply(int col, Object selectField) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addChangeListener(IFilterChangeListener listener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeChangeListener(IFilterChangeListener listener) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void clear() {
-        filterState.clear();
-        Collection<DistinctColumnItem> items = Collections.emptyList();
-        for (int column = 0; column < table.getModel().getColumnCount(); column++) {
-            execute(column, items);
-        }
-        fireFilterChange();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
 }
