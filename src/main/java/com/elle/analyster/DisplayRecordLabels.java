@@ -106,7 +106,8 @@ public class DisplayRecordLabels implements ITableNameConstants{
                     throw new NoSuchFieldException(errorMessage);
                 } catch (NoSuchFieldException ex) {
                     ex.printStackTrace();
-                    // TODO: post to log.txt
+                    // post to log.txt
+                    Analyster.getInstance().getLogwind().sendMessages(ex.getMessage());
                 }
         
                 break;
