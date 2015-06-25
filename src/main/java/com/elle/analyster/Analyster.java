@@ -1094,7 +1094,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
         // TODO check that the selectedTab is actually needed to be passed in.
         
-        // get specific information for the seletec tab
+        // get specific information for the selected tab
         ITableFilter<?> tempFilter = filterTempAssignment;
         float[] columnWidthPercentage = columnWidthPercentage1;
         JTable table = assignmentTable;
@@ -1116,7 +1116,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
                 table = archiveAssignTable;
                 break;
             default:
-                throwUnknownTableException(); // handle unkown table value
+                throwUnknownTableException(selectedTab); // handle unkown table value
                 break;
         }
         
@@ -1127,61 +1127,115 @@ public class Analyster extends JFrame implements ITableNameConstants{
     }
     
     private void changeTabbedPanelState(String selectedTab) {
+        
+        // TODO : NOT SURE IF THIS IS NEEDED
         //To remember previous filter or create a filter if the table is not filtered.//
         assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
         reportTable.setName(REPORTS_TABLE_NAME);
         archiveAssignTable.setName(ARCHIVE_TABLE_NAME);
-
+        
+        // pointers to information
+        boolean isFilterActive = false;
+        JTable table = new JTable();
+        JTable filteredTable = new JTable();
+        ITableFilter<?> filterTemp; // interface does not require initialize
+        int numberInit = 99999; // 9999 is more clear for debugging
+        
+        
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
+                
+                // not sure what this does
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(true);
-                if (GUI.filterAssignmentIsActive == true) {
-                    assignmentTable = assignmentFiltered;
-                } else {
-                    filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
-                            .apply();
-                    assignmentFiltered = filterTempAssignment.getTable();
-                }
-                numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
-                numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
+                
+                // point to assignement table information
+                isFilterActive = GUI.filterAssignmentIsActive;
+                table = assignmentTable;
+                filteredTable = assignmentFiltered;
+                filterTemp = filterTempAssignment;
+                numberInit = numberAssignmentInit;
+                
+                // set label record information
+                //numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
+                //numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
                 break;
+                
             case REPORTS_TABLE_NAME:
+                
+                // not sure what this does
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(false);
-                if (GUI.filterReportIstActive == false) {
-                    filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true)
-                            .apply();
-                    reportFiltered = filterTempReport.getTable();
-                } else {
-                    reportTable = reportFiltered;
-                }
-                numOfRecords1.setText("Number of records in Reports: " + numberReportsInit);
-                numOfRecords2.setText("Number of records shown: " + reportFiltered.getRowCount());
+                
+                // point to report table information
+                isFilterActive = GUI.filterReportIstActive;
+                table = reportTable;
+                filteredTable = reportFiltered;
+                filterTemp = filterTempReport;
+                numberInit = numberReportsInit;
+                
+                // set label record information
+                //numOfRecords1.setText("Number of records in Reports: " + numberReportsInit);
+                //numOfRecords2.setText("Number of records shown: " + reportFiltered.getRowCount());
                 break;
+                
             case ARCHIVE_TABLE_NAME:
+                
+                // not sure what this does
                 jActivateRecord.setEnabled(true);
                 jArchiveRecord.setEnabled(false);
-                if (GUI.filterArchiveIsActive == false) {
-                    filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true)
-                            .apply();
-                    archiveAssignFiltered = filterTempArchive.getTable();
-                } else {
-                    archiveAssignTable = archiveAssignFiltered;
-                }
-                numOfRecords1.setText("Number of records in Archive: " + numberArchiveAssignInit);
-                numOfRecords2.setText("Number of records shown: " + archiveAssignFiltered.getRowCount());
+                
+                // point to report table information
+                isFilterActive = GUI.filterArchiveIsActive;
+                table = archiveAssignTable;
+                filteredTable = archiveAssignFiltered;
+                filterTemp = filterTempArchive;
+                numberInit = numberArchiveAssignInit;
+                
+                // set label record information
+                //numOfRecords1.setText("Number of records in Archive: " + numberArchiveAssignInit);
+                //numOfRecords2.setText("Number of records shown: " + archiveAssignFiltered.getRowCount());
                 break;
+                
             case "Viewer":
+                // VIEWER TAB DISABLED AT THE MOMENT
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(true);
 //                viewerTable = assignmentTable;
 //                viewerTable.setVisible(true);
-                numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
-                numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
+                //numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
+                //numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
+                break;
+            default:
+                throwUnknownTableException(selectedTab);
+                selectedTab = "unknown";
                 break;
         }
-
+        
+        if(selectedTab.equals("unknown")){
+            // do nothing
+        }else{
+            if (isFilterActive) {
+            table = filteredTable;
+            } else {
+                filterTemp = TableRowFilterSupport.forTable(table).actions(true).apply();
+                filteredTable = filterTemp.getTable();
+            }
+            
+            // set label record information
+            numOfRecords1.setText("Number of records in " + selectedTab + ": " + numberInit);
+            numOfRecords2.setText("Number of records shown: " + filteredTable.getRowCount());
+        }
+        
+        //test
+        // the global variables are not being set
+        if(selectedTab.equals(ASSIGNMENTS_TABLE_NAME))
+            filterTempAssignment = TableRowFilterSupport.forTable(table).actions(true).apply();
+        if(selectedTab.equals(REPORTS_TABLE_NAME))
+            filterTempReport = TableRowFilterSupport.forTable(table).actions(true).apply();
+        if(selectedTab.equals(ARCHIVE_TABLE_NAME))
+            filterTempArchive = TableRowFilterSupport.forTable(table).actions(true).apply();
+            
     }
 
     private void jBatchEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBatchEditActionPerformed
@@ -1637,10 +1691,12 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
     /**
      * This method handles unknown table exceptions
+     * It takes the value of the selected tab that caused the exception
+     * @param selectedTab
      */
-    public void throwUnknownTableException() {
+    public void throwUnknownTableException(String selectedTab) {
         try {
-            String errorMessage = "ERROR: unknown table";
+            String errorMessage = "ERROR: unknown table: " + selectedTab;
             throw new NoSuchFieldException(errorMessage);
         } catch (NoSuchFieldException ex) {
             ex.printStackTrace();
@@ -1649,7 +1705,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
         }
     }
 
-   
 
     class AlignmentTableHeaderCellRenderer implements TableCellRenderer {
 
