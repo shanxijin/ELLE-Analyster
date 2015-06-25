@@ -33,12 +33,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-public class Analyster extends JFrame {
+public class Analyster extends JFrame implements ITableNameConstants{
 
     private static final String SYMBOL_COLUMN_NAME = "Symbol";
-    private static final String ASSIGNMENTS_TABLE_NAME = "Assignments";
-    private static final String REPORTS_TABLE_NAME = "Reports";
-    private static final String ARCHIVE_TABLE_NAME = "Assignments_Archived";
     private final TableService tableService = new TableService();
     private final Connection con = new Connection();
     private LoadTables loadTables;
