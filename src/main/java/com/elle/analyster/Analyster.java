@@ -2,6 +2,7 @@ package com.elle.analyster;
 
 import com.elle.analyster.db.ExecuteSQLStatement;
 import com.elle.analyster.domain.ModifiedData;
+import com.elle.analyster.presentation.filter.AbstractTableFilter;
 import com.elle.analyster.presentation.filter.CreateDocumentFilter;
 import com.elle.analyster.presentation.filter.ITableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
@@ -944,35 +945,37 @@ public class Analyster extends JFrame implements ITableNameConstants{
         
         String selectedField = textForSearch.getText();  // store string from text box
         
-        JTable selectedTable; // store selected JTable
-        ITableFilter<?> selectedTableFilter; // store selected table filter
-        String tableName;
+        JTable selectedTable = new JTable(); // store selected JTable
+        ITableFilter<?> selectedTableFilter = filterTempAssignment; // store selected table filter
         
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
-                tableName = ASSIGNMENTS_TABLE_NAME;
-                //selectedTable = assignmentTable;
-                //selectedTableFilter = filterTempAssignment;
+                selectedTable = assignmentTable;
+                selectedTableFilter = filterTempAssignment;
+                //tabsMap.get(selectedTab).setTable(selectedTable);
+                //tabsMap.get(selectedTab).setFilter(selectedTableFilter);
                 break;
             case REPORTS_TABLE_NAME:
-                tableName = REPORTS_TABLE_NAME;
-                //selectedTable = reportTable;
-                //selectedTableFilter = filterTempReport;
+                selectedTable = reportTable;
+                selectedTableFilter = filterTempReport;
+                //tabsMap.get(selectedTab).setTable(selectedTable);
+                //tabsMap.get(selectedTab).setFilter(selectedTableFilter);
                 break;
             case ARCHIVE_TABLE_NAME:
-                tableName = ARCHIVE_TABLE_NAME;
-                //selectedTable = archiveAssignTable;
-                //selectedTableFilter = filterTempArchive;
+                selectedTable = archiveAssignTable;
+                selectedTableFilter = filterTempArchive;
+                //tabsMap.get(selectedTab).setTable(selectedTable);
+                //tabsMap.get(selectedTab).setFilter(selectedTableFilter);
                 break;
             default:
                 throwUnknownTableException(selectedTab);
-                tableName = "unknown";
+                selectedTab = "unknown";
                 break;
         }
         
-        if(!tableName.equals("unknown")){
-            TableRowFilterSupport.forTable(tabsMap.get(tableName).getTable()).actions(true).apply().apply(columnIndex, selectedField);
-            GUI.columnFilterStatus(columnIndex, tabsMap.get(tableName).getFilter().getTable());
+        if(!selectedTab.equals("unknown")){
+            TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
+            GUI.columnFilterStatus(columnIndex, selectedTableFilter.getTable());
         }
         
     }
@@ -1133,31 +1136,43 @@ public class Analyster extends JFrame implements ITableNameConstants{
         float[] columnWidthPercentage = columnWidthPercentage1;
         JTable table = assignmentTable;
         
+        
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
                 tempFilter = filterTempAssignment;
                 columnWidthPercentage = columnWidthPercentage1;
                 table = assignmentTable;
+                //tabsMap.get(selectedTab).setTable(table);
+                //tabsMap.get(selectedTab).setFilter(tempFilter);
                 break;
             case REPORTS_TABLE_NAME:
                 tempFilter = filterTempReport;
                 columnWidthPercentage = columnWidthPercentage2;
                 table = reportTable;
+                //tabsMap.get(selectedTab).setTable(table);
+                //tabsMap.get(selectedTab).setFilter(tempFilter);
                 break;
             case ARCHIVE_TABLE_NAME:
                 tempFilter = filterTempArchive;
                 columnWidthPercentage = columnWidthPercentage1;
                 table = archiveAssignTable;
+                //tabsMap.get(selectedTab).setTable(table);
+                //tabsMap.get(selectedTab).setFilter(tempFilter);
                 break;
             default:
-                throwUnknownTableException(selectedTab); // handle unkown table value
+                throwUnknownTableException(selectedTab);
+                selectedTab = "unknown";
                 break;
         }
         
-        // apply that information here
-        loadTables.loadAssignmentTableWithFilter(tempFilter.getColumnIndex(), tempFilter.getFilterCriteria());
-        setColumnFormat(columnWidthPercentage, table);
-        GUI.columnFilterStatus(tempFilter.getColumnIndex(), table);
+        if(!selectedTab.equals("unknown")){
+            // apply that information here
+            table = tabsMap.get(selectedTab).getTable();
+            tempFilter = tabsMap.get(selectedTab).getFilter();
+            loadTables.loadAssignmentTableWithFilter(tempFilter.getColumnIndex(), tempFilter.getFilterCriteria());
+            setColumnFormat(columnWidthPercentage, table);
+            GUI.columnFilterStatus(tempFilter.getColumnIndex(), table);
+        }
     }
     
     private void changeTabbedPanelState(String selectedTab) {
@@ -1189,6 +1204,10 @@ public class Analyster extends JFrame implements ITableNameConstants{
                 filteredTable = assignmentFiltered;
                 filterTemp = filterTempAssignment;
                 numberInit = numberAssignmentInit;
+                //tabsMap.get(selectedTab).setTable(table);
+                //tabsMap.get(selectedTab).setFilteredTable(filteredTable);
+                //tabsMap.get(selectedTab).setFilter(filterTemp);
+                //tabsMap.get(selectedTab).setNumberInit(numberInit);
                 
                 // set label record information
                 //numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
@@ -1207,6 +1226,10 @@ public class Analyster extends JFrame implements ITableNameConstants{
                 filteredTable = reportFiltered;
                 filterTemp = filterTempReport;
                 numberInit = numberReportsInit;
+//                tabsMap.get(selectedTab).setTable(table);
+//                tabsMap.get(selectedTab).setFilteredTable(filteredTable);
+//                tabsMap.get(selectedTab).setFilter(filterTemp);
+//                tabsMap.get(selectedTab).setNumberInit(numberInit);
                 
                 // set label record information
                 //numOfRecords1.setText("Number of records in Reports: " + numberReportsInit);
@@ -1225,6 +1248,10 @@ public class Analyster extends JFrame implements ITableNameConstants{
                 filteredTable = archiveAssignFiltered;
                 filterTemp = filterTempArchive;
                 numberInit = numberArchiveAssignInit;
+                //tabsMap.get(selectedTab).setTable(table);
+                //tabsMap.get(selectedTab).setFilteredTable(filteredTable);
+                //tabsMap.get(selectedTab).setFilter(filterTemp);
+                //tabsMap.get(selectedTab).setNumberInit(numberInit);
                 
                 // set label record information
                 //numOfRecords1.setText("Number of records in Archive: " + numberArchiveAssignInit);
@@ -1254,6 +1281,9 @@ public class Analyster extends JFrame implements ITableNameConstants{
             } else {
                 filterTemp = TableRowFilterSupport.forTable(table).actions(true).apply();
                 filteredTable = filterTemp.getTable();
+                
+                //tabsMap.get(selectedTab).setFilter(filterTemp);
+                //tabsMap.get(selectedTab).setFilteredTable(filteredTable);
             }
             
             // set label record information
