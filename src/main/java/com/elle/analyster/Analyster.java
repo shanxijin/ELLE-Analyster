@@ -885,7 +885,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-06-24" + "\n"
+                + "2015-06-25" + "\n"
                 + "Version: " + "0.6.4d");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
