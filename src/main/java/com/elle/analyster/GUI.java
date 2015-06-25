@@ -6,7 +6,6 @@
 package com.elle.analyster;
 
 
-import com.elle.analyster.service.TableService;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -20,7 +19,7 @@ import java.sql.Statement;
  * @author Tina
  */
 @Component
-public class GUI {
+public class GUI implements ITableNameConstants{
 
     public static boolean status = false;    // already logged in?
     protected static String db_url;
@@ -76,28 +75,29 @@ public class GUI {
 
             if (table.getName().equals("Assignments")) {
                 filterAssignmentIsActive = true; //Change status to Assignment table
+                //displayRecordLabels.setTableName(ASSIGNMENTS_TABLE_NAME);
             } else if (table.getName().equals("Reports")) {
                 filterReportIstActive = true; // Change status to Reports table
+                //displayRecordLabels.setTableName(REPORTS_TABLE_NAME);
             } else {
                 filterArchiveIsActive = true;
+                //displayRecordLabels.setTableName(ARCHIVE_TABLE_NAME);
             }
         }
-        TableService tableService = new TableService();
-        Analyster.getInstance()
-                .getNumOfRecords2()
-                .setText(tableService
-                        .textToNumOfRecords(table.getRowCount()));
+
+        //displayRecordLabels.setRecordsShown(table.getRowCount());
+        //recordsLabel.setText(displayRecordLabels.toString());
+        
+        //System.out.println(recordsLabel.getText());
     }
 
     public static void cleanColumnFilterStatus(int columnIndex, JTable table) {
         table.getColumnModel().getColumn(columnIndex)
                 .setHeaderRenderer(new HeaderRenderer(table));
         isFiltering = false;
-        TableService tableService = new TableService();
-        Analyster.getInstance()
-                .getNumOfRecords2()
-                .setText(tableService
-                        .textToNumOfRecords(table.getRowCount()));
+        
+        //displayRecordLabels.setRecordsShown(table.getRowCount());
+        //recordsLabel.setText(displayRecordLabels.toString());
 
     }
 
@@ -106,11 +106,9 @@ public class GUI {
             table.getColumnModel().getColumn(i)
                     .setHeaderRenderer(new HeaderRenderer(table));
             isFiltering = false;
-            TableService tableService = new TableService();
-            Analyster.getInstance()
-                    .getNumOfRecords2()
-                    .setText(tableService
-                            .textToNumOfRecords(table.getRowCount()));
+            
+        //displayRecordLabels.setRecordsShown(table.getRowCount());
+        //recordsLabel.setText(displayRecordLabels.toString());
         }
     }
 

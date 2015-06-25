@@ -15,11 +15,11 @@ import static com.elle.analyster.service.Connection.connection;
 /**
  * User: danielabecker
  */
-public class LoadTables {
+public class LoadTables implements ITableNameConstants{
 
     private Analyster ana =Analyster.getInstance();
-    JLabel numOfRecords1 = ana.getNumOfRecords1();
-    JLabel numOfRecords2 = ana.getNumOfRecords2();
+    DisplayRecordLabels displayRecordLabels = ana.getDisplayRecordLabels();
+    JLabel recordsLabel = ana.getRecordsLabel();
     JTable assignmentTable = ana.getassignmentTable();
     JTable reportTable = ana.getReportTable();
     JTable archiveAssignTable = ana.getArchiveAssignTable();
@@ -59,9 +59,8 @@ public class LoadTables {
         Analyster.setNumberAssignmentInit(assignmentTable.getRowCount());
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
-
-        numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
-        numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
+        displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, assignmentTable.getRowCount(), assignmentTable.getRowCount());
+        recordsLabel.setText(displayRecordLabels.toString());
 
     }
 
@@ -87,9 +86,8 @@ public class LoadTables {
         Analyster.setNumberAssignmentInit(assignmentTable.getRowCount());
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
-
-        numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
-        numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
+        displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, assignmentTable.getRowCount(), assignmentTable.getRowCount());
+        recordsLabel.setText(displayRecordLabels.toString());
 
         filter.apply(columnIndex, filterCriteria);
         filter.saveTableState();

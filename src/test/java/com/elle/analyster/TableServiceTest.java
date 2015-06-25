@@ -53,11 +53,6 @@ public class TableServiceTest {
 //      assertThat( tableService.textToNumOfRecords(339, "Assignments"), is("Number of records in Assignments: 339"));
 //      
 //    }
-     @Test
-    public void shouldReturntextToNumOfRecords2(){
-     
-      assertThat( tableService.textToNumOfRecords(339), is("Number of records shown: 339"));
-      
-    }
+
 
 }
