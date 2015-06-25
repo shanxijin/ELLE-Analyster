@@ -888,8 +888,8 @@ public class Analyster extends JFrame {
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-06-23" + "\n"
-                + "Version: " + "0.6.4");
+                + "2015-06-24" + "\n"
+                + "Version: " + "0.6.4c");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked

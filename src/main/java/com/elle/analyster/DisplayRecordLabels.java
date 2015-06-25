@@ -94,9 +94,21 @@ public class DisplayRecordLabels implements ITableNameConstants{
                      + "</pre></html>";
                 break;
             default:
-                // need to handle this exception
-                System.out.println("****ATTENTION*******\nNot a valid constant table name entered");
-                output = "****ATTENTION*******\nNot a valid constant table name entered";
+                // this means an invalid table name constant was passed
+                // this exception will be handled and thrown here
+                // the program will still run and show the stack trace for debugging
+                output = "<html><pre>"
+                       + "*******ATTENTION*******"
+                  + "<br/>Not a valid table name constant entered"
+                     + "</pre></html>";
+                try {
+                    String errorMessage = "ERROR: unknown table";
+                    throw new NoSuchFieldException(errorMessage);
+                } catch (NoSuchFieldException ex) {
+                    ex.printStackTrace();
+                    // TODO: post to log.txt
+                }
+        
                 break;
         }
         
