@@ -70,6 +70,11 @@ public class TableService {
         viewerTable =table;
     }
 
+    public String textToNumOfRecords(int num) { // Set text to element numofRecords2
+        String setTextNumofRecords2 = "Number of records shown: " + num;
+        return setTextNumofRecords2;
+    }
+
     private void loadArchiveAssignTable() {
         new LoadTables().loadArchiveAssignTable();
 

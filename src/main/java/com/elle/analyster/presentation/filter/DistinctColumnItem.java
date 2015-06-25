@@ -2,18 +2,18 @@ package com.elle.analyster.presentation.filter;
 
 import java.math.BigDecimal;
 
-public class DistinctColumnItem implements Comparable<DistinctColumnItem> {
+public class DistinctColumnItem implements Comparable<DistinctColumnItem>, IValueWrapper<Object> {
 
-    private final String value;
+    private final Object value;
     private final int row;
 
-    public DistinctColumnItem( String value, int row) {
-        this.value = value.toLowerCase();
+    public DistinctColumnItem( Object value, int row) {
+        this.value = value.toString().toLowerCase();
         this.row = row;
     }
 
-    //@Override
-    public String getValue() {
+    @Override
+    public Object getValue() {
         return value;
     }
 
@@ -24,7 +24,7 @@ public class DistinctColumnItem implements Comparable<DistinctColumnItem> {
 
     @Override
     public String toString() {
-        return value == null? "":  value;
+        return value == null? "":  value.toString();
     }
 
     @Override
@@ -63,16 +63,15 @@ public class DistinctColumnItem implements Comparable<DistinctColumnItem> {
 
         if ( value.getClass() == o.value.getClass() ) {
             if ( value instanceof Comparable) {
-                return (value).compareTo(o.value);
+                return ((Comparable<Object>)value).compareTo(o.value);
             } else {
-                return value.compareTo(o.value);
+                return value.toString().compareTo(o.value.toString());
             }
         } else {
 
-            // not sure why they did this but I will cast to object
-            if ( (Object)value instanceof Number && (Object)o.value instanceof Number) {
-                BigDecimal a = new BigDecimal(value);
-                BigDecimal b = new BigDecimal(o.value);
+            if ( value instanceof Number && o.value instanceof Number) {
+                BigDecimal a = new BigDecimal(value.toString());
+                BigDecimal b = new BigDecimal(o.value.toString());
                 return a.compareTo(b);
             }
 

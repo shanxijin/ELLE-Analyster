@@ -114,11 +114,11 @@ public class DefaultCheckListModel<T> extends AbstractListModel implements IChec
             List<T> fDataList = new ArrayList<T>();
             Set<T> fDataSet = new HashSet<T>();
 
-            String value;
+            Object value;
             for (T o : dataList) {
                 //if ( t.translate(o).startsWith(f)) {
-                value = o.toString();
-                if ( filter.include(value, p)) {
+                value = o instanceof IValueWrapper? ((IValueWrapper<?>)o).getValue(): o;
+                if ( filter.include(t.translate(value), p)) {
                     fDataList.add(o);
                     fDataSet.add(o);
                 }

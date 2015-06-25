@@ -47,7 +47,7 @@ public interface ITableFilter<T extends JTable> extends Serializable {
      */
     boolean apply(int col, Collection<DistinctColumnItem> items);
 
-    boolean apply(int col, String selectField);
+    boolean apply(int col, Object selectField);
 
     void addChangeListener(IFilterChangeListener listener);
 
@@ -95,9 +95,6 @@ public interface ITableFilter<T extends JTable> extends Serializable {
 
     TableModel getMyTableModelInitial();
 
-    /**
-     *  INTERFACE ROW
-     */
     public interface Row {
         int getValueCount();
 

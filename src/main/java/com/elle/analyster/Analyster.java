@@ -4,7 +4,6 @@ import com.elle.analyster.db.ExecuteSQLStatement;
 import com.elle.analyster.domain.ModifiedData;
 import com.elle.analyster.presentation.filter.CreateDocumentFilter;
 import com.elle.analyster.presentation.filter.ITableFilter;
-import com.elle.analyster.presentation.filter.JTableFilterTest;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
 import com.elle.analyster.service.Connection;
 import com.elle.analyster.service.DeleteRecord;
@@ -34,9 +33,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-public class Analyster extends JFrame implements ITableNameConstants{
+public class Analyster extends JFrame {
 
     private static final String SYMBOL_COLUMN_NAME = "Symbol";
+    private static final String ASSIGNMENTS_TABLE_NAME = "Assignments";
+    private static final String REPORTS_TABLE_NAME = "Reports";
+    private static final String ARCHIVE_TABLE_NAME = "Assignments_Archived";
     private final TableService tableService = new TableService();
     private final Connection con = new Connection();
     private LoadTables loadTables;
@@ -62,15 +64,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
     public EnterButton enterButton = new EnterButton();
     protected static boolean isFiltering = true;
     private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
-    private DisplayRecordLabels displayRecordLabels = new DisplayRecordLabels();
-
-    public DisplayRecordLabels getDisplayRecordLabels() {
-        return displayRecordLabels;
-    }
-
-    public JLabel getRecordsLabel() {
-        return recordsLabel;
-    }
     
     @Autowired
     private UploadRecord uploadRecordService;
@@ -101,6 +94,10 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
     public void setFilterTempAssignment(ITableFilter<?> filterTempAssignment) {
         this.filterTempAssignment = filterTempAssignment;
+    }
+
+    public JLabel getNumOfRecords1() {
+        return numOfRecords1;
     }
 
     public static void setNumberArchiveAssignInit(int numberArchiveAssignInit) {
@@ -242,7 +239,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
         recordLabelPanel = new javax.swing.JPanel();
         numOfRecords1 = new javax.swing.JLabel();
         numOfRecords2 = new javax.swing.JLabel();
-        recordsLabel = new javax.swing.JLabel();
         searchPanel = new javax.swing.JPanel();
         search = new javax.swing.JButton();
         textForSearch = new javax.swing.JTextField();
@@ -309,25 +305,23 @@ public class Analyster extends JFrame implements ITableNameConstants{
         recordLabelPanelLayout.setHorizontalGroup(
             recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(recordLabelPanelLayout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(numOfRecords2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(recordLabelPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(numOfRecords1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(recordLabelPanelLayout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(numOfRecords2, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(numOfRecords1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(recordLabelPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(recordsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
         );
         recordLabelPanelLayout.setVerticalGroup(
             recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(recordLabelPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(recordsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(numOfRecords1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(numOfRecords2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addComponent(numOfRecords2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         search.setText("Search");
@@ -396,26 +390,23 @@ public class Analyster extends JFrame implements ITableNameConstants{
                 .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addPanel_controlLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)
+                        .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(addPanel_controlLayout.createSequentialGroup()
                         .addGap(258, 258, 258)
                         .addComponent(jTimeLastUpdate)))
-                .addGap(22, 22, 22)
-                .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         addPanel_controlLayout.setVerticalGroup(
             addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addPanel_controlLayout.createSequentialGroup()
-                .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(addPanel_controlLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTimeLastUpdate))
-                    .addGroup(addPanel_controlLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTimeLastUpdate)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -898,7 +889,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
                 + "2015-06-23" + "\n"
-                + "Version: " + "0.6.4b");
+                + "Version: " + "0.6.4");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
@@ -917,8 +908,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
     /**
      * This method is called by the searchActionPerformed method
      * and the textForSearchKeyPressed method
-     * This method is performed when the search button is pressed
-     * or if the user presses the enter key while in the search text box.
      */
     public void filterBySearch() {
         
@@ -953,24 +942,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
                 break;
         }
         
-        /***************** REFACTORING *******************************/
-        
-        // original code
-        // TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
-        
-        // TableRowFilterSupport.forTable(selectedTable)
-        TableRowFilterSupport tableRowFilterSupport = new TableRowFilterSupport(selectedTable);
-        
-        // TableRowFilterSupport.actions(true)
-        tableRowFilterSupport.setActionsVisible(true);
-        
-        // TableRowFilterSupport.apply()
-        tableRowFilterSupport.apply();
-        
-        // ITableFilter.apply(columnIndex, selectedField)
-        tableRowFilterSupport.getFilter().apply(columnIndex, selectedField);
-        
-        // this just calls one method
+        TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
         GUI.columnFilterStatus(columnIndex, selectedTableFilter.getTable());
     }
     
@@ -1143,8 +1115,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
         assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
         reportTable.setName(REPORTS_TABLE_NAME);
         archiveAssignTable.setName(ARCHIVE_TABLE_NAME);
-        
-        TableRowFilterSupport support; // to store a TableRowFilterSupport Object
 
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
@@ -1153,55 +1123,46 @@ public class Analyster extends JFrame implements ITableNameConstants{
                 if (GUI.filterAssignmentIsActive == true) {
                     assignmentTable = assignmentFiltered;
                 } else {
-                    //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
-                            //.apply();
-                    //assignmentFiltered = filterTempAssignment.getTable();
-                    support = new TableRowFilterSupport(assignmentTable);
-                    support.apply();
-                    assignmentFiltered = support.getFilter().getTable();
+                    filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
+                            .apply();
+                    assignmentFiltered = filterTempAssignment.getTable();
                 }
-                displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, numberAssignmentInit, assignmentFiltered.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
+                numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
+                numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
                 break;
             case REPORTS_TABLE_NAME:
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(false);
                 if (GUI.filterReportIstActive == false) {
-                    //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true)
-                            //.apply();
-                    //reportFiltered = filterTempReport.getTable();
-                    support = new TableRowFilterSupport(reportTable);
-                    support.apply();
-                    reportFiltered = support.getFilter().getTable();
+                    filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true)
+                            .apply();
+                    reportFiltered = filterTempReport.getTable();
                 } else {
                     reportTable = reportFiltered;
                 }
-                displayRecordLabels = new DisplayRecordLabels(REPORTS_TABLE_NAME, numberReportsInit, reportFiltered.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
+                numOfRecords1.setText("Number of records in Reports: " + numberReportsInit);
+                numOfRecords2.setText("Number of records shown: " + reportFiltered.getRowCount());
                 break;
             case ARCHIVE_TABLE_NAME:
                 jActivateRecord.setEnabled(true);
                 jArchiveRecord.setEnabled(false);
                 if (GUI.filterArchiveIsActive == false) {
-                    //filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true)
-                            //.apply();
-                    //archiveAssignFiltered = filterTempArchive.getTable();
-                    support = new TableRowFilterSupport(archiveAssignTable);
-                    support.apply();
-                    archiveAssignFiltered = support.getFilter().getTable();
+                    filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true)
+                            .apply();
+                    archiveAssignFiltered = filterTempArchive.getTable();
                 } else {
                     archiveAssignTable = archiveAssignFiltered;
                 }
-                displayRecordLabels = new DisplayRecordLabels(ARCHIVE_TABLE_NAME, numberArchiveAssignInit, archiveAssignFiltered.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
+                numOfRecords1.setText("Number of records in Archive: " + numberArchiveAssignInit);
+                numOfRecords2.setText("Number of records shown: " + archiveAssignFiltered.getRowCount());
                 break;
             case "Viewer":
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(true);
 //                viewerTable = assignmentTable;
 //                viewerTable.setVisible(true);
-                displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, numberAssignmentInit, assignmentFiltered.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
+                numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
+                numOfRecords2.setText("Number of records shown: " + assignmentFiltered.getRowCount());
                 break;
         }
 
@@ -1293,50 +1254,30 @@ public class Analyster extends JFrame implements ITableNameConstants{
     }//GEN-LAST:event_jButtonClearAllFilterActionPerformed
 
     private void clearAllFilters() {
-        
-        TableRowFilterSupport support; // to store a TableRowFilterSupport Object
-        
         switch (jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex())) {
             case ASSIGNMENTS_TABLE_NAME:
 
                 GUI.filterAssignmentIsActive = false;
                 loadTables.loadAssignmentTable();
-                support = new TableRowFilterSupport(assignmentTable);
-                support.setActionsVisible(true);
-                support.apply();
-                filterTempAssignment = support.getFilter();
-                filterTempAssignment.getTable(); // says get table but not stored?
                 GUI.cleanAllColumnFilterStatus(assignmentTable);
-                displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, assignmentTable.getRowCount(), assignmentTable.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
                 break;
             case REPORTS_TABLE_NAME:
                 GUI.filterReportIstActive = false;
                 loadTables.loadReportTable();
-                //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
-                //filterTempReport.getTable();
-                support = new TableRowFilterSupport(reportTable);
-                support.setActionsVisible(true);
-                support.apply();
-                filterTempReport = support.getFilter();
-                filterTempReport.getTable(); // says get table but not stored?
+                numOfRecords1.setText("Number of records in Report: " + reportTable.getRowCount());
+                numOfRecords2.setText("Number of records shown: " + reportTable.getRowCount());
+                filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
+                filterTempReport.getTable();
                 GUI.cleanAllColumnFilterStatus(reportTable);
-                displayRecordLabels = new DisplayRecordLabels(REPORTS_TABLE_NAME, reportTable.getRowCount(), reportTable.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
                 break;
             case ARCHIVE_TABLE_NAME:
                 GUI.filterArchiveIsActive = false;
                 loadTables.loadArchiveAssignTable();
-                //filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply();//
-                //filterTempArchive.getTable();
-                support = new TableRowFilterSupport(archiveAssignTable);
-                support.setActionsVisible(true);
-                support.apply();
-                filterTempArchive = support.getFilter();
-                filterTempArchive.getTable(); // says get table but not stored?
+                filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply();//
+                filterTempArchive.getTable();
+                numOfRecords1.setText("Number of records in Assignments Archive: " + archiveAssignTable.getRowCount());
+                numOfRecords2.setText("Number of records shown: " + archiveAssignTable.getRowCount());
                 GUI.cleanAllColumnFilterStatus(archiveAssignTable);
-                displayRecordLabels = new DisplayRecordLabels(ARCHIVE_TABLE_NAME, archiveAssignTable.getRowCount(), archiveAssignTable.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
                 break;
         }
         modifiedDataList.clear();
@@ -1344,41 +1285,21 @@ public class Analyster extends JFrame implements ITableNameConstants{
     }
 
     private void jMenuItemOthersLoadDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOthersLoadDataActionPerformed
-        
-        TableRowFilterSupport support; // to store a TableRowFilterSupport Object
-        
         String titleAt = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
         if (titleAt.equals(ASSIGNMENTS_TABLE_NAME)) {
             loadTables.loadAssignmentTable();
-            support = new TableRowFilterSupport(assignmentTable);
-            support.setActionsVisible(true);
-            support.apply();
-            filterTempAssignment = support.getFilter();
-            filterTempAssignment.getTable(); // says get table but not stored?
-            displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, assignmentTable.getRowCount(), assignmentTable.getRowCount());
-            recordsLabel.setText(displayRecordLabels.toString());
         } else if (titleAt.equals(REPORTS_TABLE_NAME)) {
             loadTables.loadReportTable();
-            //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
-            //filterTempReport.getTable();
-            support = new TableRowFilterSupport(reportTable);
-            support.setActionsVisible(true);
-            support.apply();
-            filterTempReport = support.getFilter();
-            filterTempReport.getTable(); // says get table but not stored?
-            displayRecordLabels = new DisplayRecordLabels(REPORTS_TABLE_NAME, reportTable.getRowCount(), reportTable.getRowCount());
-            recordsLabel.setText(displayRecordLabels.toString());
+            numOfRecords1.setText("Number of records in Report: " + reportTable.getRowCount());
+            numOfRecords2.setText("Number of records shown: " + reportTable.getRowCount());
+            filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true).apply();
+            filterTempReport.getTable();
         } else {
             loadTables.loadArchiveAssignTable();
-            //filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply();
-            //filterTempArchive.getTable();
-            support = new TableRowFilterSupport(archiveAssignTable);
-            support.setActionsVisible(true);
-            support.apply();
-            filterTempArchive = support.getFilter();
-            filterTempArchive.getTable(); // says get table but not stored?
-            displayRecordLabels = new DisplayRecordLabels(ARCHIVE_TABLE_NAME, archiveAssignTable.getRowCount(), archiveAssignTable.getRowCount());
-            recordsLabel.setText(displayRecordLabels.toString());
+            filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply();//
+            filterTempArchive.getTable();
+            numOfRecords1.setText("Number of records in Assignments Archive: " + archiveAssignTable.getRowCount());
+            numOfRecords2.setText("Number of records shown: " + archiveAssignTable.getRowCount());
         }
     }//GEN-LAST:event_jMenuItemOthersLoadDataActionPerformed
 
@@ -1494,13 +1415,9 @@ public class Analyster extends JFrame implements ITableNameConstants{
     public void loadData() {
         loadTables = new LoadTables();
         loadTables.loadTables();
-        //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
-                            //.apply();
-        //assignmentFiltered = filterTempAssignment.getTable(); 
-        TableRowFilterSupport support = new TableRowFilterSupport(assignmentTable);
-        support.setActionsVisible(true);
-        support.apply();
-        assignmentFiltered = support.getFilter().getTable();
+         filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
+                            .apply();
+                    assignmentFiltered = filterTempAssignment.getTable(); 
     }
 
     public void setTerminalsFunction(final JTable table) { //set all listenner for JTable.
@@ -1566,44 +1483,28 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
     public void filterByDoubleClick(JTable table) {
 
-        TableRowFilterSupport support; // to store a TableRowFilterSupport Object
-        
         int[] columnIndex = table.getColumnModel().getSelectedColumns();
         int rowIndex = table.getSelectedRow();
         if (rowIndex != -1) {
-            String selectedField = table.getValueAt(rowIndex, columnIndex[0]).toString();
+            Object selectedField = table.getValueAt(rowIndex, columnIndex[0]);
             if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
-                //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
-                support = new TableRowFilterSupport(assignmentTable);
-                support.setActionsVisible(true);
-                support.apply();
-                filterTempAssignment = support.getFilter();
+                filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
                 filterTempAssignment.apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], filterTempAssignment.getTable());
-                displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, numberAssignmentInit, assignmentTable.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
+                numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
             } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
-                //filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true) // D, Delete if you want to have multiple filters (for example: Symbol + analyster at the same time)
-                        //.apply();
-                support = new TableRowFilterSupport(reportTable);
-                support.setActionsVisible(true);
-                support.apply();
-                filterTempReport = support.getFilter();
+                filterTempReport = TableRowFilterSupport.forTable(reportTable).actions(true) // D, Delete if you want to have multiple filters (for example: Symbol + analyster at the same time)
+                        .apply();
                 filterTempReport.apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], filterTempReport.getTable());
-                displayRecordLabels = new DisplayRecordLabels(REPORTS_TABLE_NAME, numberReportsInit, reportTable.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
+                numOfRecords1.setText("Number of records in Reports: " + numberReportsInit);
             } else {
-                //filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true) // D, Delete if you want to have multiple filters (for example: Symbol + analyster at the same time)
-                        //.apply();
-                support = new TableRowFilterSupport(archiveAssignTable);
-                support.setActionsVisible(true);
-                support.apply();
-                filterTempArchive = support.getFilter();
+                filterTempArchive = TableRowFilterSupport.forTable(archiveAssignTable).actions(true) // D, Delete if you want to have multiple filters (for example: Symbol + analyster at the same time)
+                        .apply();
                 filterTempArchive.apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], filterTempArchive.getTable());
-                displayRecordLabels = new DisplayRecordLabels(ARCHIVE_TABLE_NAME, numberArchiveAssignInit, archiveAssignTable.getRowCount());
-                recordsLabel.setText(displayRecordLabels.toString());
+                numOfRecords1.setText("Number of records in Archive: " + numberArchiveAssignInit);
+
             }
         }
     }
@@ -1613,18 +1514,15 @@ public class Analyster extends JFrame implements ITableNameConstants{
         if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
             filterTempAssignment.apply(columnIndex, filterTempAssignment.getDistinctColumnItems(columnIndex));
             GUI.cleanColumnFilterStatus(columnIndex, filterTempAssignment.getTable());// clean green background
-            displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, numberAssignmentInit, assignmentTable.getRowCount());
-            recordsLabel.setText(displayRecordLabels.toString());
+            numOfRecords1.setText("Number of records in Assignments: " + numberAssignmentInit);
         } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
             filterTempReport.apply(columnIndex, filterTempReport.getDistinctColumnItems(columnIndex));
             GUI.cleanColumnFilterStatus(columnIndex, filterTempReport.getTable());// clean green background
-            displayRecordLabels = new DisplayRecordLabels(REPORTS_TABLE_NAME, numberReportsInit, reportTable.getRowCount());
-            recordsLabel.setText(displayRecordLabels.toString());
+            numOfRecords1.setText("Number of records in Reports: " + numberReportsInit);
         } else {
             filterTempArchive.apply(columnIndex, filterTempArchive.getDistinctColumnItems(columnIndex));
             GUI.cleanColumnFilterStatus(columnIndex, filterTempArchive.getTable());// clean green background
-            displayRecordLabels = new DisplayRecordLabels(ARCHIVE_TABLE_NAME, numberArchiveAssignInit, archiveAssignTable.getRowCount());
-            recordsLabel.setText(displayRecordLabels.toString());
+            numOfRecords1.setText("Number of records in Archive: " + numberArchiveAssignInit);
 
         }
     }
@@ -1646,8 +1544,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
         setColumnFormat(columnWidthPercentage1, assignmentTable);
         assignments.init(assignmentTable, new String[]{"Symbol", "Analyst"});
-        displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, assignmentTable.getRowCount(), assignmentTable.getRowCount());
-        recordsLabel.setText(displayRecordLabels.toString());
+        numOfRecords1.setText("Number of records in Assignments:" + assignments.getRowsNumber());
 
     }
 
@@ -1859,6 +1756,10 @@ public class Analyster extends JFrame implements ITableNameConstants{
         jTimeLastUpdate.setText("Last updated: " + time);
     }
 
+    public JLabel getNumOfRecords2() {
+        return numOfRecords2;
+    }
+
     public LogWindow getLogwind() {
         return logwind;
     }
@@ -1945,7 +1846,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
     private javax.swing.JLabel numOfRecords1;
     private javax.swing.JLabel numOfRecords2;
     private javax.swing.JPanel recordLabelPanel;
-    private javax.swing.JLabel recordsLabel;
     private javax.swing.JTable reportTable;
     private javax.swing.JButton search;
     private javax.swing.JPanel searchPanel;

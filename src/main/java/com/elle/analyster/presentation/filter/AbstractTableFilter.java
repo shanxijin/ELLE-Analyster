@@ -75,7 +75,7 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
     }
 
     @Override
-    public boolean apply(int col, String selectField) { //Create Collection from selected fields 
+    public boolean apply(int col, Object selectField) { //Create Collection from selected fields 
         Collection<DistinctColumnItem> item = new ArrayList<>();
         DistinctColumnItem distinctColumnItem =new DistinctColumnItem(selectField, col);
         item.add(distinctColumnItem);
@@ -115,7 +115,7 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
     private Collection<DistinctColumnItem> collectDistinctColumnItems(int column) {
         Set<DistinctColumnItem> result = new TreeSet<DistinctColumnItem>(); // to collect unique items
         for (int row = 0; row < table.getModel().getRowCount(); row++) {
-            String value = table.getModel().getValueAt(row, column).toString();
+            Object value = table.getModel().getValueAt(row, column);
             result.add(new DistinctColumnItem(value, row));
         }
         return result;

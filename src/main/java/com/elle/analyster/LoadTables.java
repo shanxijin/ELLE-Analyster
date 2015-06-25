@@ -15,11 +15,11 @@ import static com.elle.analyster.service.Connection.connection;
 /**
  * User: danielabecker
  */
-public class LoadTables implements ITableNameConstants{
+public class LoadTables {
 
     private Analyster ana =Analyster.getInstance();
-    DisplayRecordLabels displayRecordLabels = ana.getDisplayRecordLabels();
-    JLabel recordsLabel = ana.getRecordsLabel();
+    JLabel numOfRecords1 = ana.getNumOfRecords1();
+    JLabel numOfRecords2 = ana.getNumOfRecords2();
     JTable assignmentTable = ana.getassignmentTable();
     JTable reportTable = ana.getReportTable();
     JTable archiveAssignTable = ana.getArchiveAssignTable();
@@ -50,17 +50,14 @@ public class LoadTables implements ITableNameConstants{
         }
         ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-        //ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
-        TableRowFilterSupport support = new TableRowFilterSupport(assignmentTable);
-        support.setActionsVisible(true);
-        support.apply();
-        ana.setFilterTempAssignment(support.getFilter());
+        ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
         ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(assignmentTable.getRowCount());
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
-        displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, assignmentTable.getRowCount(), assignmentTable.getRowCount());
-        recordsLabel.setText(displayRecordLabels.toString());
+
+        numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
+        numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
 
     }
 
@@ -73,21 +70,18 @@ public class LoadTables implements ITableNameConstants{
         }
         ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-        //ITableFilter<?> filter = TableRowFilterSupport
-                                        //.forTable(assignmentTable)
-                                        //.actions(true)
-                                        //.apply();
-        TableRowFilterSupport support = new TableRowFilterSupport(assignmentTable);
-        support.setActionsVisible(true);
-        support.apply();
-        ITableFilter<?> filter = support.getFilter();
+        ITableFilter<?> filter = TableRowFilterSupport
+                                        .forTable(assignmentTable)
+                                        .actions(true)
+                                        .apply();
         ana.setFilterTempAssignment(filter);
         ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(assignmentTable.getRowCount());
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
-        displayRecordLabels = new DisplayRecordLabels(ASSIGNMENTS_TABLE_NAME, assignmentTable.getRowCount(), assignmentTable.getRowCount());
-        recordsLabel.setText(displayRecordLabels.toString());
+
+        numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
+        numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
 
         filter.apply(columnIndex, filterCriteria);
         filter.saveTableState();
@@ -117,14 +111,10 @@ public class LoadTables implements ITableNameConstants{
         }
         ana.setColumnFormat(ana.columnWidthPercentage1, archiveAssignTable);
         ana.getAssignments().init(archiveAssignTable, new String[]{"Symbol", "Analyst"});
-        //ITableFilter<?> filter = TableRowFilterSupport
-                //.forTable(archiveAssignTable)
-                //.actions(true)
-                //.apply();
-        TableRowFilterSupport support = new TableRowFilterSupport(archiveAssignTable);
-        support.setActionsVisible(true);
-        support.apply();
-        ITableFilter<?> filter = support.getFilter();
+        ITableFilter<?> filter = TableRowFilterSupport
+                .forTable(archiveAssignTable)
+                .actions(true)
+                .apply();
         ana.setFilterTempArchive(filter);
         ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(archiveAssignTable.getRowCount());
@@ -160,14 +150,10 @@ public class LoadTables implements ITableNameConstants{
         }
         ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
         ana.getAssignments().init(reportTable, new String[]{"Symbol", "Author"});
-        //ITableFilter<?> filter = TableRowFilterSupport
-                //.forTable(reportTable)
-                //.actions(true)
-                //.apply();
-        TableRowFilterSupport support = new TableRowFilterSupport(reportTable);
-        support.setActionsVisible(true);
-        support.apply();
-        ITableFilter<?> filter = support.getFilter();
+        ITableFilter<?> filter = TableRowFilterSupport
+                .forTable(reportTable)
+                .actions(true)
+                .apply();
         ana.setFilterTempReport(filter);
         ana.getFilterTempReport().getTable();   // create filter when the table is loaded.
         Analyster.setNumberAssignmentInit(reportTable.getRowCount());
