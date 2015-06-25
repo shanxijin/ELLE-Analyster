@@ -1092,19 +1092,25 @@ public class Analyster extends JFrame implements ITableNameConstants{
     }//GEN-LAST:event_jButtonCancelActionPerformed
     public void loadPrevious(String selectedTab) {
 
-        if (selectedTab.equals(ASSIGNMENTS_TABLE_NAME)) {
-            loadTables.loadAssignmentTableWithFilter(filterTempAssignment.getColumnIndex(), filterTempAssignment.getFilterCriteria());
-            setColumnFormat(columnWidthPercentage1, assignmentTable);
-            GUI.columnFilterStatus(filterTempAssignment.getColumnIndex(), assignmentTable);
-        } else if (selectedTab.equals(REPORTS_TABLE_NAME)) {
-            loadTables.loadReportTableWithFilter(filterTempReport.getColumnIndex(), filterTempReport.getFilterCriteria());
-            setColumnFormat(columnWidthPercentage2, reportTable);
-            GUI.columnFilterStatus(filterTempReport.getColumnIndex(), reportTable);
-
-        } else {
-            loadTables.loadArchiveTableWithFilter(filterTempArchive.getColumnIndex(), filterTempArchive.getFilterCriteria());
-            setColumnFormat(columnWidthPercentage1, archiveAssignTable);
-            GUI.columnFilterStatus(filterTempArchive.getColumnIndex(), archiveAssignTable);
+        switch (selectedTab) {
+            case ASSIGNMENTS_TABLE_NAME:
+                loadTables.loadAssignmentTableWithFilter(filterTempAssignment.getColumnIndex(), filterTempAssignment.getFilterCriteria());
+                setColumnFormat(columnWidthPercentage1, assignmentTable);
+                GUI.columnFilterStatus(filterTempAssignment.getColumnIndex(), assignmentTable);
+                break;
+            case REPORTS_TABLE_NAME:
+                loadTables.loadReportTableWithFilter(filterTempReport.getColumnIndex(), filterTempReport.getFilterCriteria());
+                setColumnFormat(columnWidthPercentage2, reportTable);
+                GUI.columnFilterStatus(filterTempReport.getColumnIndex(), reportTable);
+                break;
+            case ARCHIVE_TABLE_NAME:
+                loadTables.loadArchiveTableWithFilter(filterTempArchive.getColumnIndex(), filterTempArchive.getFilterCriteria());
+                setColumnFormat(columnWidthPercentage1, archiveAssignTable);
+                GUI.columnFilterStatus(filterTempArchive.getColumnIndex(), archiveAssignTable);
+                break;
+            default:
+                throwUnknownTableException();
+                break;
         }
     }
     private void changeTabbedPanelState(String selectedTab) {
@@ -1613,6 +1619,20 @@ public class Analyster extends JFrame implements ITableNameConstants{
                 table.setPreferredScrollableViewportSize(new Dimension(908, 300));
                 break;
 
+        }
+    }
+
+    /**
+     * This method handles unknown table exceptions
+     */
+    public void throwUnknownTableException() {
+        try {
+            String errorMessage = "ERROR: unknown table";
+            throw new NoSuchFieldException(errorMessage);
+        } catch (NoSuchFieldException ex) {
+            ex.printStackTrace();
+            // post to log.txt
+            getLogwind().sendMessages(ex.getMessage());
         }
     }
 
