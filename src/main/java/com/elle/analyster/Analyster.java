@@ -30,7 +30,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 public class Analyster extends JFrame implements ITableNameConstants{
@@ -50,11 +52,14 @@ public class Analyster extends JFrame implements ITableNameConstants{
     
     // these cause a minor bug in addRecordsTable.java
     // just something to do with showing record labels which is handled
-    // by a new class very soon.
+    // by a new class very soon anyway (DisplayRecordLabels).
     public TableState viewer = new TableState();
     public TableState assignments = new TableState();
     public TableState reports = new TableState();
     public TableState archiveAssign = new TableState();
+    
+    // I will store the objects with this
+    Map<String,Tab> tabsMap = new HashMap<>();
     
     
     
@@ -185,7 +190,12 @@ public class Analyster extends JFrame implements ITableNameConstants{
         tableService.setReportTable(reportTable);
         tableService.setArchiveAssignTable(archiveAssignTable);
         tableService.setViewerTable(assignmentTable);
-       
+        
+        // create tab objects
+        tabsMap.put(ASSIGNMENTS_TABLE_NAME, new Tab());
+        tabsMap.put(REPORTS_TABLE_NAME, new Tab());
+        tabsMap.put(ARCHIVE_TABLE_NAME, new Tab());
+
         
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {// Allow to TAB-
 
