@@ -10,7 +10,8 @@ import javax.swing.JTable;
  * @since  June 25, 2015
  */
 public class Tab {
-    
+
+    private JTable table;
     private JTable filtered;
     private ITableFilter<?> filter;
     private int numberInit;
@@ -20,6 +21,7 @@ public class Tab {
      * CONSTRUCTOR
      */
     public Tab() {
+        table = new JTable();
         filtered = new JTable();
         numberInit = 0;
         tableState = new TableState();
@@ -28,12 +30,14 @@ public class Tab {
     
     /**
      * CONSTRUCTOR
+     * @param table
      * @param filtered
      * @param filter
      * @param numberInit
      * @param tableState 
      */
-    public Tab(JTable filtered, ITableFilter<?> filter, int numberInit, TableState tableState) {
+    public Tab(JTable table, JTable filtered, ITableFilter<?> filter, int numberInit, TableState tableState) {
+        this.table = table;
         this.filtered = filtered;
         this.filter = filter;
         this.numberInit = numberInit;
@@ -44,6 +48,15 @@ public class Tab {
      ********************** Setters & Getters *********************************
      **************************************************************************/
 
+    
+    public JTable getTable() {
+        return table;
+    }
+
+    public void setTable(JTable table) {
+        this.table = table;
+    }
+    
     public JTable getFiltered() {
         return filtered;
     }
