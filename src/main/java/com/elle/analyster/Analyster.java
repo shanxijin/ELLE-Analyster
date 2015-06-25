@@ -946,24 +946,35 @@ public class Analyster extends JFrame implements ITableNameConstants{
         
         JTable selectedTable; // store selected JTable
         ITableFilter<?> selectedTableFilter; // store selected table filter
+        String tableName;
         
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
-                selectedTable = assignmentTable;
-                selectedTableFilter = filterTempAssignment;
+                tableName = ASSIGNMENTS_TABLE_NAME;
+                //selectedTable = assignmentTable;
+                //selectedTableFilter = filterTempAssignment;
                 break;
             case REPORTS_TABLE_NAME:
-                selectedTable = reportTable;
-                selectedTableFilter = filterTempReport;
+                tableName = REPORTS_TABLE_NAME;
+                //selectedTable = reportTable;
+                //selectedTableFilter = filterTempReport;
+                break;
+            case ARCHIVE_TABLE_NAME:
+                tableName = ARCHIVE_TABLE_NAME;
+                //selectedTable = archiveAssignTable;
+                //selectedTableFilter = filterTempArchive;
                 break;
             default:
-                selectedTable = archiveAssignTable;
-                selectedTableFilter = filterTempArchive;
+                throwUnknownTableException(selectedTab);
+                tableName = "unknown";
                 break;
         }
         
-        TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
-        GUI.columnFilterStatus(columnIndex, selectedTableFilter.getTable());
+        if(!tableName.equals("unknown")){
+            TableRowFilterSupport.forTable(tabsMap.get(tableName).getTable()).actions(true).apply().apply(columnIndex, selectedField);
+            GUI.columnFilterStatus(columnIndex, tabsMap.get(tableName).getFilter().getTable());
+        }
+        
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed

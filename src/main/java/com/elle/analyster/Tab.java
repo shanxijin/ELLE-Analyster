@@ -12,7 +12,7 @@ import javax.swing.JTable;
 public class Tab {
 
     private JTable table;
-    private JTable filtered;
+    private JTable filteredTable;
     private ITableFilter<?> filter;
     private int numberInit;
     private TableState tableState;
@@ -22,7 +22,7 @@ public class Tab {
      */
     public Tab() {
         table = new JTable();
-        filtered = new JTable();
+        filteredTable = new JTable();
         numberInit = 0;
         tableState = new TableState();
         // filter is an instance and does not get initialized
@@ -31,14 +31,14 @@ public class Tab {
     /**
      * CONSTRUCTOR
      * @param table
-     * @param filtered
+     * @param filteredTable
      * @param filter
      * @param numberInit
      * @param tableState 
      */
-    public Tab(JTable table, JTable filtered, ITableFilter<?> filter, int numberInit, TableState tableState) {
+    public Tab(JTable table, JTable filteredTable, ITableFilter<?> filter, int numberInit, TableState tableState) {
         this.table = table;
-        this.filtered = filtered;
+        this.filteredTable = filteredTable;
         this.filter = filter;
         this.numberInit = numberInit;
         this.tableState = tableState;
@@ -57,12 +57,12 @@ public class Tab {
         this.table = table;
     }
     
-    public JTable getFiltered() {
-        return filtered;
+    public JTable getFilteredTable() {
+        return filteredTable;
     }
 
-    public void setFiltered(JTable filtered) {
-        this.filtered = filtered;
+    public void setFilteredTable(JTable filteredTable) {
+        this.filteredTable = filteredTable;
     }
 
     public ITableFilter<?> getFilter() {
