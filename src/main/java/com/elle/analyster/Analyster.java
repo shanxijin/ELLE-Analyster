@@ -1092,27 +1092,40 @@ public class Analyster extends JFrame implements ITableNameConstants{
     }//GEN-LAST:event_jButtonCancelActionPerformed
     public void loadPrevious(String selectedTab) {
 
+        // TODO check that the selectedTab is actually needed to be passed in.
+        
+        // get specific information for the seletec tab
+        ITableFilter<?> tempFilter = filterTempAssignment;
+        float[] columnWidthPercentage = columnWidthPercentage1;
+        JTable table = assignmentTable;
+        
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
-                loadTables.loadAssignmentTableWithFilter(filterTempAssignment.getColumnIndex(), filterTempAssignment.getFilterCriteria());
-                setColumnFormat(columnWidthPercentage1, assignmentTable);
-                GUI.columnFilterStatus(filterTempAssignment.getColumnIndex(), assignmentTable);
+                tempFilter = filterTempAssignment;
+                columnWidthPercentage = columnWidthPercentage1;
+                table = assignmentTable;
                 break;
             case REPORTS_TABLE_NAME:
-                loadTables.loadReportTableWithFilter(filterTempReport.getColumnIndex(), filterTempReport.getFilterCriteria());
-                setColumnFormat(columnWidthPercentage2, reportTable);
-                GUI.columnFilterStatus(filterTempReport.getColumnIndex(), reportTable);
+                tempFilter = filterTempReport;
+                columnWidthPercentage = columnWidthPercentage2;
+                table = reportTable;
                 break;
             case ARCHIVE_TABLE_NAME:
-                loadTables.loadArchiveTableWithFilter(filterTempArchive.getColumnIndex(), filterTempArchive.getFilterCriteria());
-                setColumnFormat(columnWidthPercentage1, archiveAssignTable);
-                GUI.columnFilterStatus(filterTempArchive.getColumnIndex(), archiveAssignTable);
+                tempFilter = filterTempArchive;
+                columnWidthPercentage = columnWidthPercentage1;
+                table = archiveAssignTable;
                 break;
             default:
-                throwUnknownTableException();
+                throwUnknownTableException(); // handle unkown table value
                 break;
         }
+        
+        // apply that information here
+        loadTables.loadAssignmentTableWithFilter(tempFilter.getColumnIndex(), tempFilter.getFilterCriteria());
+        setColumnFormat(columnWidthPercentage, table);
+        GUI.columnFilterStatus(tempFilter.getColumnIndex(), table);
     }
+    
     private void changeTabbedPanelState(String selectedTab) {
         //To remember previous filter or create a filter if the table is not filtered.//
         assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
