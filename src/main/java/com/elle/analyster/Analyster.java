@@ -35,29 +35,42 @@ import java.util.Vector;
 
 public class Analyster extends JFrame implements ITableNameConstants{
 
-    private static final String SYMBOL_COLUMN_NAME = "Symbol";
-    private final TableService tableService = new TableService();
-    private final Connection con = new Connection();
-    private LoadTables loadTables;
+    // This should probably be its own class objects
     private JTable assignmentFiltered;
     private JTable reportFiltered;
     private JTable archiveAssignFiltered;
-    final float[] columnWidthPercentage1 = {35, 65, 80, 70, 99, 99};
-    final float[] columnWidthPercentage2 = {35, 65, 80, 100, 160, 120, 123};
-    private JTableHeader header;
+    
     private ITableFilter<?> filterTempReport;
     private ITableFilter<?> filterTempAssignment;
     private ITableFilter<?> filterTempArchive;
-    private static Analyster instance;
+    
     private static int numberAssignmentInit;
     private static int numberReportsInit;
     private static int numberArchiveAssignInit;
-    private Logger log = LoggerFactory.getLogger(Analyster.class);
-    private LogWindow logwind = new LogWindow(); 
+    
+    // these cause a minor bug in addRecordsTable.java
+    // just something to do with showing record labels which is handled
+    // by a new class very soon.
     public TableState viewer = new TableState();
     public TableState assignments = new TableState();
     public TableState reports = new TableState();
     public TableState archiveAssign = new TableState();
+    
+    
+    
+    
+    private static final String SYMBOL_COLUMN_NAME = "Symbol";
+    private final TableService tableService = new TableService();
+    private final Connection con = new Connection();
+    private LoadTables loadTables;
+    final float[] columnWidthPercentage1 = {35, 65, 80, 70, 99, 99};
+    final float[] columnWidthPercentage2 = {35, 65, 80, 100, 160, 120, 123};
+    private JTableHeader header;
+    
+    private static Analyster instance;
+    private Logger log = LoggerFactory.getLogger(Analyster.class);
+    private LogWindow logwind = new LogWindow(); 
+    
     public EnterButton enterButton = new EnterButton();
     protected static boolean isFiltering = true;
     private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
