@@ -11,34 +11,62 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import static com.elle.analyster.service.Connection.connection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: danielabecker
  */
-public class LoadTables {
+public class LoadTables implements ITableNameConstants{
 
     private Analyster ana =Analyster.getInstance();
     JLabel numOfRecords1 = ana.getNumOfRecords1();
     JLabel numOfRecords2 = ana.getNumOfRecords2();
-    JTable assignmentTable = ana.getassignmentTable();
-    JTable reportTable = ana.getReportTable();
-    JTable archiveAssignTable = ana.getArchiveAssignTable();
+//    JTable assignmentTable = ana.getassignmentTable();
+//    JTable reportTable = ana.getReportTable();
+//    JTable archiveAssignTable = ana.getArchiveAssignTable();
 //    JTable viewerTable = ana.getViewerTable();
     Logger log = LoggerFactory.getLogger(LoadTables.class);
+    
+    Map<String,Tab> tabsMap = ana.getTabsMap(); // to store ne tab objects
+    
+    JTable assignmentTable = tabsMap.get(ASSIGNMENTS_TABLE_NAME).getTable();
+    JTable reportTable = tabsMap.get(REPORTS_TABLE_NAME).getTable();
+    JTable archiveAssignTable = tabsMap.get(ARCHIVE_TABLE_NAME).getTable();
 
+    /**
+     * CONSTRUCTOR
+     */
     public void loadTables() {
+        
+        /**
+         * This code looks like it can be refactored
+         * one method loadTable(JTable t)
+         * I have to now make individual changes for every method
+         * rather than just make changes once in one method
+         */
+        
         loadAssignmentTable();
-        ana.setTerminalsFunction(ana.getassignmentTable());
+        //ana.setTerminalsFunction(ana.getassignmentTable());
+        ana.setTerminalsFunction(assignmentTable);
 
         loadReportTable();
-        ana.setTerminalsFunction(ana.getReportTable());
+        //ana.setTerminalsFunction(ana.getReportTable());
+        ana.setTerminalsFunction(reportTable);
 
 
         loadArchiveAssignTable();
-        ana.setTerminalsFunction(ana.getArchiveAssignTable());
+        //ana.setTerminalsFunction(ana.getArchiveAssignTable());
+        ana.setTerminalsFunction(archiveAssignTable);
 
 //        loadViewerTable();
         ana.setLastUpdateTime();
+        
+        //pass table map back to analyster
+        tabsMap.get(ASSIGNMENTS_TABLE_NAME).setTable(assignmentTable);
+        tabsMap.get(REPORTS_TABLE_NAME).setTable(reportTable);
+        tabsMap.get(ARCHIVE_TABLE_NAME).setTable(archiveAssignTable);
+        ana.setTabsMap(tabsMap);
     }
 
     public void loadAssignmentTable() {
@@ -60,10 +88,8 @@ public class LoadTables {
         numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
         
         // testing
-        ana.tabsMap.get("Assignments").setTable(assignmentTable);
-        ana.tabsMap.get("Assignments").setFilter(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
-        ana.tabsMap.get("Assignments").setFilteredTable(ana.getFilterTempAssignment().getTable());
-        ana.tabsMap.get("Assignments").setNumberInit(assignmentTable.getRowCount());
+        tabsMap.get("Assignments").setFilter(ana.getFilterTempAssignment());
+        tabsMap.get("Assignments").setNumberInit(assignmentTable.getRowCount());
 
     }
 
@@ -89,16 +115,15 @@ public class LoadTables {
         numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
         numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
 
+        // testing, looks like just filter an number
+        tabsMap.get("Assignments").setFilter(filter);
+        tabsMap.get("Assignments").setNumberInit(assignmentTable.getRowCount());
+        
+        // why is this code here?
         filter.apply(columnIndex, filterCriteria);
         filter.saveTableState();
         filter.saveFilterCriteria(filterCriteria);
         filter.setColumnIndex(columnIndex);
-        
-        // testing
-        ana.tabsMap.get("Assignments").setTable(assignmentTable);
-        ana.tabsMap.get("Assignments").setFilter(filter);
-        ana.tabsMap.get("Assignments").setFilteredTable(ana.getFilterTempAssignment().getTable());
-        ana.tabsMap.get("Assignments").setNumberInit(assignmentTable.getRowCount());
 
     }
 
@@ -115,8 +140,8 @@ public class LoadTables {
         Analyster.setNumberArchiveAssignInit(archiveAssignTable.getRowCount());
         
         // testing
-        ana.tabsMap.get("Assignments_Archived").setTable(archiveAssignTable);
-        ana.tabsMap.get("Assignments_Archived").setFilter(TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply());
+        //ana.tabsMap.get("Assignments_Archived").setTable(archiveAssignTable);
+        //ana.tabsMap.get("Assignments_Archived").setFilter(TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply());
         //ana.tabsMap.get("Assignments_Archived").setFilteredTable(ana.getFilterTempAssignment().getTable());
         ana.tabsMap.get("Assignments_Archived").setNumberInit(archiveAssignTable.getRowCount());
     }
@@ -144,16 +169,19 @@ public class LoadTables {
 //        numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
 //        numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
 
+        
+        // testing
+        //ana.tabsMap.get("Assignments_Archived").setTable(archiveAssignTable);
+        ana.tabsMap.get("Assignments_Archived").setFilter(filter);
+        //ana.tabsMap.get("Assignments_Archived").setFilteredTable(ana.getFilterTempAssignment().getTable());
+        ana.tabsMap.get("Assignments_Archived").setNumberInit(archiveAssignTable.getRowCount());
+        
+        
+        // why is this code here?
         filter.apply(columnIndex, filterCriteria);
         filter.saveTableState();
         filter.saveFilterCriteria(filterCriteria);
         filter.setColumnIndex(columnIndex);
-        
-        // testing
-        ana.tabsMap.get("Assignments_Archived").setTable(archiveAssignTable);
-        ana.tabsMap.get("Assignments_Archived").setFilter(filter);
-        //ana.tabsMap.get("Assignments_Archived").setFilteredTable(ana.getFilterTempAssignment().getTable());
-        ana.tabsMap.get("Assignments_Archived").setNumberInit(archiveAssignTable.getRowCount());
 
     }
       public void loadReportTable() {
@@ -168,8 +196,8 @@ public class LoadTables {
         
         
         // testing
-        ana.tabsMap.get("Reports").setTable(reportTable);
-        ana.tabsMap.get("Reports").setFilter(TableRowFilterSupport.forTable(reportTable).actions(true).apply());
+        //ana.tabsMap.get("Reports").setTable(reportTable);
+        //ana.tabsMap.get("Reports").setFilter(TableRowFilterSupport.forTable(reportTable).actions(true).apply());
         //ana.tabsMap.get("Reports").setFilteredTable(ana.getFilterTempAssignment().getTable());
         ana.tabsMap.get("Reports").setNumberInit(reportTable.getRowCount());
     }
@@ -202,7 +230,7 @@ public class LoadTables {
         filter.setColumnIndex(columnIndex);
         
         // testing
-        ana.tabsMap.get("Reports").setTable(reportTable);
+        //ana.tabsMap.get("Reports").setTable(reportTable);
         ana.tabsMap.get("Reports").setFilter(filter);
         //ana.tabsMap.get("Reports").setFilteredTable(ana.getFilterTempAssignment().getTable());
         ana.tabsMap.get("Reports").setNumberInit(reportTable.getRowCount());

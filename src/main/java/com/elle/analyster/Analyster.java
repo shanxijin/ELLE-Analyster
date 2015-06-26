@@ -61,6 +61,14 @@ public class Analyster extends JFrame implements ITableNameConstants{
     
     // I will store the objects with this
     Map<String,Tab> tabsMap = new HashMap<>();
+
+    public Map<String, Tab> getTabsMap() {
+        return tabsMap;
+    }
+
+    public void setTabsMap(Map<String, Tab> tabsMap) {
+        this.tabsMap = tabsMap;
+    }
     
     
     
