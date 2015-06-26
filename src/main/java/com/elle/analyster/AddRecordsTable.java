@@ -68,9 +68,9 @@ public class AddRecordsTable {
     
     public long getIdNum() {
         if (tableName.equals("Assignments")) {
-            return ana.assignments.getRecordsNumber();
+            return ana.getAssignments().getRecordsNumber();
         } else {
-            return ana.reports.getRecordsNumber();
+            return ana.getReports().getRecordsNumber();
         }
     }
     

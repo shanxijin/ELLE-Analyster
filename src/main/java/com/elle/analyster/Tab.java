@@ -16,6 +16,7 @@ public class Tab {
     private ITableFilter<?> filter;
     private int numberInit;
     private TableState tableState;
+    private float[] colWidthPercent;
 
     /**
      * CONSTRUCTOR
@@ -26,22 +27,6 @@ public class Tab {
         numberInit = 0;
         tableState = new TableState();
         // filter is an instance and does not get initialized
-    }
-    
-    /**
-     * CONSTRUCTOR
-     * @param table
-     * @param filteredTable
-     * @param filter
-     * @param numberInit
-     * @param tableState 
-     */
-    public Tab(JTable table, JTable filteredTable, ITableFilter<?> filter, int numberInit, TableState tableState) {
-        this.table = table;
-        this.filteredTable = filteredTable;
-        this.filter = filter;
-        this.numberInit = numberInit;
-        this.tableState = tableState;
     }
     
     /**************************************************************************
@@ -89,4 +74,11 @@ public class Tab {
         this.tableState = tableState;
     }
 
+    public float[] getColWidthPercent() {
+        return colWidthPercent;
+    }
+
+    public void setColWidthPercent(float[] colWidthPercent) {
+        this.colWidthPercent = colWidthPercent;
+    }
 }
