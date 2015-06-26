@@ -61,45 +61,49 @@ public class Analyster extends JFrame implements ITableNameConstants{
      * CONSTRUCTOR
      */
     public Analyster() {
-        initComponents();
-        jTextArea.setVisible(true);
+
+        // create tab objects -> this has to be before initcomponents();
+        tabs.put(ASSIGNMENTS_TABLE_NAME, new Tab());
+        tabs.put(REPORTS_TABLE_NAME, new Tab());
+        tabs.put(ARCHIVE_TABLE_NAME, new Tab());
+        
+        initComponents(); // generated code
 
         // set the interface to the middle of the window
         this.setLocationRelativeTo(null);
         this.setTitle("Analyster");
+        
+        // show and hide components
         jUpload.setVisible(false);
         jPanelSQL.setVisible(false); 
         jDebugEnter.setVisible(true);
         jDebugCancel.setVisible(true);
         jButtonCancel.setVisible(false);
         jBatchEdit.setVisible(true);
+        jTextArea.setVisible(true);
         
-        // I COMMENTED THESE OUT AND IT WORKS FINE !!
-        //tableService.setAssignmentTable(assignmentTable);
-        //tableService.setReportTable(reportTable);
-        //tableService.setArchiveAssignTable(archiveAssignTable);
-        //tableService.setViewerTable(assignmentTable);
+        // set names to tables (this was in tabbedPanelChanged method
+        assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
+        reportTable.setName(REPORTS_TABLE_NAME);
+        archiveAssignTable.setName(ARCHIVE_TABLE_NAME);
         
-        // create tab objects
-        tabs.put(ASSIGNMENTS_TABLE_NAME, new Tab());
-        tabs.put(REPORTS_TABLE_NAME, new Tab());
-        tabs.put(ARCHIVE_TABLE_NAME, new Tab());
+        // I COMMENTED THESE OUT AND IT WORKED FINE !!
+        tableService.setAssignmentTable(assignmentTable);
+        tableService.setReportTable(reportTable);
+        tableService.setArchiveAssignTable(archiveAssignTable);
+        tableService.setViewerTable(assignmentTable);
         
         // set tables to tab objects
         tabs.get(ASSIGNMENTS_TABLE_NAME).setTable(assignmentTable);
         tabs.get(REPORTS_TABLE_NAME).setTable(reportTable);
         tabs.get(ARCHIVE_TABLE_NAME).setTable(archiveAssignTable);
         
-        // set tables to tab objects
+        // set table states to tab objects
         tabs.get(ASSIGNMENTS_TABLE_NAME).setTableState(new TableState(assignmentTable));
         tabs.get(REPORTS_TABLE_NAME).setTableState(new TableState(reportTable));
         tabs.get(ARCHIVE_TABLE_NAME).setTableState(new TableState(archiveAssignTable));
         
-        // set names to tables (this was in tabbedPanelChanged method
-        assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
-        reportTable.setName(REPORTS_TABLE_NAME);
-        archiveAssignTable.setName(ARCHIVE_TABLE_NAME);
-
+        
         
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {// Allow to TAB-
 
@@ -1028,11 +1032,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
         // pointers to information
         boolean isFilterActive = false;
-        JTable table = new JTable();
-        JTable filteredTable = new JTable();
-        ITableFilter<?> filterTemp; // interface does not require initialize
-        int numberInit = 99999; // 9999 is more clear for debugging
-        
         
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
@@ -1062,15 +1061,15 @@ public class Analyster extends JFrame implements ITableNameConstants{
             throwUnknownTableException(selectedTab);
         }else{
             if (isFilterActive) {
-            table = filteredTable;
+            tabs.get(selectedTab).setTable(tabs.get(selectedTab).getFilteredTable());
             } else {
                 tabs.get(selectedTab).setFilter(TableRowFilterSupport.forTable(tabs.get(selectedTab).getTable()).actions(true).apply());
                 tabs.get(selectedTab).setFilteredTable(tabs.get(selectedTab).getFilter().getTable());
             }
             
             // set label record information
-            numOfRecords1.setText("Number of records in " + selectedTab + ": " + numberInit);
-            numOfRecords2.setText("Number of records shown: " + filteredTable.getRowCount());
+            numOfRecords1.setText("Number of records in " + selectedTab + ": " + tabs.get(selectedTab).getNumberInit());
+            numOfRecords2.setText("Number of records shown: " + tabs.get(selectedTab).getFilteredTable().getRowCount());
         }
     }
 
