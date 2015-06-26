@@ -187,10 +187,12 @@ public class Analyster extends JFrame implements ITableNameConstants{
         jDebugCancel.setVisible(true);
         jButtonCancel.setVisible(false);
         jBatchEdit.setVisible(true);
-        tableService.setAssignmentTable(assignmentTable);
-        tableService.setReportTable(reportTable);
-        tableService.setArchiveAssignTable(archiveAssignTable);
-        tableService.setViewerTable(assignmentTable);
+        
+        // I COMMENTED THESE OUT AND IT WORKS FINE !!
+        //tableService.setAssignmentTable(assignmentTable);
+        //tableService.setReportTable(reportTable);
+        //tableService.setArchiveAssignTable(archiveAssignTable);
+        //tableService.setViewerTable(assignmentTable);
         
         // create tab objects
         tabsMap.put(ASSIGNMENTS_TABLE_NAME, new Tab());
@@ -1769,43 +1771,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
         }
     }
 
-
-    class AlignmentTableHeaderCellRenderer implements TableCellRenderer {
-
-        private final TableCellRenderer wrappedRenderer;
-        private final JLabel label;
-
-        public AlignmentTableHeaderCellRenderer(TableCellRenderer wrappedRenderer) {
-            if (!(wrappedRenderer instanceof JLabel)) {
-                throw new IllegalArgumentException("The supplied renderer must inherit from JLabel");
-            }
-            this.wrappedRenderer = wrappedRenderer;
-            this.label = (JLabel) wrappedRenderer;
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
-            wrappedRenderer.getTableCellRendererComponent(table, value,
-                    isSelected, hasFocus, row, column);
-            if (table.getName().equals(REPORTS_TABLE_NAME)) {
-
-                if (column < table.getColumnCount() - 4) {
-                    label.setHorizontalAlignment(JLabel.CENTER);
-                    return label;
-                } else {
-                    label.setHorizontalAlignment(JLabel.LEFT);
-                    return label;
-                }
-            }
-
-            label.setHorizontalAlignment(column == table.getColumnCount() - 1 ? JLabel.LEFT : JLabel.CENTER);
-            return label;
-
-        }
-
-    }
-
     // Keep the float in Table Editor by separating editing part out here
     public void batchEdit(TableEditor editor) {
         
@@ -2001,4 +1966,44 @@ public class Analyster extends JFrame implements ITableNameConstants{
     private javax.swing.JTextField textForSearch;
     // End of variables declaration//GEN-END:variables
     // @formatter:on
+    
+    
+    /**
+     *  CLASS 
+     */
+    class AlignmentTableHeaderCellRenderer implements TableCellRenderer {
+
+        private final TableCellRenderer wrappedRenderer;
+        private final JLabel label;
+
+        public AlignmentTableHeaderCellRenderer(TableCellRenderer wrappedRenderer) {
+            if (!(wrappedRenderer instanceof JLabel)) {
+                throw new IllegalArgumentException("The supplied renderer must inherit from JLabel");
+            }
+            this.wrappedRenderer = wrappedRenderer;
+            this.label = (JLabel) wrappedRenderer;
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            wrappedRenderer.getTableCellRendererComponent(table, value,
+                    isSelected, hasFocus, row, column);
+            if (table.getName().equals(REPORTS_TABLE_NAME)) {
+
+                if (column < table.getColumnCount() - 4) {
+                    label.setHorizontalAlignment(JLabel.CENTER);
+                    return label;
+                } else {
+                    label.setHorizontalAlignment(JLabel.LEFT);
+                    return label;
+                }
+            }
+
+            label.setHorizontalAlignment(column == table.getColumnCount() - 1 ? JLabel.LEFT : JLabel.CENTER);
+            return label;
+
+        }
+
+    }
 }
