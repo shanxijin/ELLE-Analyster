@@ -196,8 +196,11 @@ public class Analyster extends JFrame implements ITableNameConstants{
         
         // create tab objects
         tabsMap.put(ASSIGNMENTS_TABLE_NAME, new Tab());
+        tabsMap.get(ASSIGNMENTS_TABLE_NAME).setTable(assignmentTable);
         tabsMap.put(REPORTS_TABLE_NAME, new Tab());
+        tabsMap.get(REPORTS_TABLE_NAME).setTable(reportTable);
         tabsMap.put(ARCHIVE_TABLE_NAME, new Tab());
+        tabsMap.get(ARCHIVE_TABLE_NAME).setTable(archiveAssignTable);
 
         
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {// Allow to TAB-
@@ -976,8 +979,8 @@ public class Analyster extends JFrame implements ITableNameConstants{
         }
         
         if(!selectedTab.equals("unknown")){
-            TableRowFilterSupport.forTable(selectedTable).actions(true).apply().apply(columnIndex, selectedField);
-            GUI.columnFilterStatus(columnIndex, selectedTableFilter.getTable());
+            TableRowFilterSupport.forTable(tabsMap.get(selectedTab).getTable()).actions(true).apply().apply(columnIndex, selectedField);
+            GUI.columnFilterStatus(columnIndex, tabsMap.get(selectedTab).getFilter().getTable());
         }
         
     }
@@ -1169,15 +1172,17 @@ public class Analyster extends JFrame implements ITableNameConstants{
         
         if(!selectedTab.equals("unknown")){
             // apply that information here
-            table = tabsMap.get(selectedTab).getTable();
-            tempFilter = tabsMap.get(selectedTab).getFilter();
-            loadTables.loadAssignmentTableWithFilter(tempFilter.getColumnIndex(), tempFilter.getFilterCriteria());
-            setColumnFormat(columnWidthPercentage, table);
-            GUI.columnFilterStatus(tempFilter.getColumnIndex(), table);
+            //table = tabsMap.get(selectedTab).getTable();
+            //tempFilter = tabsMap.get(selectedTab).getFilter();
+            loadTables.loadAssignmentTableWithFilter(tabsMap.get(selectedTab).getFilter().getColumnIndex(), tabsMap.get(selectedTab).getFilter().getFilterCriteria());
+            setColumnFormat(columnWidthPercentage, tabsMap.get(selectedTab).getTable());
+            GUI.columnFilterStatus(tabsMap.get(selectedTab).getFilter().getColumnIndex(), tabsMap.get(selectedTab).getTable());
         }
     }
     
-    private void changeTabbedPanelState(String selectedTab) {
+    private void changeTabbedPanelState() {
+        
+        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
         
         // TODO : NOT SURE IF THIS IS NEEDED
         //To remember previous filter or create a filter if the table is not filtered.//
@@ -1294,7 +1299,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
         }
         
         //test
-        // the global variables are not being set
+        //the global variables are not being set
         if(selectedTab.equals(ASSIGNMENTS_TABLE_NAME))
             filterTempAssignment = TableRowFilterSupport.forTable(table).actions(true).apply();
         if(selectedTab.equals(REPORTS_TABLE_NAME))
@@ -1385,11 +1390,6 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
     private void jButtonClearAllFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearAllFilterActionPerformed
 
-        clearAllFilters();
-
-    }//GEN-LAST:event_jButtonClearAllFilterActionPerformed
-
-    private void clearAllFilters() {
         switch (jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex())) {
             case ASSIGNMENTS_TABLE_NAME:
 
@@ -1418,7 +1418,8 @@ public class Analyster extends JFrame implements ITableNameConstants{
         }
         modifiedDataList.clear();
 
-    }
+    }//GEN-LAST:event_jButtonClearAllFilterActionPerformed
+
 
     private void jMenuItemOthersLoadDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOthersLoadDataActionPerformed
         String titleAt = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
@@ -1452,9 +1453,8 @@ public class Analyster extends JFrame implements ITableNameConstants{
 //Filter is generated everytime that table is selected.
     private void jTabbedPanel1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPanel1StateChanged
 
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
         TableState ts = getTableState();
-        changeTabbedPanelState(selectedTab);
+        changeTabbedPanelState();
         String[] field = ts.getSearchFields();
         if (field == null) {
             jField.setModel(new DefaultComboBoxModel(new String[]{"Symbol", "Analyst"}));
@@ -1551,9 +1551,10 @@ public class Analyster extends JFrame implements ITableNameConstants{
     public void loadData() {
         loadTables = new LoadTables();
         loadTables.loadTables();
-         filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true)
-                            .apply();
-                    assignmentFiltered = filterTempAssignment.getTable(); 
+         //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
+                    //assignmentFiltered = filterTempAssignment.getTable(); 
+        tabsMap.get(ASSIGNMENTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabsMap.get(ASSIGNMENTS_TABLE_NAME).getTable()).actions(true).apply());
+        tabsMap.get(ASSIGNMENTS_TABLE_NAME).setFilteredTable(tabsMap.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());
     }
 
     public void setTerminalsFunction(final JTable table) { //set all listenner for JTable.

@@ -58,6 +58,12 @@ public class LoadTables {
 
         numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
         numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
+        
+        // testing
+        ana.tabsMap.get("Assignments").setTable(assignmentTable);
+        ana.tabsMap.get("Assignments").setFilter(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
+        ana.tabsMap.get("Assignments").setFilteredTable(ana.getFilterTempAssignment().getTable());
+        ana.tabsMap.get("Assignments").setNumberInit(assignmentTable.getRowCount());
 
     }
 
@@ -87,6 +93,12 @@ public class LoadTables {
         filter.saveTableState();
         filter.saveFilterCriteria(filterCriteria);
         filter.setColumnIndex(columnIndex);
+        
+        // testing
+        ana.tabsMap.get("Assignments").setTable(assignmentTable);
+        ana.tabsMap.get("Assignments").setFilter(filter);
+        ana.tabsMap.get("Assignments").setFilteredTable(ana.getFilterTempAssignment().getTable());
+        ana.tabsMap.get("Assignments").setNumberInit(assignmentTable.getRowCount());
 
     }
 
@@ -101,7 +113,15 @@ public class LoadTables {
         ana.getArchiveAssign().init(archiveAssignTable, new String[]{"Symbol", "Analyst"});
         ana.setTerminalsFunction(archiveAssignTable);
         Analyster.setNumberArchiveAssignInit(archiveAssignTable.getRowCount());
+        
+        // testing
+        ana.tabsMap.get("Assignments_Archived").setTable(archiveAssignTable);
+        ana.tabsMap.get("Assignments_Archived").setFilter(TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply());
+        //ana.tabsMap.get("Assignments_Archived").setFilteredTable(ana.getFilterTempAssignment().getTable());
+        ana.tabsMap.get("Assignments_Archived").setNumberInit(archiveAssignTable.getRowCount());
     }
+    
+    
     public void loadArchiveTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
 
         try {
@@ -128,6 +148,12 @@ public class LoadTables {
         filter.saveTableState();
         filter.saveFilterCriteria(filterCriteria);
         filter.setColumnIndex(columnIndex);
+        
+        // testing
+        ana.tabsMap.get("Assignments_Archived").setTable(archiveAssignTable);
+        ana.tabsMap.get("Assignments_Archived").setFilter(filter);
+        //ana.tabsMap.get("Assignments_Archived").setFilteredTable(ana.getFilterTempAssignment().getTable());
+        ana.tabsMap.get("Assignments_Archived").setNumberInit(archiveAssignTable.getRowCount());
 
     }
       public void loadReportTable() {
@@ -139,6 +165,13 @@ public class LoadTables {
           ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
         ana.getReports().init(reportTable, new String[]{"Symbol", "Author"});
         Analyster.setNumberReportsInit(reportTable.getRowCount());
+        
+        
+        // testing
+        ana.tabsMap.get("Reports").setTable(reportTable);
+        ana.tabsMap.get("Reports").setFilter(TableRowFilterSupport.forTable(reportTable).actions(true).apply());
+        //ana.tabsMap.get("Reports").setFilteredTable(ana.getFilterTempAssignment().getTable());
+        ana.tabsMap.get("Reports").setNumberInit(reportTable.getRowCount());
     }
 
     public void loadReportTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
@@ -167,6 +200,12 @@ public class LoadTables {
         filter.saveTableState();
         filter.saveFilterCriteria(filterCriteria);
         filter.setColumnIndex(columnIndex);
+        
+        // testing
+        ana.tabsMap.get("Reports").setTable(reportTable);
+        ana.tabsMap.get("Reports").setFilter(filter);
+        //ana.tabsMap.get("Reports").setFilteredTable(ana.getFilterTempAssignment().getTable());
+        ana.tabsMap.get("Reports").setNumberInit(reportTable.getRowCount());
     }
 //    public void loadViewerTable(){
 //        try {

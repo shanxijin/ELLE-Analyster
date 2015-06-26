@@ -378,7 +378,7 @@ public class LoginWindow extends javax.swing.JFrame {
             System.out.println("Connection successfully");
             GUI.status = true;
             analyster.loadData();
-            dispose();
+            dispose(); // destroy this component and return consumed resources
         } catch (Exception ex) {
 
             JOptionPane.showMessageDialog(null,
