@@ -912,7 +912,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
                 + "2015-06-25" + "\n"
-                + "Version: " + "0.6.4d");
+                + "Version: " + "0.6.4e");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
