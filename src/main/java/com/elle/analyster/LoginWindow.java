@@ -22,7 +22,9 @@ import java.util.List;
  *
  * @author Louis W.
  */
-public class LoginWindow extends javax.swing.JFrame {
+public class LoginWindow extends JFrame {
+    
+    private Analyster analyster;
 
     public LoginWindow() {
         initComponents();
@@ -430,7 +432,6 @@ public class LoginWindow extends javax.swing.JFrame {
 //        });
 //    }
     
-    private Analyster analyster;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jButtonPanel;
     private javax.swing.JButton jCancelButton;
