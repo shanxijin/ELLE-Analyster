@@ -2,7 +2,6 @@ package com.elle.analyster;
 
 import com.elle.analyster.db.ExecuteSQLStatement;
 import com.elle.analyster.domain.ModifiedData;
-import com.elle.analyster.presentation.filter.AbstractTableFilter;
 import com.elle.analyster.presentation.filter.CreateDocumentFilter;
 import com.elle.analyster.presentation.filter.ITableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
@@ -57,6 +56,9 @@ public class Analyster extends JFrame implements ITableNameConstants{
     protected static boolean isFiltering = true;
     private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
     
+    @Autowired
+    private UploadRecord uploadRecordService;
+    
     /**
      * CONSTRUCTOR
      */
@@ -82,7 +84,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
         jBatchEdit.setVisible(true);
         jTextArea.setVisible(true);
         
-        // set names to tables (this was in tabbedPanelChanged method
+        // set names to tables (this was in tabbedPanelChanged method)
         assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
         reportTable.setName(REPORTS_TABLE_NAME);
         archiveAssignTable.setName(ARCHIVE_TABLE_NAME);
@@ -103,52 +105,9 @@ public class Analyster extends JFrame implements ITableNameConstants{
         tabs.get(REPORTS_TABLE_NAME).setTableState(new TableState(reportTable));
         tabs.get(ARCHIVE_TABLE_NAME).setTableState(new TableState(archiveAssignTable));
         
+        setKeyboardFocusManager();
         
         
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {// Allow to TAB-
-
-            @Override
-            public boolean dispatchKeyEvent(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_TAB) {
-                    if (jLabelEdit.getText().equals("ON ")) {
-                        if (e.getComponent() instanceof JTable) {
-                            JTable table = (JTable) e.getComponent();
-                            int row = table.getSelectedRow();
-                            int column = table.getSelectedColumn();
-                            if (column == table.getRowCount() || column == 0) {
-                                return false;
-                            } else {
-                                table.getComponentAt(row, column).requestFocus();
-                                table.editCellAt(row, column);
-                                JTextField selectCom = (JTextField) table.getEditorComponent();
-                                selectCom.requestFocusInWindow();
-                                selectCom.selectAll();
-                            }
-                        }
-                    }
-                } else if (e.getKeyCode() == KeyEvent.VK_D && e.isControlDown()) {
-                    if (jLabelEdit.getText().equals("ON ")) {                       // Default Date input with today's date
-                        JTable table = (JTable) e.getComponent().getParent();
-                        int column = table.getSelectedColumn();
-                        if (table.getColumnName(column).toLowerCase().contains("date")) {
-                            if (e.getID() != 401) {
-                                return false;
-                            } else {
-                                JTextField selectCom = (JTextField) e.getComponent();
-                                selectCom.requestFocusInWindow();
-                                selectCom.selectAll();
-                                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                Date date = new Date();
-                                String today = dateFormat.format(date);
-                                selectCom.setText(today);
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-        }
-        );
         instance = this;
 
     }
@@ -1619,9 +1578,53 @@ public class Analyster extends JFrame implements ITableNameConstants{
         String time = dateFormat.format(new Date());
         jTimeLastUpdate.setText("Last updated: " + time);
     }
+    
+    private void setKeyboardFocusManager() {
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {// Allow to TAB-
 
-        @Autowired
-    private UploadRecord uploadRecordService;
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_TAB) {
+                    if (jLabelEdit.getText().equals("ON ")) {
+                        if (e.getComponent() instanceof JTable) {
+                            JTable table = (JTable) e.getComponent();
+                            int row = table.getSelectedRow();
+                            int column = table.getSelectedColumn();
+                            if (column == table.getRowCount() || column == 0) {
+                                return false;
+                            } else {
+                                table.getComponentAt(row, column).requestFocus();
+                                table.editCellAt(row, column);
+                                JTextField selectCom = (JTextField) table.getEditorComponent();
+                                selectCom.requestFocusInWindow();
+                                selectCom.selectAll();
+                            }
+                        }
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_D && e.isControlDown()) {
+                    if (jLabelEdit.getText().equals("ON ")) {                       // Default Date input with today's date
+                        JTable table = (JTable) e.getComponent().getParent();
+                        int column = table.getSelectedColumn();
+                        if (table.getColumnName(column).toLowerCase().contains("date")) {
+                            if (e.getID() != 401) {
+                                return false;
+                            } else {
+                                JTextField selectCom = (JTextField) e.getComponent();
+                                selectCom.requestFocusInWindow();
+                                selectCom.selectAll();
+                                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                Date date = new Date();
+                                String today = dateFormat.format(date);
+                                selectCom.setText(today);
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+        );
+    }
 
     public UploadRecord getUploadRecordService() {
         return uploadRecordService;
