@@ -9,14 +9,15 @@ import javax.swing.JTable;
  * @author Carlos Igreja
  * @since  June 25, 2015
  */
-public class Tab {
+public class Tab implements ITableNameConstants{
 
     private JTable table;
     private JTable filteredTable;
     private ITableFilter<?> filter;
-    private int numberInit;
     private TableState tableState;
     private float[] colWidthPercent;
+    private int totalRecords;
+    private int recordsShown;
 
     /**
      * CONSTRUCTOR
@@ -24,8 +25,9 @@ public class Tab {
     public Tab() {
         table = new JTable();
         filteredTable = new JTable();
-        numberInit = 0;
         tableState = new TableState();
+        totalRecords = 0;
+        recordsShown = 0;
         // filter is an instance and does not get initialized
     }
     
@@ -58,14 +60,6 @@ public class Tab {
         this.filter = filter;
     }
 
-    public int getNumberInit() {
-        return numberInit;
-    }
-
-    public void setNumberInit(int numberInit) {
-        this.numberInit = numberInit;
-    }
-
     public TableState getTableState() {
         return tableState;
     }
@@ -80,5 +74,75 @@ public class Tab {
 
     public void setColWidthPercent(float[] colWidthPercent) {
         this.colWidthPercent = colWidthPercent;
+    }
+    
+    public int getTotalRecords() {
+        return totalRecords;
+    }
+
+    public void setTotalRecords(int totalRecords) {
+        this.totalRecords = totalRecords;
+    }
+
+    public int getRecordsShown() {
+        return recordsShown;
+    }
+
+    public void setRecordsShown(int recordsShown) {
+        this.recordsShown = recordsShown;
+    }
+    
+    /**************************************************************************
+     *************************** Methods **************************************
+     **************************************************************************/
+    
+    /**
+     * 
+     * @return 
+     */
+    public String getRecordsLabelString(){
+        
+        String output;
+        
+        switch (getTable().getName()) {
+            case ASSIGNMENTS_TABLE_NAME:
+                output = "<html><pre>"
+                       + "Number of records in Assignments: " + getTotalRecords() 
+                  + "<br/>         Number of records shown: " + getRecordsShown()
+                     + "</pre></html>";
+                break;
+            case REPORTS_TABLE_NAME:
+                output = "<html><pre>"
+                       + "Number of records in Reports: " + getTotalRecords() 
+                  + "<br/>     Number of records shown: " + getRecordsShown()
+                     + "</pre></html>";
+                break;
+            case ARCHIVE_TABLE_NAME:
+                output = "<html><pre>"
+                       + "Number of records in Archive: " + getTotalRecords() 
+                  + "<br/>     Number of records shown: " + getRecordsShown()
+                     + "</pre></html>";
+                break;
+            default:
+                // this means an invalid table name constant was passed
+                // this exception will be handled and thrown here
+                // the program will still run and show the stack trace for debugging
+                output = "<html><pre>"
+                       + "*******ATTENTION*******"
+                  + "<br/>Not a valid table name constant entered"
+                     + "</pre></html>";
+                try {
+                    String errorMessage = "ERROR: unknown table";
+                    throw new NoSuchFieldException(errorMessage);
+                } catch (NoSuchFieldException ex) {
+                    ex.printStackTrace();
+                    // post to log.txt
+                    Analyster.getInstance().getLogwind().sendMessages(ex.getMessage());
+                }
+        
+                break;
+        }
+        
+        return output;
     }
 }

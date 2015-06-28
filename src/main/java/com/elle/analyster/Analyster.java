@@ -37,8 +37,7 @@ import java.util.Vector;
 
 public class Analyster extends JFrame implements ITableNameConstants, IColumnConstants{
     
-    // I will store the objects with this
-    Map<String,Tab> tabs = new HashMap<>();
+    Map<String,Tab> tabs = new HashMap<>(); // stores individual tab information
 
     private final TableService tableService = new TableService();
     private final Connection con = new Connection();
@@ -1022,7 +1021,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             }
             
             // set label record information
-            numOfRecords1.setText("Number of records in " + selectedTab + ": " + tabs.get(selectedTab).getNumberInit());
+            numOfRecords1.setText("Number of records in " + selectedTab + ": " + tabs.get(selectedTab).getTotalRecords());
             numOfRecords2.setText("Number of records shown: " + tabs.get(selectedTab).getFilteredTable().getRowCount());
         }
     }
@@ -1345,17 +1344,17 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 tabs.get(ASSIGNMENTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable()).actions(true).apply()); 
                 tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());
-                numOfRecords1.setText("Number of records in Assignments: " + tabs.get(ASSIGNMENTS_TABLE_NAME).getNumberInit());
+                numOfRecords1.setText("Number of records in Assignments: " + tabs.get(ASSIGNMENTS_TABLE_NAME).getTotalRecords());
             } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
                 tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply()); 
                 tabs.get(REPORTS_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], tabs.get(REPORTS_TABLE_NAME).getFilter().getTable());
-                numOfRecords1.setText("Number of records in Reports: " + tabs.get(REPORTS_TABLE_NAME).getNumberInit());
+                numOfRecords1.setText("Number of records in Reports: " + tabs.get(REPORTS_TABLE_NAME).getTotalRecords());
             } else {
                 tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply()); 
                 tabs.get(ARCHIVE_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
                 GUI.columnFilterStatus(columnIndex[0], tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable());
-                numOfRecords1.setText("Number of records in Archive: " + tabs.get(ARCHIVE_TABLE_NAME).getNumberInit());
+                numOfRecords1.setText("Number of records in Archive: " + tabs.get(ARCHIVE_TABLE_NAME).getTotalRecords());
 
             }
         }
@@ -1366,15 +1365,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
             tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
             GUI.cleanColumnFilterStatus(columnIndex, tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());// clean green background
-            numOfRecords1.setText("Number of records in Assignments: " + tabs.get(ASSIGNMENTS_TABLE_NAME).getNumberInit());
+            numOfRecords1.setText("Number of records in Assignments: " + tabs.get(ASSIGNMENTS_TABLE_NAME).getTotalRecords());
         } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
             tabs.get(REPORTS_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(REPORTS_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
             GUI.cleanColumnFilterStatus(columnIndex, tabs.get(REPORTS_TABLE_NAME).getFilter().getTable());// clean green background
-            numOfRecords1.setText("Number of records in Reports: " + tabs.get(REPORTS_TABLE_NAME).getNumberInit());
+            numOfRecords1.setText("Number of records in Reports: " + tabs.get(REPORTS_TABLE_NAME).getTotalRecords());
         } else {
             tabs.get(ARCHIVE_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(ARCHIVE_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
             GUI.cleanColumnFilterStatus(columnIndex, tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable());// clean green background
-            numOfRecords1.setText("Number of records in Archive: " + tabs.get(ARCHIVE_TABLE_NAME).getNumberInit());
+            numOfRecords1.setText("Number of records in Archive: " + tabs.get(ARCHIVE_TABLE_NAME).getTotalRecords());
 
         }
     }
@@ -1654,15 +1653,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }
 
     public void setNumberArchiveAssignInit(int numberArchiveAssignInit) {
-        tabs.get(ARCHIVE_TABLE_NAME).setNumberInit(numberArchiveAssignInit);
+        tabs.get(ARCHIVE_TABLE_NAME).setTotalRecords(numberArchiveAssignInit);
     }
 
     public void setNumberAssignmentInit(int numberAssignmentInit) {
-        tabs.get(ASSIGNMENTS_TABLE_NAME).setNumberInit(numberAssignmentInit);
+        tabs.get(ASSIGNMENTS_TABLE_NAME).setTotalRecords(numberAssignmentInit);
     }
 
     public void setNumberReportsInit(int numberReportsInit) {
-        tabs.get(REPORTS_TABLE_NAME).setNumberInit(numberReportsInit);
+        tabs.get(REPORTS_TABLE_NAME).setTotalRecords(numberReportsInit);
     }
 
     public static String getAssignmentsTableName() {

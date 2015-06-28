@@ -89,7 +89,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
         
         // testing
         tabsMap.get("Assignments").setFilter(ana.getFilterTempAssignment());
-        tabsMap.get("Assignments").setNumberInit(assignmentTable.getRowCount());
+        tabsMap.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
 
     }
 
@@ -117,7 +117,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
 
         // testing, looks like just filter an number
         tabsMap.get("Assignments").setFilter(filter);
-        tabsMap.get("Assignments").setNumberInit(assignmentTable.getRowCount());
+        tabsMap.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
         
         // why is this code here?
         filter.apply(columnIndex, filterCriteria);
@@ -143,7 +143,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
         //ana.tabsMap.get("Assignments_Archived").setTable(archiveAssignTable);
         //ana.tabsMap.get("Assignments_Archived").setFilter(TableRowFilterSupport.forTable(archiveAssignTable).actions(true).apply());
         //ana.tabsMap.get("Assignments_Archived").setFilteredTable(ana.getFilterTempAssignment().getTable());
-        ana.tabs.get("Assignments_Archived").setNumberInit(archiveAssignTable.getRowCount());
+        ana.tabs.get("Assignments_Archived").setTotalRecords(archiveAssignTable.getRowCount());
     }
     
     
@@ -174,7 +174,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
         //ana.tabsMap.get("Assignments_Archived").setTable(archiveAssignTable);
         ana.tabs.get("Assignments_Archived").setFilter(filter);
         //ana.tabsMap.get("Assignments_Archived").setFilteredTable(ana.getFilterTempAssignment().getTable());
-        ana.tabs.get("Assignments_Archived").setNumberInit(archiveAssignTable.getRowCount());
+        ana.tabs.get("Assignments_Archived").setTotalRecords(archiveAssignTable.getRowCount());
         
         
         // why is this code here?
@@ -199,7 +199,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
         //ana.tabsMap.get("Reports").setTable(reportTable);
         //ana.tabsMap.get("Reports").setFilter(TableRowFilterSupport.forTable(reportTable).actions(true).apply());
         //ana.tabsMap.get("Reports").setFilteredTable(ana.getFilterTempAssignment().getTable());
-        ana.tabs.get("Reports").setNumberInit(reportTable.getRowCount());
+        ana.tabs.get("Reports").setTotalRecords(reportTable.getRowCount());
     }
 
     public void loadReportTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
@@ -233,7 +233,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
         //ana.tabsMap.get("Reports").setTable(reportTable);
         ana.tabs.get("Reports").setFilter(filter);
         //ana.tabsMap.get("Reports").setFilteredTable(ana.getFilterTempAssignment().getTable());
-        ana.tabs.get("Reports").setNumberInit(reportTable.getRowCount());
+        ana.tabs.get("Reports").setTotalRecords(reportTable.getRowCount());
     }
 //    public void loadViewerTable(){
 //        try {
