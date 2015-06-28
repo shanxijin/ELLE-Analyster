@@ -20,8 +20,6 @@ import java.sql.SQLException;
 //Delete from DataBase record selected
 public class DeleteRecord {
     private Logger log = LoggerFactory.getLogger(DeleteRecord.class);
-    private GUI gui = new GUI();
-    
     String sqlDelete =null;
 
     public String deleteRecordSelected( JTable table) throws HeadlessException {
@@ -31,9 +29,9 @@ public class DeleteRecord {
             for (int i = 0; i < rowsSelected; i++) {
                 int row = table.getSelectedRows()[i];
                 Integer selectedTask = (Integer) table.getValueAt(row, 0); // Add Note to selected taskID
-                sqlDelete = "DELETE FROM " + gui.getDatabase() + "." + tableName + " where ID=" + selectedTask;
+                sqlDelete = "DELETE FROM " + GUI.getDatabase() + "." + tableName + " where ID=" + selectedTask;
                 try {
-                    gui.getStmt().executeUpdate(sqlDelete);
+                    GUI.getStmt().executeUpdate(sqlDelete);
                 } catch (SQLException e) {
                     log.info(e.getMessage());
                 }

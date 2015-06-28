@@ -11,6 +11,7 @@ import javax.swing.JTable;
  */
 public class Tab implements ITableNameConstants{
 
+    String tableName; 
     private JTable table;
     private JTable filteredTable;
     private ITableFilter<?> filter;
@@ -23,6 +24,7 @@ public class Tab implements ITableNameConstants{
      * CONSTRUCTOR
      */
     public Tab() {
+        tableName = "";
         table = new JTable();
         filteredTable = new JTable();
         tableState = new TableState();
@@ -88,6 +90,15 @@ public class Tab implements ITableNameConstants{
         return getTable().getRowCount();
     }
 
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    
     
     /**************************************************************************
      *************************** Methods **************************************
@@ -101,7 +112,7 @@ public class Tab implements ITableNameConstants{
         
         String output;
         
-        switch (getTable().getName()) {
+        switch (getTableName()) {
             case ASSIGNMENTS_TABLE_NAME:
                 output = "<html><pre>"
                        + "Number of records in Assignments: " + getTotalRecords() 

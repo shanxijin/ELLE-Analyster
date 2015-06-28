@@ -7,6 +7,8 @@ package com.elle.analyster;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -20,10 +22,7 @@ import java.util.List;
  *
  * @author Louis W.
  */
-public class LoginWindow extends JFrame {
-    
-    private Analyster analyster;
-    private GUI gui = new GUI();
+public class LoginWindow extends javax.swing.JFrame {
 
     public LoginWindow() {
         initComponents();
@@ -260,13 +259,13 @@ public class LoginWindow extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCancelButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jCancelButtonActionPerformed
-        gui.status = false; // already logged in?
-        gui.db_url = "";
-        gui.database = "";
-        gui.username = "";
-        gui.password = "";
-        gui.stmt = null;
-        gui.con = null;
+        GUI.status = false; // already logged in?
+        GUI.db_url = "";
+        GUI.database = "";
+        GUI.username = "";
+        GUI.password = "";
+        GUI.stmt = null;
+        GUI.con = null;
         dispose();
     }//GEN-LAST:event_jCancelButtonActionPerformed
 
@@ -361,11 +360,11 @@ public class LoginWindow extends JFrame {
         }
 
         // load database name
-        gui.database = jDatabase.getSelectedItem().toString();
+        GUI.database = jDatabase.getSelectedItem().toString();
         pw = jPassword.getPassword();
-        gui.username = jUsername.getText();
-        gui.password = String.valueOf(pw);
-        gui.db_url = server + gui.database;
+        GUI.username = jUsername.getText();
+        GUI.password = String.valueOf(pw);
+        GUI.db_url = server + GUI.database;
         Arrays.fill(pw, '0');
 
         String jdbc_driver = "com.mysql.jdbc.Driver";
@@ -373,11 +372,11 @@ public class LoginWindow extends JFrame {
             Class.forName(jdbc_driver);
             //connect to the local database for test now
             analyster.getLogwind().sendMessages("\nStart to connect local database...");
-            gui.con = DriverManager.getConnection(gui.db_url, gui.username, gui.password);
+            GUI.con = DriverManager.getConnection(GUI.db_url, GUI.username, GUI.password);
             analyster.getLogwind().sendMessages("Connect successfully!\n");
-            gui.stmt = gui.con.createStatement();
+            GUI.stmt = GUI.con.createStatement();
             System.out.println("Connection successfully");
-            gui.status = true;
+            GUI.status = true;
             analyster.loadData();
             dispose(); // destroy this component and return consumed resources
         } catch (Exception ex) {
@@ -390,7 +389,7 @@ public class LoginWindow extends JFrame {
             System.out.println("Cannot open local database -- make sure it is configured properly.");
             ex.printStackTrace();
             analyster.getLogwind().sendMessages(ex.getMessage());
-            gui.password = "";
+            GUI.password = "";
             jPassword.setText("");
         }
 
@@ -431,6 +430,7 @@ public class LoginWindow extends JFrame {
 //        });
 //    }
     
+    private Analyster analyster;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jButtonPanel;
     private javax.swing.JButton jCancelButton;

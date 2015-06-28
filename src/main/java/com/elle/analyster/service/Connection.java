@@ -20,9 +20,8 @@ import java.util.Vector;
 public class Connection {
 
     private static Logger log = LoggerFactory.getLogger(Connection.class);
-    private GUI gui = new GUI();
 
-    public String connection(String sql, JTable table) throws SQLException {
+    public static String connection(String sql, JTable table) throws SQLException {
 
         Analyster ana = Analyster.getInstance();
         Vector data = new Vector();
@@ -30,7 +29,7 @@ public class Connection {
         TableState ts = ana.getTableState(table);
         int columns;
 
-        if (gui.status == false) {
+        if (GUI.status == false) {
             JOptionPane.showMessageDialog(null, "You have not yet logged in.",
                     "Warning", JOptionPane.WARNING_MESSAGE);
             new LoginWindow().setVisible(true);
@@ -39,7 +38,7 @@ public class Connection {
         ResultSet rs = null;
         ResultSetMetaData metaData = null;
         try {
-            rs = gui.getStmt().executeQuery(sql);
+            rs = GUI.getStmt().executeQuery(sql);
             metaData = rs.getMetaData();
         } catch (Exception ex) {
             log.error("Error: ", ex);

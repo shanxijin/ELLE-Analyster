@@ -16,7 +16,6 @@ import java.util.List;
 public class UploadRecord {
 
     private final Logger log = LoggerFactory.getLogger(UploadRecord.class);
-    private GUI gui = new GUI();
 
     public String uploadRecord(JTable table, List<ModifiedData> modifiedDataList) throws SQLException {
         int id, col;
@@ -39,7 +38,7 @@ public class UploadRecord {
                             + " = '" + value + "' WHERE ID = " + id + ";";
                 }
                 log.info(sqlChange);
-                gui.getStmt().executeUpdate(sqlChange);
+                GUI.getStmt().executeUpdate(sqlChange);
                 table.setAutoCreateRowSorter(true);
 
             } catch (SQLException ex) {

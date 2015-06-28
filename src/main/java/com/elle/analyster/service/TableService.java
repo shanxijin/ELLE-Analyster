@@ -26,7 +26,6 @@ public class TableService {
     JTable reportTable;
     JTable archiveAssignTable;
     JTable viewerTable;
-    private GUI gui = new GUI();
 
     public String[] getColumnNames(int number) {
         JTable table = assignmentTable;  // use this method cause table1 and table2 are private
@@ -93,7 +92,7 @@ public class TableService {
         if (rowSelected != -1) {
 
             for (int i = 0; i < rowSelected; i++) {
-                String sqlInsert = "INSERT INTO " + gui.getDatabase() + "." + assignmentTable.getName() + "(symbol, analyst, priority, dateAssigned,dateDone,notes) VALUES ( ";
+                String sqlInsert = "INSERT INTO " + GUI.getDatabase() + "." + assignmentTable.getName() + "(symbol, analyst, priority, dateAssigned,dateDone,notes) VALUES ( ";
                 int numRow = rowsSelected[i];
                 for (int j = 1; j < archiveAssignTable.getColumnCount() - 1; j++) {
                     if (archiveAssignTable.getValueAt(numRow, j) == null) {
@@ -108,7 +107,7 @@ public class TableService {
                     sqlInsert += "'" + archiveAssignTable.getValueAt(numRow, archiveAssignTable.getColumnCount() - 1) + "')";
                 }
                 try {
-                    gui.getStmt().executeUpdate(sqlInsert);
+                    GUI.getStmt().executeUpdate(sqlInsert);
 //                    ana.getLogwind().sendMessages(sqlInsert);
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -141,13 +140,13 @@ public class TableService {
             for (int i = 0; i < rowSelected; i++) {
                 String analyst = (String) table.getValueAt(rowsSelected[i], 2);
                 Integer selectedTask = (Integer) table.getValueAt(rowsSelected[i], 0); // Add Note to selected taskID
-                String sqlDelete = "UPDATE " + gui.getDatabase() + "." + assignmentTable.getName() + " SET analyst = \"\",\n"
+                String sqlDelete = "UPDATE " + GUI.getDatabase() + "." + assignmentTable.getName() + " SET analyst = \"\",\n"
                         + " priority=null,\n"
                         + " dateAssigned= '" + today + "',"
                         + " dateDone=null,\n"
                         + " notes= \'Previous " + analyst + "' " + "where ID=" + selectedTask;
                 try {
-                    gui.getStmt().executeUpdate(sqlDelete);
+                    GUI.getStmt().executeUpdate(sqlDelete);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -159,7 +158,7 @@ public class TableService {
         if (rowSelected != -1) {
 
             for (int i = 0; i < rowSelected; i++) {
-                String sqlInsert = "INSERT INTO " + gui.getDatabase() + "." + archiveAssignTable.getName() + " (symbol, analyst, priority, dateAssigned,dateDone,notes) VALUES (";
+                String sqlInsert = "INSERT INTO " + GUI.getDatabase() + "." + archiveAssignTable.getName() + " (symbol, analyst, priority, dateAssigned,dateDone,notes) VALUES (";
                 int numRow = rowsSelected[i];
                 for (int j = 1; j < table.getColumnCount() - 1; j++) {
                     if (table.getValueAt(numRow, j) == null) {
@@ -174,7 +173,7 @@ public class TableService {
                     sqlInsert += "'" + table.getValueAt(numRow, table.getColumnCount() - 1) + "')";
                 }
                 try {
-                    gui.getStmt().executeUpdate(sqlInsert);
+                    GUI.getStmt().executeUpdate(sqlInsert);
 //                    logwind.sendMessages(sqlInsert);
                 } catch (SQLException e) {
                     e.printStackTrace();
