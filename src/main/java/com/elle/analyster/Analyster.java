@@ -41,11 +41,14 @@ public class Analyster extends JFrame implements ITableNameConstants{
     Map<String,Tab> tabs = new HashMap<>();
 
     private static final String SYMBOL_COLUMN_NAME = "Symbol";
+    
+    // these constants are being used directly in LoadTables
+    final float[] columnWidthPercentage1 = {35, 65, 80, 70, 99, 99};
+    final float[] columnWidthPercentage2 = {35, 65, 80, 100, 160, 120, 123};
+    
     private final TableService tableService = new TableService();
     private final Connection con = new Connection();
     private LoadTables loadTables;
-    final float[] columnWidthPercentage1 = {35, 65, 80, 70, 99, 99};
-    final float[] columnWidthPercentage2 = {35, 65, 80, 100, 160, 120, 123};
     private JTableHeader header;
     
     private static Analyster instance;
@@ -106,9 +109,8 @@ public class Analyster extends JFrame implements ITableNameConstants{
         tabs.get(ARCHIVE_TABLE_NAME).setTableState(new TableState(archiveAssignTable));
         
         setKeyboardFocusManager();
-        
-        
-        instance = this;
+
+        instance = this; // this is used to call an instance of Analyster
 
     }
 
@@ -798,8 +800,7 @@ public class Analyster extends JFrame implements ITableNameConstants{
      */
     public void filterBySearch() {
         
-        String selectedTab; // store the selected tab
-        selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex()); // get selected tab
+        String selectedTab = getSelectedTab(); // get the selected tab
         
         int columnIndex; // the column of the table
         
@@ -1752,6 +1753,10 @@ public class Analyster extends JFrame implements ITableNameConstants{
         this.tabs = tabs;
     }
     
+    private String getSelectedTab() {
+        return jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
+    }
+    
     // @formatter:off
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel addPanel_control;
@@ -1816,8 +1821,8 @@ public class Analyster extends JFrame implements ITableNameConstants{
     private javax.swing.JTextField textForSearch;
     // End of variables declaration//GEN-END:variables
     // @formatter:on
-    
-    
+
+ 
     /**
      *  CLASS 
      */
