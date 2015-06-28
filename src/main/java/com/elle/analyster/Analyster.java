@@ -35,17 +35,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-public class Analyster extends JFrame implements ITableNameConstants{
+public class Analyster extends JFrame implements ITableNameConstants, IColumnConstants{
     
     // I will store the objects with this
     Map<String,Tab> tabs = new HashMap<>();
 
-    private static final String SYMBOL_COLUMN_NAME = "Symbol";
-    
-    // these constants are being used directly in LoadTables
-    final float[] columnWidthPercentage1 = {35, 65, 80, 70, 99, 99};
-    final float[] columnWidthPercentage2 = {35, 65, 80, 100, 160, 120, 123};
-    
     private final TableService tableService = new TableService();
     private final Connection con = new Connection();
     private LoadTables loadTables;

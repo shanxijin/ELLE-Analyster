@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * User: danielabecker
  */
-public class LoadTables implements ITableNameConstants{
+public class LoadTables implements ITableNameConstants, IColumnConstants{
 
     private Analyster ana = Analyster.getInstance();
     JLabel numOfRecords1 = ana.getNumOfRecords1();
