@@ -26,6 +26,7 @@ import java.util.List;
 public class AddRecords extends javax.swing.JFrame {
 
     private Logger logger = LoggerFactory.getLogger(AddRecords.class);
+    private GUI gui = new GUI();
 
     /**
      * Creates new form ReportWin
@@ -282,7 +283,7 @@ public class AddRecords extends javax.swing.JFrame {
             try {
                 String sqlChange = "INSERT INTO " + tableName + title + " VALUES " + rows.get(i);
                 System.out.println(sqlChange);
-                GUI.stmt.executeUpdate(sqlChange);
+                gui.stmt.executeUpdate(sqlChange);
                 log.sendMessages(sqlChange);
                 flag = true;
             } catch (SQLException ex) {

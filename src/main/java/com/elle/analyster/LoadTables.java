@@ -3,6 +3,7 @@ package com.elle.analyster;
 import com.elle.analyster.presentation.filter.DistinctColumnItem;
 import com.elle.analyster.presentation.filter.ITableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
+import com.elle.analyster.service.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +11,6 @@ import javax.swing.*;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import static com.elle.analyster.service.Connection.connection;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,19 +19,20 @@ import java.util.Map;
 public class LoadTables implements ITableNameConstants, IColumnConstants{
 
     private Analyster ana = Analyster.getInstance();
-    JLabel numOfRecords1 = ana.getNumOfRecords1();
-    JLabel numOfRecords2 = ana.getNumOfRecords2();
+    private JLabel recordsLabel = ana.getRecordsLabel();
 //    JTable assignmentTable = ana.getassignmentTable();
 //    JTable reportTable = ana.getReportTable();
 //    JTable archiveAssignTable = ana.getArchiveAssignTable();
 //    JTable viewerTable = ana.getViewerTable();
     Logger log = LoggerFactory.getLogger(LoadTables.class);
     
-    Map<String,Tab> tabsMap = ana.getTabsMap(); // to store ne tab objects
+    Map<String,Tab> tabs = ana.getTabs(); // to store ne tab objects
     
-    JTable assignmentTable = tabsMap.get(ASSIGNMENTS_TABLE_NAME).getTable();
-    JTable reportTable = tabsMap.get(REPORTS_TABLE_NAME).getTable();
-    JTable archiveAssignTable = tabsMap.get(ARCHIVE_TABLE_NAME).getTable();
+    JTable assignmentTable = tabs.get(ASSIGNMENTS_TABLE_NAME).getTable();
+    JTable reportTable = tabs.get(REPORTS_TABLE_NAME).getTable();
+    JTable archiveAssignTable = tabs.get(ARCHIVE_TABLE_NAME).getTable();
+    
+    private Connection con = new Connection();
 
     /**
      * CONSTRUCTOR
@@ -63,16 +63,16 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
         ana.setLastUpdateTime();
         
         //pass table map back to analyster
-        tabsMap.get(ASSIGNMENTS_TABLE_NAME).setTable(assignmentTable);
-        tabsMap.get(REPORTS_TABLE_NAME).setTable(reportTable);
-        tabsMap.get(ARCHIVE_TABLE_NAME).setTable(archiveAssignTable);
-        ana.setTabsMap(tabsMap);
+        tabs.get(ASSIGNMENTS_TABLE_NAME).setTable(assignmentTable);
+        tabs.get(REPORTS_TABLE_NAME).setTable(reportTable);
+        tabs.get(ARCHIVE_TABLE_NAME).setTable(archiveAssignTable);
+        ana.setTabs(tabs);
     }
 
     public void loadAssignmentTable() {
 
         try {
-            connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
+            con.connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
         } catch (SQLException e) {
             log.error("Error", e);
         }
@@ -84,19 +84,20 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
 
-        numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
-        numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
         
         // testing
-        tabsMap.get("Assignments").setFilter(ana.getFilterTempAssignment());
-        tabsMap.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
+        tabs.get("Assignments").setFilter(ana.getFilterTempAssignment());
+        tabs.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
+        
+        // set label record information
+        recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
 
     }
 
     public void loadAssignmentTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
 
         try {
-            connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
+            con.connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
         } catch (SQLException e) {
             log.error("Error", e);
         }
@@ -112,12 +113,13 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
 
-        numOfRecords1.setText("Number of records in Assignments: " + assignmentTable.getRowCount());
-        numOfRecords2.setText("Number of records shown: " + assignmentTable.getRowCount());
 
-        // testing, looks like just filter an number
-        tabsMap.get("Assignments").setFilter(filter);
-        tabsMap.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
+        // testing, looks like just filter and number
+        tabs.get("Assignments").setFilter(filter);
+        tabs.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
+        
+        // set label record information
+        recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
         
         // why is this code here?
         filter.apply(columnIndex, filterCriteria);
@@ -130,7 +132,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
     public void loadArchiveAssignTable() {
 
         try {
-            connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
+            con.connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
         } catch (SQLException e) {
             log.error("Error", e);
         }
@@ -150,7 +152,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
     public void loadArchiveTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
 
         try {
-            connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
+            con.connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
         } catch (SQLException e) {
             log.error("Error", e);
         }
@@ -186,7 +188,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
     }
       public void loadReportTable() {
           try {
-              connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
+              con.connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
           } catch (SQLException e) {
               log.error("Error", e);
           }
@@ -205,7 +207,7 @@ public class LoadTables implements ITableNameConstants, IColumnConstants{
     public void loadReportTableWithFilter(int columnIndex, Collection<DistinctColumnItem> filterCriteria) {
 
         try {
-            connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
+            con.connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
         } catch (SQLException e) {
             log.error("Error", e);
         }

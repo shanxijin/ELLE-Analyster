@@ -26,11 +26,12 @@ import static org.mockito.Mockito.*;
 public class UploadRecordTest {
 
     private Statement statement;
+    private GUI gui = new GUI();
 
     @Before
     public void setUp() throws SQLException {
         statement = mock(Statement.class);
-        GUI.setStmt(statement);
+        gui.setStmt(statement);
 
         when(statement.executeUpdate(anyString())).thenReturn(0);
 

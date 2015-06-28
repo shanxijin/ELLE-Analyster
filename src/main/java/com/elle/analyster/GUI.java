@@ -22,51 +22,51 @@ import java.sql.Statement;
 @Component
 public class GUI {
 
-    public static boolean status = false;    // already logged in?
-    protected static String db_url;
-    protected static String database;
-    protected static String username;
-    protected static String password;
-    protected static Statement stmt;
-    protected static Connection con = null;
-    protected static boolean isFiltering = false;
-    public static boolean filterAssignmentIsActive = false;
-    public static boolean filterReportIstActive;
-    static boolean filterArchiveIsActive;
-    protected static boolean isChangesUploaded =false;
+    public boolean status = false;    // already logged in?
+    protected String db_url;
+    protected String database;
+    protected String username;
+    protected String password;
+    protected Statement stmt;
+    protected Connection con = null;
+    protected boolean isFiltering = false;
+    public boolean filterAssignmentIsActive = false;
+    public boolean filterReportIstActive;
+    boolean filterArchiveIsActive;
+    protected boolean isChangesUploaded =false;
     final JTable temporaryTable = new JTable();
-    private static GUI guiInstance;
-    private Analyster analyster;
+    private GUI guiInstance;
+    private Analyster analyster = Analyster.getInstance();
     
-     public static GUI getInstance() {
+     public GUI getInstance() {
         if (guiInstance == null) {
             guiInstance = new GUI();
         }
         return guiInstance;
     }
 
-    public static boolean isIsFiltering() {
+    public boolean isIsFiltering() {
         return isFiltering;
     }
 
-    public static String getDatabase() {
+    public String getDatabase() {
         return database;
     }
 
-    public static Statement getStmt() {
+    public Statement getStmt() {
         return stmt;
     }
 
-    public static void setStmt(Statement statement){
+    public void setStmt(Statement statement){
         stmt = statement;
     }
    
-    public static JTable setTemporaryTable (JTable table){
+    public JTable setTemporaryTable (JTable table){
          final JTable temporaryTable = table;
          return temporaryTable;
     }
 
-    public static void columnFilterStatus(int columnIndex, JTable table) {
+    public void columnFilterStatus(int columnIndex, JTable table) {
         if (columnIndex != -1) {
             DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
             cellRenderer.setBackground(Color.GREEN);
@@ -84,34 +84,29 @@ public class GUI {
             }
         }
         TableService tableService = new TableService();
-        Analyster.getInstance()
-                .getNumOfRecords2()
-                .setText(tableService
-                        .textToNumOfRecords(table.getRowCount()));
+        
+        // set label record information
+        analyster.getRecordsLabel().setText(analyster.getTabs().get(table.getName()).getRecordsLabel()); 
     }
 
-    public static void cleanColumnFilterStatus(int columnIndex, JTable table) {
+    public void cleanColumnFilterStatus(int columnIndex, JTable table) {
         table.getColumnModel().getColumn(columnIndex)
                 .setHeaderRenderer(new HeaderRenderer(table));
         isFiltering = false;
         TableService tableService = new TableService();
-        Analyster.getInstance()
-                .getNumOfRecords2()
-                .setText(tableService
-                        .textToNumOfRecords(table.getRowCount()));
+        // set label record information
+        analyster.getRecordsLabel().setText(analyster.getTabs().get(table.getName()).getRecordsLabel()); 
 
     }
 
-    public static void cleanAllColumnFilterStatus(JTable table) {
+    public void cleanAllColumnFilterStatus(JTable table) {
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i)
                     .setHeaderRenderer(new HeaderRenderer(table));
             isFiltering = false;
             TableService tableService = new TableService();
-            Analyster.getInstance()
-                    .getNumOfRecords2()
-                    .setText(tableService
-                            .textToNumOfRecords(table.getRowCount()));
+            // set label record information
+            analyster.getRecordsLabel().setText(analyster.getTabs().get(table.getName()).getRecordsLabel()); 
         }
     }
 

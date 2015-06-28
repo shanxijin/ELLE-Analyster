@@ -37,10 +37,13 @@ import java.util.Vector;
 
 public class Analyster extends JFrame implements ITableNameConstants, IColumnConstants{
     
+    // testing as instance
+    private GUI gui = new GUI();
+    private Connection con = new Connection();
+    
     Map<String,Tab> tabs = new HashMap<>(); // stores individual tab information
 
     private final TableService tableService = new TableService();
-    private final Connection con = new Connection();
     private LoadTables loadTables;
     private JTableHeader header;
     
@@ -786,7 +789,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         
         if(selectedTab.equals(ASSIGNMENTS_TABLE_NAME) || selectedTab.equals(REPORTS_TABLE_NAME) || selectedTab.equals(ARCHIVE_TABLE_NAME)){
             TableRowFilterSupport.forTable(tabs.get(selectedTab).getTable()).actions(true).apply().apply(columnIndex, selectedField);
-            GUI.columnFilterStatus(columnIndex, tabs.get(selectedTab).getFilter().getTable());
+            gui.columnFilterStatus(columnIndex, tabs.get(selectedTab).getFilter().getTable());
         }else{
             throwUnknownTableException(selectedTab);
         }
@@ -799,10 +802,10 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         try{
             String sqlC = "select * from " + ASSIGNMENTS_TABLE_NAME;
-            Connection.connection(sqlC, assignmentTable);
+            con.connection(sqlC, assignmentTable);
             log.info("Connection");
             String sqlD = "select * from " + REPORTS_TABLE_NAME;
-            Connection.connection(sqlD, reportTable);
+            con.connection(sqlD, reportTable);
         } catch (SQLException ex) {
             logwind.sendMessages(ex.getMessage());
         }
@@ -825,7 +828,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 break;
         }
 
-        if (GUI.isIsFiltering()) {
+        if (gui.isIsFiltering()) {
 //            loadPrevious(selectedTab);
         } else {
             switch (selectedTab) {
@@ -855,12 +858,12 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private void jDebugEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDebugEnterActionPerformed
         if (enterButton.isCreateTable(jTextArea)) {
             try {
-                Connection.connection(enterButton.getCommand(jTextArea), assignmentTable);
+                con.connection(enterButton.getCommand(jTextArea), assignmentTable);
             } catch (SQLException e) {
                 logwind.sendMessages(e.getMessage());  //To change body of catch statement use File | Settings | File Templates.
             }
         } else {
-            ExecuteSQLStatement.updateDatabase(GUI.con,
+            ExecuteSQLStatement.updateDatabase(gui.con,
                     enterButton.getCommand(jTextArea));
         }
     }//GEN-LAST:event_jDebugEnterActionPerformed
@@ -922,7 +925,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
         String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        if (GUI.isIsFiltering()) {
+        if (gui.isIsFiltering()) {
             loadPrevious(selectedTab);
         } else {
             switch (selectedTab) {
@@ -952,7 +955,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         if(selectedTab.equals(ASSIGNMENTS_TABLE_NAME) || selectedTab.equals(REPORTS_TABLE_NAME) || selectedTab.equals(ARCHIVE_TABLE_NAME)){
             loadTables.loadAssignmentTableWithFilter(tabs.get(selectedTab).getFilter().getColumnIndex(), tabs.get(selectedTab).getFilter().getFilterCriteria());
             setColumnFormat(tabs.get(selectedTab).getColWidthPercent(), tabs.get(selectedTab).getTable());
-            GUI.columnFilterStatus(tabs.get(selectedTab).getFilter().getColumnIndex(), tabs.get(selectedTab).getTable());
+            gui.columnFilterStatus(tabs.get(selectedTab).getFilter().getColumnIndex(), tabs.get(selectedTab).getTable());
         }else{
             throwUnknownTableException(selectedTab);
         }
@@ -969,19 +972,19 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             case ASSIGNMENTS_TABLE_NAME:
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(true);
-                isFilterActive = GUI.filterAssignmentIsActive;
+                isFilterActive = gui.filterAssignmentIsActive;
                 break;
                 
             case REPORTS_TABLE_NAME:
                 jActivateRecord.setEnabled(false);
                 jArchiveRecord.setEnabled(false);
-                isFilterActive = GUI.filterReportIstActive;
+                isFilterActive = gui.filterReportIstActive;
                 break;
                 
             case ARCHIVE_TABLE_NAME:
                 jActivateRecord.setEnabled(true);
                 jArchiveRecord.setEnabled(false);
-                isFilterActive = GUI.filterArchiveIsActive;
+                isFilterActive = gui.filterArchiveIsActive;
                 break;
 
             default:
@@ -1000,8 +1003,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             }
             
             // set label record information
-            numOfRecords1.setText("Number of records in " + selectedTab + ": " + tabs.get(selectedTab).getTotalRecords());
-            numOfRecords2.setText("Number of records shown: " + tabs.get(selectedTab).getFilteredTable().getRowCount());
+            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
         }
     }
 
@@ -1086,29 +1088,31 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
     private void jButtonClearAllFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearAllFilterActionPerformed
 
-        switch (jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex())) {
+        String selectedTab = getSelectedTab();
+        
+        switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
-                GUI.filterAssignmentIsActive = false;
+                gui.filterAssignmentIsActive = false;
                 loadTables.loadAssignmentTable();
-                GUI.cleanAllColumnFilterStatus(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable());
+                gui.cleanAllColumnFilterStatus(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable());
                 break;
             case REPORTS_TABLE_NAME:
-                GUI.filterReportIstActive = false;
+                gui.filterReportIstActive = false;
                 loadTables.loadReportTable();
-                numOfRecords1.setText("Number of records in Report: " + tabs.get(REPORTS_TABLE_NAME).getTable().getRowCount());
-                numOfRecords2.setText("Number of records shown: " + tabs.get(REPORTS_TABLE_NAME).getTable().getRowCount());
+                // set label record information
+                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
                 tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply());
                 tabs.get(REPORTS_TABLE_NAME).getFilter().getTable();
-                GUI.cleanAllColumnFilterStatus(tabs.get(REPORTS_TABLE_NAME).getTable());
+                gui.cleanAllColumnFilterStatus(tabs.get(REPORTS_TABLE_NAME).getTable());
                 break;
             case ARCHIVE_TABLE_NAME:
-                GUI.filterArchiveIsActive = false;
+                gui.filterArchiveIsActive = false;
                 loadTables.loadArchiveAssignTable();
                 tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply());
                 tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable();
-                numOfRecords1.setText("Number of records in Report: " + tabs.get(ARCHIVE_TABLE_NAME).getTable().getRowCount());
-                numOfRecords2.setText("Number of records shown: " + tabs.get(ARCHIVE_TABLE_NAME).getTable().getRowCount());
-                GUI.cleanAllColumnFilterStatus(tabs.get(ARCHIVE_TABLE_NAME).getTable());
+                // set label record information
+                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
+                gui.cleanAllColumnFilterStatus(tabs.get(ARCHIVE_TABLE_NAME).getTable());
                 break;
         }
         modifiedDataList.clear();
@@ -1117,21 +1121,23 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
 
     private void jMenuItemOthersLoadDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOthersLoadDataActionPerformed
-        String titleAt = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        if (titleAt.equals(ASSIGNMENTS_TABLE_NAME)) {
+        
+        String selectedTab = getSelectedTab();
+        
+        if (selectedTab.equals(ASSIGNMENTS_TABLE_NAME)) {
             loadTables.loadAssignmentTable();
-        } else if (titleAt.equals(REPORTS_TABLE_NAME)) {
+        } else if (selectedTab.equals(REPORTS_TABLE_NAME)) {
             loadTables.loadReportTable();
-            numOfRecords1.setText("Number of records in Report: " + tabs.get(REPORTS_TABLE_NAME).getTable().getRowCount());
-            numOfRecords2.setText("Number of records shown: " + tabs.get(REPORTS_TABLE_NAME).getTable().getRowCount());
+            // set label record information
+            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
             tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply());
             tabs.get(REPORTS_TABLE_NAME).getFilter().getTable();
         } else {
             loadTables.loadArchiveAssignTable();
             tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply());
             tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable();
-            numOfRecords1.setText("Number of records in Report: " + tabs.get(ARCHIVE_TABLE_NAME).getTable().getRowCount());
-            numOfRecords2.setText("Number of records shown: " + tabs.get(ARCHIVE_TABLE_NAME).getTable().getRowCount());
+            // set label record information
+            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
         }
     }//GEN-LAST:event_jMenuItemOthersLoadDataActionPerformed
 
@@ -1315,6 +1321,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
     public void filterByDoubleClick(JTable table) {
 
+        String selectedTab = getSelectedTab();
+        
         int[] columnIndex = table.getColumnModel().getSelectedColumns();
         int rowIndex = table.getSelectedRow();
         if (rowIndex != -1) {
@@ -1322,37 +1330,47 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
                 tabs.get(ASSIGNMENTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable()).actions(true).apply()); 
                 tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
-                GUI.columnFilterStatus(columnIndex[0], tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());
-                numOfRecords1.setText("Number of records in Assignments: " + tabs.get(ASSIGNMENTS_TABLE_NAME).getTotalRecords());
+                gui.columnFilterStatus(columnIndex[0], tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());
+                // set label record information
+                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
             } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
                 tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply()); 
                 tabs.get(REPORTS_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
-                GUI.columnFilterStatus(columnIndex[0], tabs.get(REPORTS_TABLE_NAME).getFilter().getTable());
-                numOfRecords1.setText("Number of records in Reports: " + tabs.get(REPORTS_TABLE_NAME).getTotalRecords());
+                gui.columnFilterStatus(columnIndex[0], tabs.get(REPORTS_TABLE_NAME).getFilter().getTable());
+                // set label record information
+                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
             } else {
                 tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply()); 
                 tabs.get(ARCHIVE_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
-                GUI.columnFilterStatus(columnIndex[0], tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable());
-                numOfRecords1.setText("Number of records in Archive: " + tabs.get(ARCHIVE_TABLE_NAME).getTotalRecords());
+                gui.columnFilterStatus(columnIndex[0], tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable());
+                // set label record information
+                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
 
             }
         }
     }
 
     private void clearFilterDoubleClick(MouseEvent e, JTable table) {
+        
+        String selectedTab = getSelectedTab();
+        
         int columnIndex = table.getColumnModel().getColumnIndexAtX(e.getX());
+        
         if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
             tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
-            GUI.cleanColumnFilterStatus(columnIndex, tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());// clean green background
-            numOfRecords1.setText("Number of records in Assignments: " + tabs.get(ASSIGNMENTS_TABLE_NAME).getTotalRecords());
+            gui.cleanColumnFilterStatus(columnIndex, tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());// clean green background
+            // set label record information
+            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
         } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
             tabs.get(REPORTS_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(REPORTS_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
-            GUI.cleanColumnFilterStatus(columnIndex, tabs.get(REPORTS_TABLE_NAME).getFilter().getTable());// clean green background
-            numOfRecords1.setText("Number of records in Reports: " + tabs.get(REPORTS_TABLE_NAME).getTotalRecords());
+            gui.cleanColumnFilterStatus(columnIndex, tabs.get(REPORTS_TABLE_NAME).getFilter().getTable());// clean green background
+            // set label record information
+            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
         } else {
             tabs.get(ARCHIVE_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(ARCHIVE_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
-            GUI.cleanColumnFilterStatus(columnIndex, tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable());// clean green background
-            numOfRecords1.setText("Number of records in Archive: " + tabs.get(ARCHIVE_TABLE_NAME).getTotalRecords());
+            gui.cleanColumnFilterStatus(columnIndex, tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable());// clean green background
+            // set label record information
+            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
 
         }
     }
@@ -1363,18 +1381,23 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         return SqlQuery;
     }
 
+    /**
+     * This says load active data
+     * but it only looks like it is loading assignments tab
+     */
     public void loadActiveData() {// load only active data from analyst
         log.info("Connection");
         String sqlC = "select A.* from Assignments A left join t_analysts T\n" + "on A.analyst = T.analyst\n" + "where T.active = 1\n" + "order by A.symbol";
         try {
-            Connection.connection(sqlC, assignmentTable);
+            con.connection(sqlC, assignmentTable);
         } catch (SQLException e) {
-            logwind.sendMessages(e.getMessage());  //To change body of catch statement use File | Settings | File Templates.
+            logwind.sendMessages(e.getMessage());  
         }
 
         setColumnFormat(columnWidthPercentage1, assignmentTable);
         tabs.get(ASSIGNMENTS_TABLE_NAME).getTableState().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-        numOfRecords1.setText("Number of records in Assignments:" + tabs.get(ASSIGNMENTS_TABLE_NAME).getTableState().getRowsNumber());
+        // set label record information
+        recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
 
     }
 
@@ -1627,10 +1650,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(ASSIGNMENTS_TABLE_NAME).setFilter(filterTempAssignment);
     }
 
-    public JLabel getNumOfRecords1() {
-        return numOfRecords1;
-    }
-
     public void setNumberArchiveAssignInit(int numberArchiveAssignInit) {
         tabs.get(ARCHIVE_TABLE_NAME).setTotalRecords(numberArchiveAssignInit);
     }
@@ -1688,9 +1707,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     public JMenuItem getjArchiveRecord() {
         return jArchiveRecord;
     }
-    
-    public JLabel getNumOfRecords2() {
-        return numOfRecords2;
+
+    public JLabel getRecordsLabel() {
+        return recordsLabel;
     }
 
     public LogWindow getLogwind() {
@@ -1717,11 +1736,11 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         return tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter();
     }
     
-        public Map<String, Tab> getTabsMap() {
+        public Map<String, Tab> getTabs() {
         return tabs;
     }
 
-    public void setTabsMap(Map<String, Tab> tabs) {
+    public void setTabs(Map<String, Tab> tabs) {
         this.tabs = tabs;
     }
     

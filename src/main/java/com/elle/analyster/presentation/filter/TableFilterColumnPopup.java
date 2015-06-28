@@ -38,6 +38,7 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
     private boolean actionsVisible = true;
     private boolean useTableRenderers = false;
     private TableModel myTableModelInitial;
+    private GUI gui = new GUI();
 
     @SuppressWarnings("static-access")
     public TableFilterColumnPopup(ITableFilter<?> filter) {
@@ -132,7 +133,7 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
         filter.saveTableState();
         filter.saveFilterCriteria(checked);
         filter.setColumnIndex(mColumnIndex);
-        GUI.columnFilterStatus(mColumnIndex, filter.getTable());
+        gui.columnFilterStatus(mColumnIndex, filter.getTable());
         return true;
     }
 

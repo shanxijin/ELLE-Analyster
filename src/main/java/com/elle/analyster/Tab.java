@@ -85,12 +85,9 @@ public class Tab implements ITableNameConstants{
     }
 
     public int getRecordsShown() {
-        return recordsShown;
+        return getTable().getRowCount();
     }
 
-    public void setRecordsShown(int recordsShown) {
-        this.recordsShown = recordsShown;
-    }
     
     /**************************************************************************
      *************************** Methods **************************************
@@ -100,7 +97,7 @@ public class Tab implements ITableNameConstants{
      * 
      * @return 
      */
-    public String getRecordsLabelString(){
+    public String getRecordsLabel(){
         
         String output;
         

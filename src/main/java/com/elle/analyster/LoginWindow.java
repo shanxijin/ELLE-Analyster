@@ -23,6 +23,7 @@ import java.util.List;
 public class LoginWindow extends JFrame {
     
     private Analyster analyster;
+    private GUI gui = new GUI();
 
     public LoginWindow() {
         initComponents();
@@ -259,13 +260,13 @@ public class LoginWindow extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCancelButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jCancelButtonActionPerformed
-        GUI.status = false; // already logged in?
-        GUI.db_url = "";
-        GUI.database = "";
-        GUI.username = "";
-        GUI.password = "";
-        GUI.stmt = null;
-        GUI.con = null;
+        gui.status = false; // already logged in?
+        gui.db_url = "";
+        gui.database = "";
+        gui.username = "";
+        gui.password = "";
+        gui.stmt = null;
+        gui.con = null;
         dispose();
     }//GEN-LAST:event_jCancelButtonActionPerformed
 
@@ -360,11 +361,11 @@ public class LoginWindow extends JFrame {
         }
 
         // load database name
-        GUI.database = jDatabase.getSelectedItem().toString();
+        gui.database = jDatabase.getSelectedItem().toString();
         pw = jPassword.getPassword();
-        GUI.username = jUsername.getText();
-        GUI.password = String.valueOf(pw);
-        GUI.db_url = server + GUI.database;
+        gui.username = jUsername.getText();
+        gui.password = String.valueOf(pw);
+        gui.db_url = server + gui.database;
         Arrays.fill(pw, '0');
 
         String jdbc_driver = "com.mysql.jdbc.Driver";
@@ -372,11 +373,11 @@ public class LoginWindow extends JFrame {
             Class.forName(jdbc_driver);
             //connect to the local database for test now
             analyster.getLogwind().sendMessages("\nStart to connect local database...");
-            GUI.con = DriverManager.getConnection(GUI.db_url, GUI.username, GUI.password);
+            gui.con = DriverManager.getConnection(gui.db_url, gui.username, gui.password);
             analyster.getLogwind().sendMessages("Connect successfully!\n");
-            GUI.stmt = GUI.con.createStatement();
+            gui.stmt = gui.con.createStatement();
             System.out.println("Connection successfully");
-            GUI.status = true;
+            gui.status = true;
             analyster.loadData();
             dispose(); // destroy this component and return consumed resources
         } catch (Exception ex) {
@@ -389,7 +390,7 @@ public class LoginWindow extends JFrame {
             System.out.println("Cannot open local database -- make sure it is configured properly.");
             ex.printStackTrace();
             analyster.getLogwind().sendMessages(ex.getMessage());
-            GUI.password = "";
+            gui.password = "";
             jPassword.setText("");
         }
 
