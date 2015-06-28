@@ -121,12 +121,14 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         addPanel_control = new javax.swing.JPanel();
         jTimeLastUpdate = new javax.swing.JLabel();
+        recordLabelPanel = new javax.swing.JPanel();
+        numOfRecords1 = new javax.swing.JLabel();
+        numOfRecords2 = new javax.swing.JLabel();
         searchPanel = new javax.swing.JPanel();
         search = new javax.swing.JButton();
         textForSearch = new javax.swing.JTextField();
         jField = new javax.swing.JComboBox();
         jButtonClearAllFilter = new javax.swing.JButton();
-        recordsLabel = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jTabbedPanel1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -182,6 +184,30 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         setPreferredSize(new java.awt.Dimension(894, 560));
 
         jTimeLastUpdate.setText("Last updated: ");
+
+        javax.swing.GroupLayout recordLabelPanelLayout = new javax.swing.GroupLayout(recordLabelPanel);
+        recordLabelPanel.setLayout(recordLabelPanelLayout);
+        recordLabelPanelLayout.setHorizontalGroup(
+            recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(recordLabelPanelLayout.createSequentialGroup()
+                .addGroup(recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(recordLabelPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(numOfRecords1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(recordLabelPanelLayout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(numOfRecords2, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        recordLabelPanelLayout.setVerticalGroup(
+            recordLabelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(recordLabelPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(numOfRecords1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(numOfRecords2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         search.setText("Search");
         search.addActionListener(new java.awt.event.ActionListener() {
@@ -241,8 +267,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        recordsLabel.setText("jLabel1");
-
         javax.swing.GroupLayout addPanel_controlLayout = new javax.swing.GroupLayout(addPanel_control);
         addPanel_control.setLayout(addPanel_controlLayout);
         addPanel_controlLayout.setHorizontalGroup(
@@ -251,27 +275,24 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addPanel_controlLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)
+                        .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(addPanel_controlLayout.createSequentialGroup()
                         .addGap(258, 258, 258)
                         .addComponent(jTimeLastUpdate)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(recordsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(92, 92, 92))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         addPanel_controlLayout.setVerticalGroup(
             addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addPanel_controlLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(addPanel_controlLayout.createSequentialGroup()
-                        .addComponent(recordsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(49, 49, 49))
-                    .addGroup(addPanel_controlLayout.createSequentialGroup()
-                        .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTimeLastUpdate)
-                        .addContainerGap(14, Short.MAX_VALUE))))
+                .addContainerGap()
+                .addGroup(addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(recordLabelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTimeLastUpdate)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPanel1.setPreferredSize(new java.awt.Dimension(800, 584));
@@ -1803,7 +1824,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private javax.swing.JLabel jTimeLastUpdate;
     private javax.swing.JButton jUpload;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JLabel recordsLabel;
+    private javax.swing.JLabel numOfRecords1;
+    private javax.swing.JLabel numOfRecords2;
+    private javax.swing.JPanel recordLabelPanel;
     private javax.swing.JTable reportTable;
     private javax.swing.JButton search;
     private javax.swing.JPanel searchPanel;
