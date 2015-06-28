@@ -243,6 +243,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        recordsLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         recordsLabel.setText("jLabel1");
 
         javax.swing.GroupLayout addPanel_controlLayout = new javax.swing.GroupLayout(addPanel_control);
