@@ -28,6 +28,7 @@ public class Application {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
+                    
                     Analyster analyster = applicationContext.getBean(Analyster.class);
 //                    analyster.setVisible(true);
 //                    new LoginWindow(analyster).setVisible(true);

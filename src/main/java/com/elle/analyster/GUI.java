@@ -36,6 +36,7 @@ public class GUI {
     protected static boolean isChangesUploaded =false;
     final JTable temporaryTable = new JTable();
     private static GUI guiInstance;
+    private Analyster analyster;
     
      public static GUI getInstance() {
         if (guiInstance == null) {

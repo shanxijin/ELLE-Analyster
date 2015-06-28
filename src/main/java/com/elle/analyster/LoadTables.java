@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class LoadTables implements ITableNameConstants{
 
-    private Analyster ana =Analyster.getInstance();
+    private Analyster ana = Analyster.getInstance();
     JLabel numOfRecords1 = ana.getNumOfRecords1();
     JLabel numOfRecords2 = ana.getNumOfRecords2();
 //    JTable assignmentTable = ana.getassignmentTable();

@@ -28,6 +28,7 @@ public class AnalysterConfiguration {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Analyster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        
         Analyster analyster = new Analyster();
         analyster.setVisible(true);
         new LoginWindow(analyster).setVisible(true);
