@@ -823,20 +823,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         if (GUI.isIsFiltering()) {
 //            loadPrevious(selectedTab);
-        } else {
-            switch (selectedTab) {
-                case (ASSIGNMENTS_TABLE_NAME):
-                    loadTables.loadAssignmentTable();
-                    break;
-                case (REPORTS_TABLE_NAME):
-                    loadTables.loadReportTable();
-                    break;
-                case (ARCHIVE_TABLE_NAME):
-                    loadTables.loadArchiveAssignTable();
-                    break;
-//                case ("Viewer"):
-//                    loadTables.loadAssignmentTable();
-            }
+        } else {         
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
         }
         getModifiedDataList().clear();    // reset the arraylist to record future changes
         setLastUpdateTime();    // update time
@@ -921,17 +909,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         if (GUI.isIsFiltering()) {
             loadPrevious(selectedTab);
         } else {
-            switch (selectedTab) {
-                case (ASSIGNMENTS_TABLE_NAME):
-                    loadTables.loadAssignmentTable();
-                    break;
-                case (REPORTS_TABLE_NAME):
-                    loadTables.loadReportTable();
-                    break;
-                case (ARCHIVE_TABLE_NAME):
-                    loadTables.loadArchiveAssignTable();
-                    break;
-            }
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
         }
         makeTableEditable();
 
@@ -1088,14 +1066,14 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
                 GUI.filterAssignmentIsActive = false;
-                loadTables.loadAssignmentTable();
+                loadTables.loadTable(tabs.get(selectedTab).getTable());
                 GUI.cleanAllColumnFilterStatus(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable());
                 // set label record information
                 recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
                 break;
             case REPORTS_TABLE_NAME:
                 GUI.filterReportIstActive = false;
-                loadTables.loadReportTable();
+                loadTables.loadTable(tabs.get(selectedTab).getTable());
                 tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply());
                 tabs.get(REPORTS_TABLE_NAME).getFilter().getTable();
                 GUI.cleanAllColumnFilterStatus(tabs.get(REPORTS_TABLE_NAME).getTable());
@@ -1104,7 +1082,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 break;
             case ARCHIVE_TABLE_NAME:
                 GUI.filterArchiveIsActive = false;
-                loadTables.loadArchiveAssignTable();
+                loadTables.loadTable(tabs.get(selectedTab).getTable());
                 tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply());
                 tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable();
                 GUI.cleanAllColumnFilterStatus(tabs.get(ARCHIVE_TABLE_NAME).getTable());
@@ -1122,15 +1100,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         String selectedTab = getSelectedTab();
         
         if (selectedTab.equals(ASSIGNMENTS_TABLE_NAME)) {
-            loadTables.loadAssignmentTable();
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
         } else if (selectedTab.equals(REPORTS_TABLE_NAME)) {
-            loadTables.loadReportTable();
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
             tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply());
             tabs.get(REPORTS_TABLE_NAME).getFilter().getTable();
             // set label record information
             recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
         } else {
-            loadTables.loadArchiveAssignTable();
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
             tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply());
             tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable();
             // set label record information
@@ -1248,7 +1226,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
     public void loadData() {
         loadTables = new LoadTables();
-        loadTables.loadTables();
+        loadTables.loadTables(tabs);
          //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
                     //assignmentFiltered = filterTempAssignment.getTable(); 
         tabs.get(ASSIGNMENTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable()).actions(true).apply());

@@ -11,7 +11,7 @@ import javax.swing.JTable;
  */
 public class Tab implements ITableNameConstants{
 
-    String tableName; 
+    private String tableName; 
     private JTable table;
     private JTable filteredTable;
     private ITableFilter<?> filter;
