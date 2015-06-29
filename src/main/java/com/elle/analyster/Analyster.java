@@ -1029,25 +1029,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
     private void jDeleteRecordActionPerformed(java.awt.event.ActionEvent evt) {
         DeleteRecord deleteRecord = new DeleteRecord();
-        JTable table = null;
-        String tableName = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
+        String selectedTab = getSelectedTab();
         String sqlDelete;
 
-        if (null != tableName) {
-            switch (tableName) {
-                case ASSIGNMENTS_TABLE_NAME:
-                    table = assignmentTable;
-                    break;
-                case REPORTS_TABLE_NAME:
-                    table = reportTable;
-                    break;
-                default:
-                    table = archiveAssignTable;
-                    break;
-            }
-        }
-       sqlDelete = deleteRecord.deleteRecordSelected(table);
-       logwind.sendMessages(sqlDelete);
+       try{
+            sqlDelete = deleteRecord.deleteRecordSelected(tabs.get(selectedTab).getTable());
+            logwind.sendMessages(sqlDelete);
+        }catch(NullPointerException e){
+            throwUnknownTableException(selectedTab, e);
+        } 
     }
 
 
