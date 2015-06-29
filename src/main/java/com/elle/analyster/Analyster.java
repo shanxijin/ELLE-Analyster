@@ -787,15 +787,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         
         String selectedField = textForSearch.getText();  // store string from text box
         
-        if(selectedTab.equals(ASSIGNMENTS_TABLE_NAME) || selectedTab.equals(REPORTS_TABLE_NAME) || selectedTab.equals(ARCHIVE_TABLE_NAME)){
+        try{
             TableRowFilterSupport.forTable(tabs.get(selectedTab).getTable()).actions(true).apply().apply(columnIndex, selectedField);
             GUI.columnFilterStatus(columnIndex, tabs.get(selectedTab).getFilter().getTable());
             // set label record information
             recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-        }else{
-            throwUnknownTableException(selectedTab);
-        }
-        
+            
+        }catch(NullPointerException e){
+            throwUnknownTableException(selectedTab, e);
+        }    
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -923,14 +923,14 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(REPORTS_TABLE_NAME).setColWidthPercent(columnWidthPercentage2);
         tabs.get(ARCHIVE_TABLE_NAME).setColWidthPercent(columnWidthPercentage1);
         
-        if(selectedTab.equals(ASSIGNMENTS_TABLE_NAME) || selectedTab.equals(REPORTS_TABLE_NAME) || selectedTab.equals(ARCHIVE_TABLE_NAME)){
+        try{
             loadTables.loadAssignmentTableWithFilter(tabs.get(selectedTab).getFilter().getColumnIndex(), tabs.get(selectedTab).getFilter().getFilterCriteria());
             setColumnFormat(tabs.get(selectedTab).getColWidthPercent(), tabs.get(selectedTab).getTable());
             GUI.columnFilterStatus(tabs.get(selectedTab).getFilter().getColumnIndex(), tabs.get(selectedTab).getTable());
             // set label record information
             recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-        }else{
-            throwUnknownTableException(selectedTab);
+        }catch(NullPointerException e){
+            throwUnknownTableException(selectedTab, e);
         }
     }
     
@@ -965,9 +965,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 break;
         }
         
-        if(selectedTab.equals("unknown")){
-            throwUnknownTableException(selectedTab);
-        }else{
+        try{
             if (isFilterActive) {
             tabs.get(selectedTab).setTable(tabs.get(selectedTab).getFilteredTable());
             } else {
@@ -977,6 +975,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             
             // set label record information
             recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
+        }catch(NullPointerException e){
+            throwUnknownTableException(selectedTab, e);
         }
     }
 
@@ -1450,18 +1450,21 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     /**
      * This method handles unknown table exceptions
      * It takes the value of the selected tab that caused the exception
+     * It also takes the exception to print the stack trace
      * @param selectedTab
      */
-    public void throwUnknownTableException(String selectedTab) {
+    public void throwUnknownTableException(String selectedTab, Exception e) {
         try {
             String errorMessage = "ERROR: unknown table: " + selectedTab;
             throw new NoSuchFieldException(errorMessage);
         } catch (NoSuchFieldException ex) {
+            ex.setStackTrace(e.getStackTrace());
             ex.printStackTrace();
             // post to log.txt
             getLogwind().sendMessages(ex.getMessage());
         }
     }
+    
 
     // Keep the float in Table Editor by separating editing part out here
     public void batchEdit(TableEditor editor) {
