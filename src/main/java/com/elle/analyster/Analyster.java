@@ -817,18 +817,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private void jUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadActionPerformed
         // upload two tables separately
         
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        switch (selectedTab) {
-            case (ASSIGNMENTS_TABLE_NAME):
-                updateTable(assignmentTable, modifiedDataList);
-                break;
-            case (REPORTS_TABLE_NAME):
-                updateTable(reportTable, modifiedDataList);
-                break;
-            case (ARCHIVE_TABLE_NAME):
-                updateTable(archiveAssignTable, modifiedDataList);
-                break;
-        }
+        String selectedTab = getSelectedTab();
+        
+        updateTable(tabs.get(selectedTab).getTable(), modifiedDataList);
 
         if (GUI.isIsFiltering()) {
 //            loadPrevious(selectedTab);
