@@ -115,6 +115,7 @@ public class LogWindow extends JFrame{
 		readMessages();
 	}
 
+
 	public String fillSQLCommand(String str) {
 
 		String output;

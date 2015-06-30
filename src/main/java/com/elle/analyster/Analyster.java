@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
 
 public class Analyster extends JFrame implements ITableNameConstants, IColumnConstants{
     
@@ -59,6 +60,25 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
      * CONSTRUCTOR
      */
     public Analyster() {
+        
+        instance = this; // this is used to call an instance of Analyster
+        
+        // create a login window
+        LoginWindow login = new LoginWindow();
+                //analyster.setVisible(true);
+        //new LoginWindow(analyster).setVisible(true);
+        
+        synchronized(this){
+            try {
+                // wait for login window to either login or close
+                this.wait();
+            } catch (InterruptedException ex) {
+                java.util.logging.Logger.getLogger(Analyster.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        login.dispose();
+        
 
         // create tab objects -> this has to be before initcomponents();
         tabs.put(ASSIGNMENTS_TABLE_NAME, new Tab());
@@ -71,19 +91,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(ARCHIVE_TABLE_NAME).setTableName(ARCHIVE_TABLE_NAME);
         
         initComponents(); // generated code
-
-        // set the interface to the middle of the window
-        this.setLocationRelativeTo(null);
-        this.setTitle("Analyster");
-        
-        // show and hide components
-        jUpload.setVisible(false);
-        jPanelSQL.setVisible(false); 
-        jDebugEnter.setVisible(true);
-        jDebugCancel.setVisible(true);
-        jButtonCancel.setVisible(false);
-        jBatchEdit.setVisible(true);
-        jTextArea.setVisible(true);
         
         // set names to tables (this was in tabbedPanelChanged method)
         assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
@@ -106,10 +113,30 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(REPORTS_TABLE_NAME).setTableState(new TableState(reportTable));
         tabs.get(ARCHIVE_TABLE_NAME).setTableState(new TableState(archiveAssignTable));
         
+        // load tab tables with data from the database
+        loadData();
+        
+        // set initial total row counts for each tab table
+        tabs = loadTables.initTotalRowCounts(tabs);
+        
+        // set initial label for the initial tab
+        recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel());
+        
         setKeyboardFocusManager();
 
-        instance = this; // this is used to call an instance of Analyster
+        // show and hide components
+        jUpload.setVisible(false);
+        jPanelSQL.setVisible(false); 
+        jDebugEnter.setVisible(true);
+        jDebugCancel.setVisible(true);
+        jButtonCancel.setVisible(false);
+        jBatchEdit.setVisible(true);
+        jTextArea.setVisible(true);
 
+        // set Analyster to the middle of the screen
+        this.setLocationRelativeTo(null);
+        this.setTitle("Analyster");
+        this.setVisible(true);
     }
 
     /**
@@ -1035,6 +1062,11 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
        try{
             sqlDelete = deleteRecord.deleteRecordSelected(tabs.get(selectedTab).getTable());
             logwind.sendMessages(sqlDelete);
+            
+            // set label record information
+            tabs.get(selectedTab).subtractFromTotalRowCount(1); // update total row count
+            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); // update label
+            
         }catch(NullPointerException e){
             throwUnknownTableException(selectedTab, e);
         } 

@@ -34,8 +34,30 @@ public class LoadTables implements ITableNameConstants{
     JTable reportTable = tabs.get(REPORTS_TABLE_NAME).getTable();
     JTable archiveAssignTable = tabs.get(ARCHIVE_TABLE_NAME).getTable();
 
+
     /**
-     * CONSTRUCTOR
+     *  called once to initialize the total row counts of each tabs table
+     * @param tabs
+     * @return 
+     */
+    public Map<String,Tab> initTotalRowCounts(Map<String,Tab> tabs) {
+        
+        int totalRecords;
+                
+        for (Map.Entry<String, Tab> entry : tabs.entrySet())
+        {
+            totalRecords = tabs.get(entry.getKey()).getTable().getRowCount();
+            tabs.get(entry.getKey()).setTotalRecords(totalRecords);
+        }
+
+        return tabs;
+    }
+    
+    
+    /**
+     * This method takes a tabs Map and loads all the tabs/tables
+     * @param tabs
+     * @return 
      */
     public Map<String,Tab> loadTables(Map<String,Tab> tabs) {
         
@@ -46,12 +68,6 @@ public class LoadTables implements ITableNameConstants{
         }
 
         ana.setLastUpdateTime();
-        
-        //pass table map back to analyster
-        tabs.get(ASSIGNMENTS_TABLE_NAME).setTable(assignmentTable);
-        tabs.get(REPORTS_TABLE_NAME).setTable(reportTable);
-        tabs.get(ARCHIVE_TABLE_NAME).setTable(archiveAssignTable);
-        ana.setTabs(tabs);
         
         return tabs;
     }
@@ -78,16 +94,16 @@ public class LoadTables implements ITableNameConstants{
                 ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
                 ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
                 ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
-                ana.setNumberAssignmentInit(assignmentTable.getRowCount());
+                //ana.setNumberAssignmentInit(assignmentTable.getRowCount());
                 ana.getjActivateRecord().setEnabled(false);
                 ana.getjArchiveRecord().setEnabled(true);
 
                 // testing
                 tabs.get("Assignments").setFilter(ana.getFilterTempAssignment());
-                tabs.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
+                //tabs.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
 
-                // set label record information
-                recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
+                // set label record information -> this should only happen in Analyster
+                //recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
                 
                 break;
                 
@@ -100,9 +116,9 @@ public class LoadTables implements ITableNameConstants{
                 }
                 ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
                 ana.getReports().init(reportTable, new String[]{"Symbol", "Author"});
-                ana.setNumberReportsInit(reportTable.getRowCount());
+                //ana.setNumberReportsInit(reportTable.getRowCount());
 
-                ana.tabs.get("Reports").setTotalRecords(reportTable.getRowCount());
+                //ana.tabs.get("Reports").setTotalRecords(reportTable.getRowCount());
                 
                 break;
                 
@@ -116,15 +132,15 @@ public class LoadTables implements ITableNameConstants{
                 ana.setColumnFormat(ana.columnWidthPercentage1, archiveAssignTable);
                 ana.getArchiveAssign().init(archiveAssignTable, new String[]{"Symbol", "Analyst"});
                 ana.setTerminalsFunction(archiveAssignTable);
-                ana.setNumberArchiveAssignInit(archiveAssignTable.getRowCount());
+                //ana.setNumberArchiveAssignInit(archiveAssignTable.getRowCount());
 
-                ana.tabs.get("Assignments_Archived").setTotalRecords(archiveAssignTable.getRowCount());
+                //ana.tabs.get("Assignments_Archived").setTotalRecords(archiveAssignTable.getRowCount());
                 
                 break; 
                 
             default:
                 
-                
+                // do nothing this is a temporary switch statement until it can be refactored better
                 break;
                 
         }
@@ -153,17 +169,17 @@ public class LoadTables implements ITableNameConstants{
                                         .apply();
         ana.setFilterTempAssignment(filter);
         ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
-        ana.setNumberAssignmentInit(assignmentTable.getRowCount());
+        //ana.setNumberAssignmentInit(assignmentTable.getRowCount());
         ana.getjActivateRecord().setEnabled(false);
         ana.getjArchiveRecord().setEnabled(true);
 
 
         // testing, looks like just filter and number
         tabs.get("Assignments").setFilter(filter);
-        tabs.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
+        //tabs.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
 
-        // set label record information
-        recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
+        // set label record information -> this should not be done here : only in Analyster
+        //recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
 
         // why is this code here?
         filter.apply(columnIndex, filterCriteria);

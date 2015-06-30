@@ -17,6 +17,11 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,11 +29,17 @@ import java.util.List;
  */
 public class LoginWindow extends javax.swing.JFrame {
 
+    final Lock lock = new ReentrantLock();
+    final Condition startWaiting = lock.newCondition();
+    final Condition stopWaiting = lock.newCondition();
+    private Analyster analyster = Analyster.getInstance();
+    
     public LoginWindow() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Log in");
         loadList();    // did not find suitable event
+        this.setVisible(true);
     }
 
     public LoginWindow(Analyster a) {
@@ -371,14 +382,19 @@ public class LoginWindow extends javax.swing.JFrame {
         try {
             Class.forName(jdbc_driver);
             //connect to the local database for test now
-            analyster.getLogwind().sendMessages("\nStart to connect local database...");
+            //analyster.getLogwind().sendMessages("\nStart to connect local database...");
             GUI.con = DriverManager.getConnection(GUI.db_url, GUI.username, GUI.password);
-            analyster.getLogwind().sendMessages("Connect successfully!\n");
+            //analyster.getLogwind().sendMessages("Connect successfully!\n");
             GUI.stmt = GUI.con.createStatement();
             System.out.println("Connection successfully");
             GUI.status = true;
-            analyster.loadData();
-            dispose(); // destroy this component and return consumed resources
+            //analyster.loadData();
+            //dispose(); // destroy this component and return consumed resources
+            
+            synchronized(Analyster.getInstance()){
+                Analyster.getInstance().notify();
+            }
+            
         } catch (Exception ex) {
 
             JOptionPane.showMessageDialog(null,
@@ -430,7 +446,6 @@ public class LoginWindow extends javax.swing.JFrame {
 //        });
 //    }
     
-    private Analyster analyster;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jButtonPanel;
     private javax.swing.JButton jCancelButton;
@@ -449,4 +464,5 @@ public class LoginWindow extends javax.swing.JFrame {
     private javax.swing.JTextField jUsername;
     private javax.swing.JButton loginButton;
     // End of variables declaration//GEN-END:variables
+
 }
