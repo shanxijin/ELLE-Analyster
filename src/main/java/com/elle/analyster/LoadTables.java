@@ -1,3 +1,13 @@
+
+/**
+ * User: danielabecker
+ * 
+ * -Refactored
+ * @author Carlos Igreja
+ * @since 6-29-2015
+ * @version 0.6.5b
+ */
+
 package com.elle.analyster;
 
 import com.elle.analyster.presentation.filter.DistinctColumnItem;
@@ -13,14 +23,7 @@ import java.util.Collection;
 import static com.elle.analyster.service.Connection.connection;
 import java.util.Map;
 
-/**
- * User: danielabecker
- * 
- * -Refactored
- * @author Carlos Igreja
- * @since 6-29-2015
- * @version 0.6.5a
- */
+
 public class LoadTables implements ITableNameConstants{
 
     private Analyster ana =Analyster.getInstance();
@@ -43,11 +46,19 @@ public class LoadTables implements ITableNameConstants{
     public Map<String,Tab> initTotalRowCounts(Map<String,Tab> tabs) {
         
         int totalRecords;
-                
+ 
+        boolean isFirstTabRecordLabelSet = false;
+        
         for (Map.Entry<String, Tab> entry : tabs.entrySet())
         {
             totalRecords = tabs.get(entry.getKey()).getTable().getRowCount();
             tabs.get(entry.getKey()).setTotalRecords(totalRecords);
+            
+            if(isFirstTabRecordLabelSet == false){
+                ana.getRecordsLabel()
+                        .setText(tabs.get(entry.getKey()).getRecordsLabel());
+                isFirstTabRecordLabelSet = true; // now its set
+            }
         }
 
         return tabs;

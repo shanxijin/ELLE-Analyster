@@ -1,15 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
+/**
+ * @author Louis W.
+ * 
+ * Refactored
+ * @author Carlos Igreja
+ * @since June 30, 2015
+ * @version 0.6.5b
  */
 package com.elle.analyster;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,40 +21,24 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author Louis W.
- */
-public class LoginWindow extends javax.swing.JFrame {
 
-    final Lock lock = new ReentrantLock();
-    final Condition startWaiting = lock.newCondition();
-    final Condition stopWaiting = lock.newCondition();
-    private Analyster analyster = Analyster.getInstance();
+public class LoginWindow extends JFrame {
+
+    private Analyster analyster;
     
     public LoginWindow() {
+        
+        // initialize
         initComponents();
-        this.setLocationRelativeTo(null);
-        this.setTitle("Log in");
+        analyster = Analyster.getInstance();
+        
         loadList();    // did not find suitable event
-        this.setVisible(true);
-    }
-
-    public LoginWindow(Analyster a) {
-        initComponents();
-        this.setLocationRelativeTo(null);
+ 
+        // show window
         this.setTitle("Log in");
-
-
-        analyster = a;
-
-        loadList();    // did not find suitable event
+        this.setLocationRelativeTo(null);
+        this.setVisible(true); 
     }
 
     /**
@@ -270,6 +258,14 @@ public class LoginWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCancelButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jCancelButtonActionPerformed
+        this.close();
+        
+    }//GEN-LAST:event_jCancelButtonActionPerformed
+
+    /**
+     * Close down application properly
+     */
+    public void close(){
         GUI.status = false; // already logged in?
         GUI.db_url = "";
         GUI.database = "";
@@ -277,12 +273,13 @@ public class LoginWindow extends javax.swing.JFrame {
         GUI.password = "";
         GUI.stmt = null;
         GUI.con = null;
-        dispose();
-    }//GEN-LAST:event_jCancelButtonActionPerformed
-
+        // destroy these component and return consumed resources
+        this.dispose();
+        analyster.dispose();
+        System.exit(0); // Terminates the currently running Java Virtual Machine.
+    }
     private void loginButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         login();
-//        dispose();
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void jPasswordKeyPressed(KeyEvent evt) {//GEN-FIRST:event_jPasswordKeyPressed
@@ -347,7 +344,7 @@ public class LoginWindow extends javax.swing.JFrame {
                 try {
                     buf.close();
                 } catch (IOException e) {
-                    e.getStackTrace();
+                    e.printStackTrace();
                 }
             }
         }
@@ -382,17 +379,16 @@ public class LoginWindow extends javax.swing.JFrame {
         try {
             Class.forName(jdbc_driver);
             //connect to the local database for test now
-            //analyster.getLogwind().sendMessages("\nStart to connect local database...");
+            analyster.getLogwind().sendMessages("\nStart to connect local database...");
             GUI.con = DriverManager.getConnection(GUI.db_url, GUI.username, GUI.password);
-            //analyster.getLogwind().sendMessages("Connect successfully!\n");
+            analyster.getLogwind().sendMessages("Connect successfully!\n");
             GUI.stmt = GUI.con.createStatement();
             System.out.println("Connection successfully");
             GUI.status = true;
-            //analyster.loadData();
-            //dispose(); // destroy this component and return consumed resources
             
+            // login successfull - notify Analyster to continue
             synchronized(Analyster.getInstance()){
-                Analyster.getInstance().notify();
+                analyster.notify();
             }
             
         } catch (Exception ex) {
@@ -410,41 +406,6 @@ public class LoginWindow extends javax.swing.JFrame {
         }
 
     }
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(LoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(LoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(LoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(LoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//        //</editor-fold>
-////        initComponents();
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new LoginWindow().setVisible(true);
-//            }
-//        });
-//    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jButtonPanel;

@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.logging.Level;
 
 public class Analyster extends JFrame implements ITableNameConstants, IColumnConstants{
     
@@ -61,24 +60,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
      */
     public Analyster() {
         
-        instance = this; // this is used to call an instance of Analyster
-        
-        // create a login window
-        LoginWindow login = new LoginWindow();
-                //analyster.setVisible(true);
-        //new LoginWindow(analyster).setVisible(true);
-        
-        synchronized(this){
-            try {
-                // wait for login window to either login or close
-                this.wait();
-            } catch (InterruptedException ex) {
-                java.util.logging.Logger.getLogger(Analyster.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        login.dispose();
-        
+        instance = this; // this is used to call an instance of Analyster  
 
         // create tab objects -> this has to be before initcomponents();
         tabs.put(ASSIGNMENTS_TABLE_NAME, new Tab());
@@ -113,14 +95,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(REPORTS_TABLE_NAME).setTableState(new TableState(reportTable));
         tabs.get(ARCHIVE_TABLE_NAME).setTableState(new TableState(archiveAssignTable));
         
+        // create login window and wait for database connection or termination
+        displayLoginWindow();
+
         // load tab tables with data from the database
         loadData();
         
         // set initial total row counts for each tab table
         tabs = loadTables.initTotalRowCounts(tabs);
         
-        // set initial label for the initial tab
-        recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel());
         
         setKeyboardFocusManager();
 
@@ -133,7 +116,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         jBatchEdit.setVisible(true);
         jTextArea.setVisible(true);
 
-        // set Analyster to the middle of the screen
+        // set Analyster to the middle of the screen and make visible
         this.setLocationRelativeTo(null);
         this.setTitle("Analyster");
         this.setVisible(true);
@@ -1046,11 +1029,27 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         switch (n) {
             case 0: {               // Reconnect
-                new LoginWindow(this).setVisible(true);
+                
+                // hide Analyster
+                this.setVisible(false);
+                
+                // create login window and wait for database connection 
+                // or termination of the application
+                displayLoginWindow();
+
+                // load tab tables with data from the database
+                loadData();
+
+                // set initial total row counts for each tab table
+                tabs = loadTables.initTotalRowCounts(tabs);
+
+                // show Analyster
+                this.setVisible(true);
+                
                 break;
             }
             case 1:
-                System.exit(1); // Quit
+                System.exit(0); // Quit
         }
     }//GEN-LAST:event_jMenuItemLogOffActionPerformed
 
@@ -1622,6 +1621,34 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         );
     }
 
+    /**
+     * Creates a new login window instance and waits for it to either 
+     * connect to the database or terminate the running application
+     */
+    public void displayLoginWindow(){
+        
+        // create a login window
+        LoginWindow login = new LoginWindow();
+        
+        // shut down properly if closed manually
+        login.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e){
+                login.close();
+            }
+        });
+        
+        // wait for login window to either login or close
+        // the login is required for a database connection 
+        synchronized(this){
+            try {
+                this.wait();
+            } catch (InterruptedException e) {e.printStackTrace();}
+        }
+        
+        login.dispose(); // destroy this component and return consumed resources
+    }
+    
     public UploadRecord getUploadRecordService() {
         return uploadRecordService;
     }
