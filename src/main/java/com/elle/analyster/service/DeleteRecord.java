@@ -37,8 +37,11 @@ public class DeleteRecord {
                     log.info(e.getMessage());
                 }
             }
+            
             // this is where the table is refreshing 
             new LoadTables().loadTable(Analyster.getInstance().getTabs().get(tableName).getTable());
+
+            // output pop up dialog that a record was deleted 
             JOptionPane.showMessageDialog(null, rowsSelected + " Record(s) Deleted");
         }
         return sqlDelete;

@@ -52,6 +52,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     protected static boolean isFiltering = true;
     private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
     
+    private LoginWindow loginWindow;
+    
     @Autowired
     private UploadRecord uploadRecordService;
     
@@ -1035,10 +1037,10 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 
                 // create login window and wait for database connection 
                 // or termination of the application
-                displayLoginWindow();
+                this.displayLoginWindow();
 
                 // load tab tables with data from the database
-                loadData();
+                this.loadData();
 
                 // set initial total row counts for each tab table
                 tabs = loadTables.initTotalRowCounts(tabs);
@@ -1628,13 +1630,13 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     public void displayLoginWindow(){
         
         // create a login window
-        LoginWindow login = new LoginWindow();
+        loginWindow = new LoginWindow();
         
         // shut down properly if closed manually
-        login.addWindowListener(new WindowAdapter() {
+        loginWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e){
-                login.close();
+                loginWindow.close();
             }
         });
         
@@ -1643,10 +1645,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         synchronized(this){
             try {
                 this.wait();
+                loginWindow.dispose(); // destroy this component and return consumed resources
             } catch (InterruptedException e) {e.printStackTrace();}
         }
-        
-        login.dispose(); // destroy this component and return consumed resources
     }
     
     public UploadRecord getUploadRecordService() {
