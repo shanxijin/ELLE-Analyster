@@ -24,6 +24,7 @@ import java.util.*;
 
 public class LogWindow extends JFrame{
     
+    
 	private final JScrollPane scrollPane;
 	private final TextArea logText;
 	private final String FILENAME = "log.txt";
@@ -31,8 +32,9 @@ public class LogWindow extends JFrame{
         private final JPanel jPanelLogWindowButtons;
         private final JButton jBtnClearAll;
         private final JButton jBtnClearAllButToday;
-        private final JCheckBox jCheckBoxOrder;
-        private final JLabel jLabelOrder;
+        //private final JCheckBox jCheckBoxOrder;  // this is replaced with showAll button
+        private JButton showAll;
+        //private final JLabel jLabelOrder; // label for checkbox
         private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
 
         // constructor
@@ -71,25 +73,37 @@ public class LogWindow extends JFrame{
                         jBtnClearAllActionPerformed(evt);
                     }
                 });
+                
                 jBtnClearAllButToday = new JButton("Clear All But Today");
                 jBtnClearAllButToday.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jBtnClearAllButTodayActionPerformed(evt);
                     }
                 });
-                jCheckBoxOrder = new JCheckBox();
-                jCheckBoxOrder.addActionListener(new java.awt.event.ActionListener() {
+                
+                /********* THIS IS THE CHECKBOX ORDER FEATURE *****************/
+//                jCheckBoxOrder = new JCheckBox();
+//                jCheckBoxOrder.addActionListener(new java.awt.event.ActionListener() {
+//                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                        jCheckBoxOrderActionPerformed(evt);
+//                    }
+//                });
+////                jLabelOrder = new JLabel("Order");
+                
+                showAll = new JButton("Show All");
+                showAll.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jCheckBoxOrderActionPerformed(evt);
+                        showAllActionPerformed(evt);
                     }
                 });
-                jLabelOrder = new JLabel("Order");
+                
                 
                 // add buttons to panel
                 jPanelLogWindowButtons.add(jBtnClearAll);
                 jPanelLogWindowButtons.add(jBtnClearAllButToday);
-                jPanelLogWindowButtons.add(jCheckBoxOrder);
-                jPanelLogWindowButtons.add(jLabelOrder);
+                //jPanelLogWindowButtons.add(jCheckBoxOrder);
+                //jPanelLogWindowButtons.add(jLabelOrder);
+                jPanelLogWindowButtons.add(showAll);
                 
                 // set constraints for the buttons panel
                 GridBagConstraints buttonsPanelConstraints = new GridBagConstraints();
@@ -203,22 +217,27 @@ public class LogWindow extends JFrame{
             // store log messages in an array of log messages
             storeLogMessages(); // get most current messages to array
             
-            // get the order of messages
-            if(jCheckBoxOrder.isSelected()){
-                // sorts by most recent date first
-                Collections.sort(logMessages, new LogMessage.SortByMostRecentDateFirst());
-            }else if(!jCheckBoxOrder.isSelected()){
-                // sorts by least recent date first
-                Collections.sort(logMessages, new LogMessage.SortByLeastRecentDateFirst());
-            }
+           /****************** CHECK BOX ORDER FEATURE ********************/
+//            // get the order of messages
+//            if(jCheckBoxOrder.isSelected()){
+//                // sorts by most recent date first
+//                Collections.sort(logMessages, new LogMessage.SortByMostRecentDateFirst());
+//            }else if(!jCheckBoxOrder.isSelected()){
+//                // sorts by most recent date last
+//                Collections.sort(logMessages, new LogMessage.SortByMostRecentDateLast());
+//            }
                 
+            // sorts by most recent date last
+            Collections.sort(logMessages, new LogMessage.SortByMostRecentDateLast());
+            
             // compare date with todays date and print to screen
             Date date = new Date(); // get todays date
             logText.setText(""); // clear text box
             for(LogMessage logMessage : logMessages){
                 
                 // if date is today then print to screen
-                if(logMessage.getDate().getYear() == date.getYear() 
+                if(logMessage.getDate().getYear() == date.getYear()
+                        && logMessage.getDate().getMonth()== date.getMonth()
                         && logMessage.getDate().getDay()== date.getDay()){
                     logText.append("-------------------------" + dateFormat.format(logMessage.getDate()) + "-------------------------");
                     logText.append(logMessage.getMessage());
@@ -230,21 +249,42 @@ public class LogWindow extends JFrame{
          * Order check box: When the order check box is checked, 
          * all the messages are reversed in order in the scroll pane text box.
          */
-        private void jCheckBoxOrderActionPerformed(ActionEvent evt) {
+//        private void jCheckBoxOrderActionPerformed(ActionEvent evt) {
+//            
+//            // store log messages in an array of log messages
+//            storeLogMessages(); // get most current messages to array
+//            
+//            // sort log messages
+//            if(jCheckBoxOrder.isSelected()){
+//                // sorts by most recent date first
+//                Collections.sort(logMessages, new LogMessage.SortByMostRecentDateFirst());
+//            }else if(!jCheckBoxOrder.isSelected()){
+//                // sorts by least recent date first
+//                Collections.sort(logMessages, new LogMessage.SortByLeastRecentDateFirst());
+//            }
+//            
+//            logText.setText("");// clear text box
+//            // print log messages to log window text box
+//            for (LogMessage logMessage : logMessages) {
+//                logText.append("-------------------------" + dateFormat.format(logMessage.getDate()) + "-------------------------");
+//                logText.append(logMessage.getMessage());
+//            }
+//        }
+        
+        /**
+         * Show all message with most recent appearing at the bottom
+         * @param evt 
+         */
+        private void showAllActionPerformed(ActionEvent evt){
             
             // store log messages in an array of log messages
             storeLogMessages(); // get most current messages to array
             
-            // sort log messages
-            if(jCheckBoxOrder.isSelected()){
-                // sorts by most recent date first
-                Collections.sort(logMessages, new LogMessage.SortByMostRecentDateFirst());
-            }else if(!jCheckBoxOrder.isSelected()){
-                // sorts by least recent date first
-                Collections.sort(logMessages, new LogMessage.SortByLeastRecentDateFirst());
-            }
+            // sorts by least recent date first
+            Collections.sort(logMessages, new LogMessage.SortByMostRecentDateLast());
             
-            logText.setText("");// clear text box
+            logText.setText(""); // clear text box
+            
             // print log messages to log window text box
             for (LogMessage logMessage : logMessages) {
                 logText.append("-------------------------" + dateFormat.format(logMessage.getDate()) + "-------------------------");
@@ -323,15 +363,15 @@ public class LogWindow extends JFrame{
         {
             @Override
             public int compare(LogMessage c, LogMessage c1) {
-                return c.getDate().compareTo(c1.getDate());
+                return c1.getDate().compareTo(c.getDate());
             }    
         }
         
-        public static class SortByLeastRecentDateFirst implements Comparator<LogMessage>
+        public static class SortByMostRecentDateLast implements Comparator<LogMessage>
         {
             @Override
             public int compare(LogMessage c, LogMessage c1) {
-                return c1.getDate().compareTo(c.getDate());
+                return c.getDate().compareTo(c1.getDate());
             }    
         }
     }
