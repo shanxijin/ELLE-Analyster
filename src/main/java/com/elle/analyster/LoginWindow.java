@@ -25,18 +25,21 @@ public class LoginWindow extends JFrame {
 
     private Analyster analyster;
     
-    public LoginWindow() {
+    public LoginWindow(Analyster analyster) {
         
         // initialize
         initComponents();
-        analyster = Analyster.getInstance();
+        this.analyster = analyster;
         
         loadList();    // did not find suitable event
  
         // show window
         this.setTitle("Log in");
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(analyster);
         this.setVisible(true); 
+        
+        // hide Analyster
+        analyster.setVisible(false);
     }
 
     /**
@@ -272,8 +275,8 @@ public class LoginWindow extends JFrame {
         GUI.stmt = null;
         GUI.con = null;
         // destroy these component and return consumed resources
-        this.dispose();
         analyster.dispose();
+        this.dispose();
         System.exit(0); // Terminates the currently running Java Virtual Machine.
     }
     private void loginButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
@@ -384,10 +387,18 @@ public class LoginWindow extends JFrame {
             System.out.println("Connection successfully");
             GUI.status = true;
             
-            // login successfull - notify Analyster to continue
-            synchronized(Analyster.getInstance()){
-                analyster.notify();
-            }
+            // load data from database to tables
+            analyster.getLoadTables().loadTables(analyster.getTabs());
+            
+            // set initial record counts of now full tables
+            analyster.getLoadTables().initTotalRowCounts(analyster.getTabs());
+            
+            // hide login window
+            this.setVisible(false);
+            
+            // show Analyster
+            analyster.setLocationRelativeTo(this);
+            analyster.setVisible(true);
             
         } catch (Exception ex) {
 

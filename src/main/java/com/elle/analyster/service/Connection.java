@@ -32,7 +32,7 @@ public class Connection {
         if (GUI.status == false) {
             JOptionPane.showMessageDialog(null, "You have not yet logged in.",
                     "Warning", JOptionPane.WARNING_MESSAGE);
-            new LoginWindow().setVisible(true);
+            new LoginWindow(ana).setVisible(true);
         }
 
         ResultSet rs = null;

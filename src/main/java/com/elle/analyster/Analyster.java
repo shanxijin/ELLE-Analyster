@@ -52,10 +52,10 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     protected static boolean isFiltering = true;
     private List<ModifiedData> modifiedDataList = new ArrayList<>();    // record the locations of changed cell
     
-    private LoginWindow loginWindow;
-    
     @Autowired
     private UploadRecord uploadRecordService;
+    
+    LoginWindow loginWindow;
     
     /**
      * CONSTRUCTOR
@@ -97,16 +97,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(REPORTS_TABLE_NAME).setTableState(new TableState(reportTable));
         tabs.get(ARCHIVE_TABLE_NAME).setTableState(new TableState(archiveAssignTable));
         
-        // create login window and wait for database connection or termination
-        displayLoginWindow();
-
-        // load tab tables with data from the database
-        loadData();
-        
-        // set initial total row counts for each tab table
-        tabs = loadTables.initTotalRowCounts(tabs);
-        
-        
         setKeyboardFocusManager();
 
         // show and hide components
@@ -118,10 +108,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         jBatchEdit.setVisible(true);
         jTextArea.setVisible(true);
 
-        // set Analyster to the middle of the screen and make visible
-        this.setLocationRelativeTo(null);
+        // set title of window to Analyster
         this.setTitle("Analyster");
-        this.setVisible(true);
+        
+        // initialize loadTables
+        loadTables = new LoadTables();
+        
+        // create a login window instance
+        loginWindow = new LoginWindow(this);
+        
     }
 
     /**
@@ -764,8 +759,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-06-29" + "\n"
-                + "Version: " + "0.6.5a");
+                + "2015-07-1" + "\n"
+                + "Version: " + "0.6.5b");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
@@ -1035,19 +1030,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 // hide Analyster
                 this.setVisible(false);
                 
-                // create login window and wait for database connection 
-                // or termination of the application
-                this.displayLoginWindow();
+                // show login window
+                loginWindow.setVisible(true);
 
-                // load tab tables with data from the database
-                this.loadData();
-
-                // set initial total row counts for each tab table
-                tabs = loadTables.initTotalRowCounts(tabs);
-
-                // show Analyster
-                this.setVisible(true);
-                
                 break;
             }
             case 1:
@@ -1628,24 +1613,12 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
      * connect to the database or terminate the running application
      */
     public void displayLoginWindow(){
-        
-        // create a login window
-        loginWindow = new LoginWindow();
-        
-        // shut down properly if closed manually
-        loginWindow.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e){
-                loginWindow.close();
-            }
-        });
-        
-        // wait for login window to either login or close
-        // the login is required for a database connection 
+
+        // wait for login window database connection 
+        // or termination of the application
         synchronized(this){
             try {
                 this.wait();
-                loginWindow.dispose(); // destroy this component and return consumed resources
             } catch (InterruptedException e) {e.printStackTrace();}
         }
     }
@@ -1775,6 +1748,12 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private String getSelectedTab() {
         return jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
     }
+
+    public LoadTables getLoadTables() {
+        return loadTables;
+    }
+    
+    
     
     // @formatter:off
     // Variables declaration - do not modify//GEN-BEGIN:variables
