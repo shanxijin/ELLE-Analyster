@@ -92,68 +92,28 @@ public class LoadTables implements ITableNameConstants{
        */
     public JTable loadTable(JTable table) {
         
-        // this is temporary switch statement to handle current code
-        switch(table.getName()){
-            case ASSIGNMENTS_TABLE_NAME:
+        // make sure column percents are set in tabs first
+        
+        try {
+            connection(ana.sqlQuery(table.getName()), table);
+        } catch (SQLException e) {
+            log.error("Error", e);
+        }
+        ana.setColumnFormat(ana.getTabs().get(table.getName()).getColWidthPercent(), table);
+        ana.getTabs().get(table.getName()).getTableState().init(table, new String[]{"Symbol", "Analyst"});
                 
-                try {
-                    connection(ana.sqlQuery(Analyster.getAssignmentsTableName()), assignmentTable);
-                } catch (SQLException e) {
-                    log.error("Error", e);
-                }
-                ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
-                ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-                ana.setFilterTempAssignment(TableRowFilterSupport.forTable(assignmentTable).actions(true).apply());
-                ana.getFilterTempAssignment().getTable();   // create filter when the table is loaded.
-                //ana.setNumberAssignmentInit(assignmentTable.getRowCount());
-                ana.getjActivateRecord().setEnabled(false);
-                ana.getjArchiveRecord().setEnabled(true);
-
-                // testing
-                tabs.get("Assignments").setFilter(ana.getFilterTempAssignment());
-                //tabs.get("Assignments").setTotalRecords(assignmentTable.getRowCount());
-
-                // set label record information -> this should only happen in Analyster
-                //recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
-                
-                break;
-                
-            case REPORTS_TABLE_NAME:
-                
-                try {
-                    connection(ana.sqlQuery(Analyster.getReportsTableName()), reportTable);
-                } catch (SQLException e) {
-                    log.error("Error", e);
-                }
-                ana.setColumnFormat(ana.columnWidthPercentage2, reportTable);
-                ana.getReports().init(reportTable, new String[]{"Symbol", "Author"});
-                //ana.setNumberReportsInit(reportTable.getRowCount());
-
-                //ana.tabs.get("Reports").setTotalRecords(reportTable.getRowCount());
-                
-                break;
-                
-            case ARCHIVE_TABLE_NAME:
-                
-                try {
-                    connection(ana.sqlQuery(Analyster.getArchiveTableName()), archiveAssignTable);
-                } catch (SQLException e) {
-                    log.error("Error", e);
-                }
-                ana.setColumnFormat(ana.columnWidthPercentage1, archiveAssignTable);
-                ana.getArchiveAssign().init(archiveAssignTable, new String[]{"Symbol", "Analyst"});
-                ana.setTerminalsFunction(archiveAssignTable);
-                //ana.setNumberArchiveAssignInit(archiveAssignTable.getRowCount());
-
-                //ana.tabs.get("Assignments_Archived").setTotalRecords(archiveAssignTable.getRowCount());
-                
-                break; 
-                
-            default:
-                
-                // do nothing this is a temporary switch statement until it can be refactored better
-                break;
-                
+        // this enables or disables the menu components for this tab
+        // this code still needs to be refactored.
+        if(table.getName().equals(ASSIGNMENTS_TABLE_NAME)){
+            ana.getjActivateRecord().setEnabled(false); 
+            ana.getjArchiveRecord().setEnabled(true); 
+            
+            // the first tab filter has to be initialized
+            // this prevents a bug from a search before the first tab changes state
+            // for the first time. The changePanelState method in Analyster
+            // handles the rest. This is just temporary while refactoring for now.
+            tabs.get(table.getName()).setFilter(TableRowFilterSupport.forTable(tabs.get(table.getName()).getTable()).actions(true).apply());
+            tabs.get(table.getName()).setFilteredTable(tabs.get(table.getName()).getFilter().getTable());
         }
         
         return table;
@@ -172,7 +132,7 @@ public class LoadTables implements ITableNameConstants{
         } catch (SQLException e) {
             log.error("Error", e);
         }
-        ana.setColumnFormat(ana.columnWidthPercentage1, assignmentTable);
+        ana.setColumnFormat(ana.getTabs().get(ASSIGNMENTS_TABLE_NAME).getColWidthPercent(), assignmentTable);
         ana.getAssignments().init(assignmentTable, new String[]{"Symbol", "Analyst"});
         ITableFilter<?> filter = TableRowFilterSupport
                                         .forTable(assignmentTable)
