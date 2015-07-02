@@ -97,6 +97,11 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(REPORTS_TABLE_NAME).setTableState(new TableState(reportTable));
         tabs.get(ARCHIVE_TABLE_NAME).setTableState(new TableState(archiveAssignTable));
         
+        // set column width percents to tables of the tab objects
+        tabs.get(ASSIGNMENTS_TABLE_NAME).setColWidthPercent(COL_WIDTH_PER_ASSIGNMENTS);
+        tabs.get(REPORTS_TABLE_NAME).setColWidthPercent(COL_WIDTH_PER_REPORTS);
+        tabs.get(ARCHIVE_TABLE_NAME).setColWidthPercent(COL_WIDTH_PER_ARCHIVE);
+        
         setKeyboardFocusManager();
 
         // show and hide components
@@ -925,11 +930,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         // TODO check that the selectedTab is actually needed to be passed in.
         
-        //set column witdh percent
-        tabs.get(ASSIGNMENTS_TABLE_NAME).setColWidthPercent(columnWidthPercentage1);
-        tabs.get(REPORTS_TABLE_NAME).setColWidthPercent(columnWidthPercentage2);
-        tabs.get(ARCHIVE_TABLE_NAME).setColWidthPercent(columnWidthPercentage1);
-        
         try{
             loadTables.loadAssignmentTableWithFilter(tabs.get(selectedTab).getFilter().getColumnIndex(), tabs.get(selectedTab).getFilter().getFilterCriteria());
             setColumnFormat(tabs.get(selectedTab).getColWidthPercent(), tabs.get(selectedTab).getTable());
@@ -943,7 +943,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     
     private void changeTabbedPanelState() {
         
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
+        String selectedTab = getSelectedTab();
 
         // pointers to information
         boolean isFilterActive = false;
@@ -1074,30 +1074,20 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
                 GUI.filterAssignmentIsActive = false;
-                loadTables.loadTable(tabs.get(selectedTab).getTable());
-                GUI.cleanAllColumnFilterStatus(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable());
-                // set label record information
-                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
                 break;
             case REPORTS_TABLE_NAME:
                 GUI.filterReportIstActive = false;
-                loadTables.loadTable(tabs.get(selectedTab).getTable());
-                tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply());
-                tabs.get(REPORTS_TABLE_NAME).getFilter().getTable();
-                GUI.cleanAllColumnFilterStatus(tabs.get(REPORTS_TABLE_NAME).getTable());
-                // set label record information
-                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
                 break;
             case ARCHIVE_TABLE_NAME:
                 GUI.filterArchiveIsActive = false;
-                loadTables.loadTable(tabs.get(selectedTab).getTable());
-                tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply());
-                tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable();
-                GUI.cleanAllColumnFilterStatus(tabs.get(ARCHIVE_TABLE_NAME).getTable());
-                // set label record information
-                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
                 break;
         }
+        
+        loadTables.loadTable(tabs.get(selectedTab).getTable());
+        GUI.cleanAllColumnFilterStatus(tabs.get(selectedTab).getTable());
+        // set label record information
+        recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
+                
         modifiedDataList.clear();
 
     }//GEN-LAST:event_jButtonClearAllFilterActionPerformed
@@ -1377,7 +1367,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             logwind.sendMessages(e.getMessage());  
         }
 
-        setColumnFormat(columnWidthPercentage1, assignmentTable);
+        setColumnFormat(tabs.get(ASSIGNMENTS_TABLE_NAME).getColWidthPercent(), assignmentTable);
         tabs.get(ASSIGNMENTS_TABLE_NAME).getTableState().init(assignmentTable, new String[]{"Symbol", "Analyst"});
         // set label record information
         recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
@@ -1397,9 +1387,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         table.setModel(model);
         table.setRowSorter(sorter);
-        setColumnFormat(columnWidthPercentage1, assignmentTable);
-        setColumnFormat(columnWidthPercentage2, reportTable);
-        setColumnFormat(columnWidthPercentage1, archiveAssignTable);
+        setColumnFormat(tabs.get(ASSIGNMENTS_TABLE_NAME).getColWidthPercent(), assignmentTable);
+        setColumnFormat(tabs.get(REPORTS_TABLE_NAME).getColWidthPercent(), reportTable);
+        setColumnFormat(tabs.get(ARCHIVE_TABLE_NAME).getColWidthPercent(), archiveAssignTable);
     }
 
     void setColumnFormat(float[] width, JTable table) {
@@ -1534,7 +1524,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }
 
     public TableState getTableState() {                 // get TableState by selected Tab
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
+        String selectedTab = getSelectedTab();
         return tabs.get(selectedTab).getTableState();
     }
 

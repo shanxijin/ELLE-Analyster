@@ -101,19 +101,19 @@ public class LoadTables implements ITableNameConstants{
         }
         ana.setColumnFormat(ana.getTabs().get(table.getName()).getColWidthPercent(), table);
         ana.getTabs().get(table.getName()).getTableState().init(table, new String[]{"Symbol", "Analyst"});
-                
+          
+        // the first tab filter has to be initialized
+        // this prevents a bug from a search before the first tab changes state
+        // for the first time. The changePanelState method in Analyster
+        // handles the rest. This is just temporary while refactoring for now.
+        tabs.get(table.getName()).setFilter(TableRowFilterSupport.forTable(tabs.get(table.getName()).getTable()).actions(true).apply());
+        tabs.get(table.getName()).setFilteredTable(tabs.get(table.getName()).getFilter().getTable());
+            
         // this enables or disables the menu components for this tab
         // this code still needs to be refactored.
         if(table.getName().equals(ASSIGNMENTS_TABLE_NAME)){
             ana.getjActivateRecord().setEnabled(false); 
             ana.getjArchiveRecord().setEnabled(true); 
-            
-            // the first tab filter has to be initialized
-            // this prevents a bug from a search before the first tab changes state
-            // for the first time. The changePanelState method in Analyster
-            // handles the rest. This is just temporary while refactoring for now.
-            tabs.get(table.getName()).setFilter(TableRowFilterSupport.forTable(tabs.get(table.getName()).getTable()).actions(true).apply());
-            tabs.get(table.getName()).setFilteredTable(tabs.get(table.getName()).getFilter().getTable());
         }
         
         return table;
