@@ -5,6 +5,7 @@
  */
 package com.elle.analyster.service;
 
+import com.elle.analyster.Analyster;
 import com.elle.analyster.GUI;
 import com.elle.analyster.LoadTables;
 import org.slf4j.Logger;
@@ -36,17 +37,11 @@ public class DeleteRecord {
                     log.info(e.getMessage());
                 }
             }
-            switch (tableName) {
-                case "Assignments":
-                    new LoadTables().loadAssignmentTable();
-                    break;
-                case "Reports":
-                    new LoadTables().loadReportTable();
-                    break;
-                default:
-                    new LoadTables().loadArchiveAssignTable();
-                    break;
-            }
+            
+            // this is where the table is refreshing 
+            new LoadTables().loadTable(Analyster.getInstance().getTabs().get(tableName).getTable());
+
+            // output pop up dialog that a record was deleted 
             JOptionPane.showMessageDialog(null, rowsSelected + " Record(s) Deleted");
         }
         return sqlDelete;

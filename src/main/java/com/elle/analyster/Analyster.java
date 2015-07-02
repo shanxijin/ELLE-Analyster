@@ -55,10 +55,14 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     @Autowired
     private UploadRecord uploadRecordService;
     
+    LoginWindow loginWindow;
+    
     /**
      * CONSTRUCTOR
      */
     public Analyster() {
+        
+        instance = this; // this is used to call an instance of Analyster  
 
         // create tab objects -> this has to be before initcomponents();
         tabs.put(ASSIGNMENTS_TABLE_NAME, new Tab());
@@ -71,19 +75,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(ARCHIVE_TABLE_NAME).setTableName(ARCHIVE_TABLE_NAME);
         
         initComponents(); // generated code
-
-        // set the interface to the middle of the window
-        this.setLocationRelativeTo(null);
-        this.setTitle("Analyster");
-        
-        // show and hide components
-        jUpload.setVisible(false);
-        jPanelSQL.setVisible(false); 
-        jDebugEnter.setVisible(true);
-        jDebugCancel.setVisible(true);
-        jButtonCancel.setVisible(false);
-        jBatchEdit.setVisible(true);
-        jTextArea.setVisible(true);
         
         // set names to tables (this was in tabbedPanelChanged method)
         assignmentTable.setName(ASSIGNMENTS_TABLE_NAME);
@@ -108,8 +99,24 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         
         setKeyboardFocusManager();
 
-        instance = this; // this is used to call an instance of Analyster
+        // show and hide components
+        jUpload.setVisible(false);
+        jPanelSQL.setVisible(false); 
+        jDebugEnter.setVisible(true);
+        jDebugCancel.setVisible(true);
+        jButtonCancel.setVisible(false);
+        jBatchEdit.setVisible(true);
+        jTextArea.setVisible(true);
 
+        // set title of window to Analyster
+        this.setTitle("Analyster");
+        
+        // initialize loadTables
+        loadTables = new LoadTables();
+        
+        // create a login window instance
+        loginWindow = new LoginWindow(this);
+        
     }
 
     /**
@@ -243,6 +250,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        recordsLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         recordsLabel.setText("jLabel1");
 
         javax.swing.GroupLayout addPanel_controlLayout = new javax.swing.GroupLayout(addPanel_control);
@@ -751,8 +759,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-06-26" + "\n"
-                + "Version: " + "0.6.5");
+                + "2015-07-1" + "\n"
+                + "Version: " + "0.6.5c");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
@@ -786,15 +794,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         
         String selectedField = textForSearch.getText();  // store string from text box
         
-        if(selectedTab.equals(ASSIGNMENTS_TABLE_NAME) || selectedTab.equals(REPORTS_TABLE_NAME) || selectedTab.equals(ARCHIVE_TABLE_NAME)){
+        try{
             TableRowFilterSupport.forTable(tabs.get(selectedTab).getTable()).actions(true).apply().apply(columnIndex, selectedField);
             GUI.columnFilterStatus(columnIndex, tabs.get(selectedTab).getFilter().getTable());
             // set label record information
             recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-        }else{
-            throwUnknownTableException(selectedTab);
-        }
-        
+            
+        }catch(NullPointerException e){
+            throwUnknownTableException(selectedTab, e);
+        }    
     }
     
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -816,35 +824,14 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private void jUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadActionPerformed
         // upload two tables separately
         
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        switch (selectedTab) {
-            case (ASSIGNMENTS_TABLE_NAME):
-                updateTable(assignmentTable, modifiedDataList);
-                break;
-            case (REPORTS_TABLE_NAME):
-                updateTable(reportTable, modifiedDataList);
-                break;
-            case (ARCHIVE_TABLE_NAME):
-                updateTable(archiveAssignTable, modifiedDataList);
-                break;
-        }
+        String selectedTab = getSelectedTab();
+        
+        updateTable(tabs.get(selectedTab).getTable(), modifiedDataList);
 
         if (GUI.isIsFiltering()) {
 //            loadPrevious(selectedTab);
-        } else {
-            switch (selectedTab) {
-                case (ASSIGNMENTS_TABLE_NAME):
-                    loadTables.loadAssignmentTable();
-                    break;
-                case (REPORTS_TABLE_NAME):
-                    loadTables.loadReportTable();
-                    break;
-                case (ARCHIVE_TABLE_NAME):
-                    loadTables.loadArchiveAssignTable();
-                    break;
-//                case ("Viewer"):
-//                    loadTables.loadAssignmentTable();
-            }
+        } else {         
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
         }
         getModifiedDataList().clear();    // reset the arraylist to record future changes
         setLastUpdateTime();    // update time
@@ -929,17 +916,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         if (GUI.isIsFiltering()) {
             loadPrevious(selectedTab);
         } else {
-            switch (selectedTab) {
-                case (ASSIGNMENTS_TABLE_NAME):
-                    loadTables.loadAssignmentTable();
-                    break;
-                case (REPORTS_TABLE_NAME):
-                    loadTables.loadReportTable();
-                    break;
-                case (ARCHIVE_TABLE_NAME):
-                    loadTables.loadArchiveAssignTable();
-                    break;
-            }
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
         }
         makeTableEditable();
 
@@ -953,14 +930,14 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(REPORTS_TABLE_NAME).setColWidthPercent(columnWidthPercentage2);
         tabs.get(ARCHIVE_TABLE_NAME).setColWidthPercent(columnWidthPercentage1);
         
-        if(selectedTab.equals(ASSIGNMENTS_TABLE_NAME) || selectedTab.equals(REPORTS_TABLE_NAME) || selectedTab.equals(ARCHIVE_TABLE_NAME)){
+        try{
             loadTables.loadAssignmentTableWithFilter(tabs.get(selectedTab).getFilter().getColumnIndex(), tabs.get(selectedTab).getFilter().getFilterCriteria());
             setColumnFormat(tabs.get(selectedTab).getColWidthPercent(), tabs.get(selectedTab).getTable());
             GUI.columnFilterStatus(tabs.get(selectedTab).getFilter().getColumnIndex(), tabs.get(selectedTab).getTable());
             // set label record information
             recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-        }else{
-            throwUnknownTableException(selectedTab);
+        }catch(NullPointerException e){
+            throwUnknownTableException(selectedTab, e);
         }
     }
     
@@ -995,9 +972,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 break;
         }
         
-        if(selectedTab.equals("unknown")){
-            throwUnknownTableException(selectedTab);
-        }else{
+        try{
             if (isFilterActive) {
             tabs.get(selectedTab).setTable(tabs.get(selectedTab).getFilteredTable());
             } else {
@@ -1007,6 +982,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             
             // set label record information
             recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
+        }catch(NullPointerException e){
+            throwUnknownTableException(selectedTab, e);
         }
     }
 
@@ -1049,35 +1026,36 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         switch (n) {
             case 0: {               // Reconnect
-                new LoginWindow(this).setVisible(true);
+                
+                // hide Analyster
+                this.setVisible(false);
+                
+                // show login window
+                loginWindow.setVisible(true);
+
                 break;
             }
             case 1:
-                System.exit(1); // Quit
+                System.exit(0); // Quit
         }
     }//GEN-LAST:event_jMenuItemLogOffActionPerformed
 
     private void jDeleteRecordActionPerformed(java.awt.event.ActionEvent evt) {
         DeleteRecord deleteRecord = new DeleteRecord();
-        JTable table = null;
-        String tableName = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
+        String selectedTab = getSelectedTab();
         String sqlDelete;
 
-        if (null != tableName) {
-            switch (tableName) {
-                case ASSIGNMENTS_TABLE_NAME:
-                    table = assignmentTable;
-                    break;
-                case REPORTS_TABLE_NAME:
-                    table = reportTable;
-                    break;
-                default:
-                    table = archiveAssignTable;
-                    break;
-            }
-        }
-       sqlDelete = deleteRecord.deleteRecordSelected(table);
-       logwind.sendMessages(sqlDelete);
+       try{
+            sqlDelete = deleteRecord.deleteRecordSelected(tabs.get(selectedTab).getTable());
+            logwind.sendMessages(sqlDelete);
+            
+            // set label record information
+            tabs.get(selectedTab).subtractFromTotalRowCount(1); // update total row count
+            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); // update label
+            
+        }catch(NullPointerException e){
+            throwUnknownTableException(selectedTab, e);
+        } 
     }
 
 
@@ -1096,14 +1074,14 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
                 GUI.filterAssignmentIsActive = false;
-                loadTables.loadAssignmentTable();
+                loadTables.loadTable(tabs.get(selectedTab).getTable());
                 GUI.cleanAllColumnFilterStatus(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable());
                 // set label record information
                 recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
                 break;
             case REPORTS_TABLE_NAME:
                 GUI.filterReportIstActive = false;
-                loadTables.loadReportTable();
+                loadTables.loadTable(tabs.get(selectedTab).getTable());
                 tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply());
                 tabs.get(REPORTS_TABLE_NAME).getFilter().getTable();
                 GUI.cleanAllColumnFilterStatus(tabs.get(REPORTS_TABLE_NAME).getTable());
@@ -1112,7 +1090,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 break;
             case ARCHIVE_TABLE_NAME:
                 GUI.filterArchiveIsActive = false;
-                loadTables.loadArchiveAssignTable();
+                loadTables.loadTable(tabs.get(selectedTab).getTable());
                 tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply());
                 tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable();
                 GUI.cleanAllColumnFilterStatus(tabs.get(ARCHIVE_TABLE_NAME).getTable());
@@ -1130,15 +1108,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         String selectedTab = getSelectedTab();
         
         if (selectedTab.equals(ASSIGNMENTS_TABLE_NAME)) {
-            loadTables.loadAssignmentTable();
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
         } else if (selectedTab.equals(REPORTS_TABLE_NAME)) {
-            loadTables.loadReportTable();
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
             tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply());
             tabs.get(REPORTS_TABLE_NAME).getFilter().getTable();
             // set label record information
             recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
         } else {
-            loadTables.loadArchiveAssignTable();
+            loadTables.loadTable(tabs.get(selectedTab).getTable());
             tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply());
             tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable();
             // set label record information
@@ -1256,7 +1234,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
     public void loadData() {
         loadTables = new LoadTables();
-        loadTables.loadTables();
+        loadTables.loadTables(tabs);
          //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
                     //assignmentFiltered = filterTempAssignment.getTable(); 
         tabs.get(ASSIGNMENTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable()).actions(true).apply());
@@ -1480,18 +1458,21 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     /**
      * This method handles unknown table exceptions
      * It takes the value of the selected tab that caused the exception
+     * It also takes the exception to print the stack trace
      * @param selectedTab
      */
-    public void throwUnknownTableException(String selectedTab) {
+    public void throwUnknownTableException(String selectedTab, Exception e) {
         try {
             String errorMessage = "ERROR: unknown table: " + selectedTab;
             throw new NoSuchFieldException(errorMessage);
         } catch (NoSuchFieldException ex) {
+            ex.setStackTrace(e.getStackTrace());
             ex.printStackTrace();
             // post to log.txt
             getLogwind().sendMessages(ex.getMessage());
         }
     }
+    
 
     // Keep the float in Table Editor by separating editing part out here
     public void batchEdit(TableEditor editor) {
@@ -1627,6 +1608,21 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         );
     }
 
+    /**
+     * Creates a new login window instance and waits for it to either 
+     * connect to the database or terminate the running application
+     */
+    public void displayLoginWindow(){
+
+        // wait for login window database connection 
+        // or termination of the application
+        synchronized(this){
+            try {
+                this.wait();
+            } catch (InterruptedException e) {e.printStackTrace();}
+        }
+    }
+    
     public UploadRecord getUploadRecordService() {
         return uploadRecordService;
     }
@@ -1752,6 +1748,12 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private String getSelectedTab() {
         return jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
     }
+
+    public LoadTables getLoadTables() {
+        return loadTables;
+    }
+    
+    
     
     // @formatter:off
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -5,18 +5,13 @@
  */
 package com.elle.analyster;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.*;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
 
 
@@ -26,7 +21,7 @@ import javax.swing.JOptionPane;
  */
 public class EditDatabaseList extends javax.swing.JFrame {
     
-    LoginWindow L = new LoginWindow();
+    LoginWindow L ;
     boolean flag = false;   // true if call this class from log in window
     
     /**

@@ -5,6 +5,7 @@
  */
 package com.elle.analyster.service;
 
+import com.elle.analyster.Analyster;
 import com.elle.analyster.GUI;
 import com.elle.analyster.LoadTables;
 
@@ -76,12 +77,12 @@ public class TableService {
     }
 
     private void loadArchiveAssignTable() {
-        new LoadTables().loadArchiveAssignTable();
+        new LoadTables().loadTable(Analyster.getInstance().getArchiveAssignTable());
 
     }
 
     private void loadAssignmentTable() {
-        new LoadTables().loadAssignmentTable();
+        new LoadTables().loadTable(Analyster.getInstance().getassignmentTable());
     }
 
     public void activateRecords() {

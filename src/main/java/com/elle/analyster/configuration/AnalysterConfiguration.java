@@ -30,8 +30,6 @@ public class AnalysterConfiguration {
         }
         
         Analyster analyster = new Analyster();
-        analyster.setVisible(true);
-        new LoginWindow(analyster).setVisible(true);
         return analyster;
     }
 
