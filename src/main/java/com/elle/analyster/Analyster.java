@@ -1458,20 +1458,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }
 
     public TableState getTableState(JTable table) {     // get TableState by jTable object
-        if (table == assignmentTable) {
-            return tabs.get(ASSIGNMENTS_TABLE_NAME).getTableState();
-        } else if (table == reportTable) {
-            return tabs.get(REPORTS_TABLE_NAME).getTableState();
-        } else if (table == archiveAssignTable) {
-            return tabs.get(ARCHIVE_TABLE_NAME).getTableState();
-        } 
-//        else if (table == viewerTable) {
-//            return viewer;
-//        } 
-        else {
-            JOptionPane.showMessageDialog(null, "TableState not found!");
-            return null;
-        }
+        return tabs.get(table.getName()).getTableState();
     }
 
     public void setLastUpdateTime() {
