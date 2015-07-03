@@ -764,8 +764,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-07-1" + "\n"
-                + "Version: " + "0.6.5c");
+                + "2015-07-2" + "\n"
+                + "Version: " + "0.6.5d");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textForSearchMouseClicked
@@ -1584,9 +1584,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     public JTable getArchiveAssignTable() {
         return archiveAssignTable;
     }
-//     JTable getViewerTable() {
-//        return viewerTable;
-//    }
 
     public JTabbedPane getjTabbedPanel1() {
         return jTabbedPanel1;
