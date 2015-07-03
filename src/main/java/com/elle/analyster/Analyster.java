@@ -1279,29 +1279,17 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         }
     }
 
+    /**
+     * This is triggered when the the column header is double clicked
+     */
     private void clearFilterDoubleClick(MouseEvent e, JTable table) {
-        
-        String selectedTab = getSelectedTab();
         
         int columnIndex = table.getColumnModel().getColumnIndexAtX(e.getX());
         
-        if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
-            tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
-            GUI.cleanColumnFilterStatus(columnIndex, tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());// clean green background
-            // set label record information
-            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-        } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
-            tabs.get(REPORTS_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(REPORTS_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
-            GUI.cleanColumnFilterStatus(columnIndex, tabs.get(REPORTS_TABLE_NAME).getFilter().getTable());// clean green background
-            // set label record information
-            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-        } else {
-            tabs.get(ARCHIVE_TABLE_NAME).getFilter().apply(columnIndex, tabs.get(ARCHIVE_TABLE_NAME).getFilter().getDistinctColumnItems(columnIndex));
-            GUI.cleanColumnFilterStatus(columnIndex, tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable());// clean green background
-            // set label record information
-            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-
-        }
+        tabs.get(table.getName()).getFilter().apply(columnIndex, tabs.get(table.getName()).getFilter().getDistinctColumnItems(columnIndex));
+        GUI.cleanColumnFilterStatus(columnIndex, tabs.get(table.getName()).getFilter().getTable());// clean green background
+        // set label record information
+        recordsLabel.setText(tabs.get(table.getName()).getRecordsLabel()); 
     }
 
     public String sqlQuery(String tableName) { //Creat Query to select * from DB.
