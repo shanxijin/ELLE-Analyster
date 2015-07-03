@@ -16,7 +16,8 @@ public interface IColumnConstants {
     final String SYMBOL_COLUMN_NAME = "Symbol";
     
     // column width percent constants
-    final float[] columnWidthPercentage1 = {35, 65, 80, 70, 99, 99};
-    final float[] columnWidthPercentage2 = {35, 65, 80, 100, 160, 120, 123};
+    final float[] COL_WIDTH_PER_ASSIGNMENTS = {35, 65, 80, 70, 99, 99};
+    final float[] COL_WIDTH_PER_REPORTS = {35, 65, 80, 100, 160, 120, 123};
+    final float[] COL_WIDTH_PER_ARCHIVE = {35, 65, 80, 70, 99, 99};
     
 }
