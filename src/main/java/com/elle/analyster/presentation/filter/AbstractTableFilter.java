@@ -77,6 +77,10 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
     @Override
     public boolean apply(int col, Object selectField) { //Create Collection from selected fields 
         Collection<DistinctColumnItem> item = new ArrayList<>();
+        
+        // handle null exceptions
+        if(selectField == null) selectField = "";
+        
         DistinctColumnItem distinctColumnItem =new DistinctColumnItem(selectField, col);
         item.add(distinctColumnItem);
         return apply(col, item);

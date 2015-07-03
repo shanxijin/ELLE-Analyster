@@ -81,7 +81,14 @@ class TableFilterState implements Serializable {
         for( int col=0; col< entry.getValueCount(); col++ ) {
             Collection<DistinctColumnItem> values = getValues(col);
             if ( CollectionUtils.isEmpty(values) ) continue; // no filtering for this column
-            if ( !values.contains( new DistinctColumnItem( entry.getValue(col), 0))) {return false;}
+            
+            // get value
+            Object value = entry.getValue(col);
+            
+            // handle null exception
+            if(entry.getValue(col) == null) value = "";
+            
+            if ( !values.contains( new DistinctColumnItem( value, 0))) {return false;}
         }
         return true;
         

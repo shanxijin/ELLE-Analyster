@@ -256,7 +256,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         );
 
         recordsLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        recordsLabel.setText("jLabel1");
+        recordsLabel.setText("recordsLabel");
 
         javax.swing.GroupLayout addPanel_controlLayout = new javax.swing.GroupLayout(addPanel_control);
         addPanel_control.setLayout(addPanel_controlLayout);
@@ -272,7 +272,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                     .addGroup(addPanel_controlLayout.createSequentialGroup()
                         .addGap(258, 258, 258)
                         .addComponent(jTimeLastUpdate)))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         addPanel_controlLayout.setVerticalGroup(
             addPanel_controlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -547,7 +547,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                     .addComponent(jDebugEnter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(closeDebugPanelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(4, 4, 4)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE))
         );
         jPanelSQLLayout.setVerticalGroup(
             jPanelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -569,8 +569,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 896, Short.MAX_VALUE)
-            .addComponent(jPanelEdit, javax.swing.GroupLayout.DEFAULT_SIZE, 896, Short.MAX_VALUE)
+            .addComponent(jTabbedPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 894, Short.MAX_VALUE)
+            .addComponent(jPanelEdit, javax.swing.GroupLayout.DEFAULT_SIZE, 894, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jPanelSQL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(4, 4, 4))
@@ -1279,8 +1279,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
     public void filterByDoubleClick(JTable table) {
         
-        int[] columnIndex = table.getColumnModel().getSelectedColumns();
-        int rowIndex = table.getSelectedRow();
+        // why this array? -> it always passes columnIndex[0] and the length = 1
+        int[] columnIndex = table.getColumnModel().getSelectedColumns(); // this returns the column index
+        int rowIndex = table.getSelectedRow(); // this returns the row index
         if (rowIndex != -1) {
             Object selectedField = table.getValueAt(rowIndex, columnIndex[0]);
             // apply filter
