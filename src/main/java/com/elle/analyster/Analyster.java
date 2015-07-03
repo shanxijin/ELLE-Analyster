@@ -1184,28 +1184,18 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         int row = e.getFirstRow();
         int col = e.getColumn();
-        int id = 0;
-        Object value = null;
-        String tableName = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        switch (tableName) {
-            case ASSIGNMENTS_TABLE_NAME:
-                id = (Integer) assignmentTable.getModel().getValueAt(row, 0);
-                value = assignmentTable.getModel().getValueAt(row, col);
-                break;
-            case REPORTS_TABLE_NAME:
-                id = (Integer) reportTable.getModel().getValueAt(row, 0);
-                value = reportTable.getModel().getValueAt(row, col);
-                break;
-            case ARCHIVE_TABLE_NAME:
-                id = (Integer) archiveAssignTable.getModel().getValueAt(row, 0);
-                value = archiveAssignTable.getModel().getValueAt(row, col);
-                break;
-        }
+        int id;
+        Object value;
+        
+        String selectedTab = getSelectedTab();
+        
+        id = (Integer) tabs.get(selectedTab).getTable().getModel().getValueAt(row, 0);
+        value = tabs.get(selectedTab).getTable().getModel().getValueAt(row, col);
 
         ModifiedData modifiedData = new ModifiedData();
         modifiedData.setColumnIndex(col);
         modifiedData.setId(id);
-        modifiedData.setTableName(tableName);
+        modifiedData.setTableName(selectedTab);
         modifiedData.setValueModified(value);
         modifiedDataList.add(modifiedData);
     }
