@@ -1201,12 +1201,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }
 
     public void loadData() {
-        loadTables = new LoadTables();
         loadTables.loadTables(tabs);
-         //filterTempAssignment = TableRowFilterSupport.forTable(assignmentTable).actions(true).apply();
-                    //assignmentFiltered = filterTempAssignment.getTable(); 
-        tabs.get(ASSIGNMENTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable()).actions(true).apply());
-        tabs.get(ASSIGNMENTS_TABLE_NAME).setFilteredTable(tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());
     }
 
     public void setTerminalsFunction(final JTable table) { //set all listenner for JTable.
