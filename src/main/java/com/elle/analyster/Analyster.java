@@ -1097,21 +1097,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         
         String selectedTab = getSelectedTab();
         
-        if (selectedTab.equals(ASSIGNMENTS_TABLE_NAME)) {
-            loadTables.loadTable(tabs.get(selectedTab).getTable());
-        } else if (selectedTab.equals(REPORTS_TABLE_NAME)) {
-            loadTables.loadTable(tabs.get(selectedTab).getTable());
-            tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply());
-            tabs.get(REPORTS_TABLE_NAME).getFilter().getTable();
-            // set label record information
-            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-        } else {
-            loadTables.loadTable(tabs.get(selectedTab).getTable());
-            tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply());
-            tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable();
-            // set label record information
-            recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-        }
+        loadTables.loadTable(tabs.get(selectedTab).getTable());
+        // set label record information
+        recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
     }//GEN-LAST:event_jMenuItemOthersLoadDataActionPerformed
 
     private void jArchiveRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jArchiveRecordActionPerformed

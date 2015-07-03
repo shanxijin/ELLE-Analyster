@@ -102,10 +102,10 @@ public class LoadTables implements ITableNameConstants{
         ana.setColumnFormat(ana.getTabs().get(table.getName()).getColWidthPercent(), table);
         ana.getTabs().get(table.getName()).getTableState().init(table, new String[]{"Symbol", "Analyst"});
           
-        // the first tab filter has to be initialized
-        // this prevents a bug from a search before the first tab changes state
-        // for the first time. The changePanelState method in Analyster
-        // handles the rest. This is just temporary while refactoring for now.
+        // I am thinking that these filters should be set here and not in analyster
+        // they had it mixed up some here and some in analyster
+        // this will make refactoring much better
+        // the code will be in one place rather than many places.
         tabs.get(table.getName()).setFilter(TableRowFilterSupport.forTable(tabs.get(table.getName()).getTable()).actions(true).apply());
         tabs.get(table.getName()).setFilteredTable(tabs.get(table.getName()).getFilter().getTable());
             
