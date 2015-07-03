@@ -17,24 +17,24 @@ import javax.swing.border.LineBorder;
  *
  * @author danielabecker //
  */
-public class AnalysterTableCellEditor extends DefaultCellEditor {
-
-    public AnalysterTableCellEditor(JTextField textField) {
-        super(textField);
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-
-        JTextField jTexfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
-        if (isSelected == true) {
-            ((JComponent) getComponent()).setBorder(new LineBorder(Color.black));
-            jTexfield.setText("");
-            return jTexfield;
-        } else {
-            ((JComponent) getComponent()).setBorder(new LineBorder(Color.black));
-            return jTexfield;
-        }
-    }
-}
+//public class AnalysterTableCellEditor extends DefaultCellEditor {
+//
+//    public AnalysterTableCellEditor(JTextField textField) {
+//        super(textField);
+//    }
+//
+//    @Override
+//    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+//
+//        JTextField jTexfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+//        if (isSelected == true) {
+//            ((JComponent) getComponent()).setBorder(new LineBorder(Color.black));
+//            jTexfield.setText("");
+//            return jTexfield;
+//        } else {
+//            ((JComponent) getComponent()).setBorder(new LineBorder(Color.black));
+//            return jTexfield;
+//        }
+//    }
+//}
 
