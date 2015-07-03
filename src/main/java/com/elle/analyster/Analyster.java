@@ -1266,33 +1266,16 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }
 
     public void filterByDoubleClick(JTable table) {
-
-        String selectedTab = getSelectedTab();
         
         int[] columnIndex = table.getColumnModel().getSelectedColumns();
         int rowIndex = table.getSelectedRow();
         if (rowIndex != -1) {
             Object selectedField = table.getValueAt(rowIndex, columnIndex[0]);
-            if (table.getName().equals(ASSIGNMENTS_TABLE_NAME)) {
-                tabs.get(ASSIGNMENTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ASSIGNMENTS_TABLE_NAME).getTable()).actions(true).apply()); 
-                tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
-                GUI.columnFilterStatus(columnIndex[0], tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter().getTable());
-                // set label record information
-                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-            } else if (table.getName().equals(REPORTS_TABLE_NAME)) {
-                tabs.get(REPORTS_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(REPORTS_TABLE_NAME).getTable()).actions(true).apply()); 
-                tabs.get(REPORTS_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
-                GUI.columnFilterStatus(columnIndex[0], tabs.get(REPORTS_TABLE_NAME).getFilter().getTable());
-                // set label record information
-                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-            } else {
-                tabs.get(ARCHIVE_TABLE_NAME).setFilter(TableRowFilterSupport.forTable(tabs.get(ARCHIVE_TABLE_NAME).getTable()).actions(true).apply()); 
-                tabs.get(ARCHIVE_TABLE_NAME).getFilter().apply(columnIndex[0], selectedField);
-                GUI.columnFilterStatus(columnIndex[0], tabs.get(ARCHIVE_TABLE_NAME).getFilter().getTable());
-                // set label record information
-                recordsLabel.setText(tabs.get(selectedTab).getRecordsLabel()); 
-
-            }
+            // apply filter
+            tabs.get(table.getName()).getFilter().apply(columnIndex[0], selectedField);
+            GUI.columnFilterStatus(columnIndex[0], tabs.get(table.getName()).getFilter().getTable());
+            // set label record information
+            recordsLabel.setText(tabs.get(table.getName()).getRecordsLabel()); 
         }
     }
 
