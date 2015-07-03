@@ -120,6 +120,10 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
         Set<DistinctColumnItem> result = new TreeSet<DistinctColumnItem>(); // to collect unique items
         for (int row = 0; row < table.getModel().getRowCount(); row++) {
             Object value = table.getModel().getValueAt(row, column);
+            
+            // handle null exception
+            if(value == null)value = "";
+            
             result.add(new DistinctColumnItem(value, row));
         }
         return result;
