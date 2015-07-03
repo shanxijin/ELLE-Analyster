@@ -1513,21 +1513,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         }
         );
     }
-
-    /**
-     * Creates a new login window instance and waits for it to either 
-     * connect to the database or terminate the running application
-     */
-    public void displayLoginWindow(){
-
-        // wait for login window database connection 
-        // or termination of the application
-        synchronized(this){
-            try {
-                this.wait();
-            } catch (InterruptedException e) {e.printStackTrace();}
-        }
-    }
     
     public UploadRecord getUploadRecordService() {
         return uploadRecordService;
