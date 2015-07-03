@@ -254,7 +254,7 @@
                           <Component id="jTimeLastUpdate" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="86" max="32767" attributes="0"/>
+                  <EmptySpace pref="84" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -369,8 +369,8 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jTabbedPanel1" pref="896" max="32767" attributes="0"/>
-              <Component id="jPanelEdit" alignment="0" pref="896" max="32767" attributes="0"/>
+              <Component id="jTabbedPanel1" pref="894" max="32767" attributes="0"/>
+              <Component id="jPanelEdit" alignment="0" pref="894" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jPanelSQL" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
@@ -736,7 +736,7 @@
                           <Component id="closeDebugPanelBtn" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="812" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="810" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

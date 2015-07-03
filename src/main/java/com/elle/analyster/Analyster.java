@@ -1063,8 +1063,20 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         loadData();
     }//GEN-LAST:event_jMenuItemViewAllAssigActionPerformed
 
+    // load only active data from analyst
     private void jMenuItemViewActiveAssigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemViewActiveAssigActionPerformed
-        loadActiveData();
+        log.info("Connection");
+        String sqlC = "select A.* from Assignments A left join t_analysts T\n" + "on A.analyst = T.analyst\n" + "where T.active = 1\n" + "order by A.symbol";
+        try {
+            connection(sqlC, assignmentTable);
+        } catch (SQLException e) {
+            logwind.sendMessages(e.getMessage());  
+        }
+
+        setColumnFormat(tabs.get(ASSIGNMENTS_TABLE_NAME).getColWidthPercent(), assignmentTable);
+        tabs.get(ASSIGNMENTS_TABLE_NAME).getTableState().init(assignmentTable, new String[]{"Symbol", "Analyst"});
+        // set label record information
+        recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
     }//GEN-LAST:event_jMenuItemViewActiveAssigActionPerformed
 
     private void jButtonClearAllFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearAllFilterActionPerformed
@@ -1296,26 +1308,6 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         log.info("Connection");
         String SqlQuery = "SELECT * FROM " + tableName + " ORDER BY symbol ASC";
         return SqlQuery;
-    }
-
-    /**
-     * This says load active data
-     * but it only looks like it is loading assignments tab
-     */
-    public void loadActiveData() {// load only active data from analyst
-        log.info("Connection");
-        String sqlC = "select A.* from Assignments A left join t_analysts T\n" + "on A.analyst = T.analyst\n" + "where T.active = 1\n" + "order by A.symbol";
-        try {
-            connection(sqlC, assignmentTable);
-        } catch (SQLException e) {
-            logwind.sendMessages(e.getMessage());  
-        }
-
-        setColumnFormat(tabs.get(ASSIGNMENTS_TABLE_NAME).getColWidthPercent(), assignmentTable);
-        tabs.get(ASSIGNMENTS_TABLE_NAME).getTableState().init(assignmentTable, new String[]{"Symbol", "Analyst"});
-        // set label record information
-        recordsLabel.setText(tabs.get(ASSIGNMENTS_TABLE_NAME).getRecordsLabel()); 
-
     }
 
     public void tableReload(final JTable table, Vector data, Vector columnNames) {
