@@ -1448,15 +1448,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }
 
     public JTable getSelectedTable() {  //get JTable by  selected Tab
-        String selectedTab = jTabbedPanel1.getTitleAt(jTabbedPanel1.getSelectedIndex());
-        switch (selectedTab) {
-            case ASSIGNMENTS_TABLE_NAME:
-                return assignmentTable;
-            case REPORTS_TABLE_NAME:
-                return reportTable;
-            default:
-                return archiveAssignTable;
-        }
+        String selectedTab = getSelectedTab();
+        return tabs.get(selectedTab).getTable();
     }
 
     public TableState getTableState() {                 // get TableState by selected Tab
