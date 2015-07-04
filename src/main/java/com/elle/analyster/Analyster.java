@@ -827,7 +827,20 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void btnUploadChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadChangesActionPerformed
-        // upload two tables separately
+
+        uploadChanges();
+    }//GEN-LAST:event_btnUploadChangesActionPerformed
+
+    /**
+     * This uploads changes made by editing and saves the changes
+     * by uploading them to the database.
+     * This method is called by:
+     * btnUploadChangesActionPerformed(java.awt.event.ActionEvent evt) 
+     * and also a keylistener when editing mode is on and enter is pressed
+     */
+    public void uploadChanges(){
+        
+         // upload two tables separately
         
         String selectedTab = getSelectedTab();
         
@@ -841,9 +854,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         getModifiedDataList().clear();    // reset the arraylist to record future changes
         setLastUpdateTime();    // update time
         makeTableEditable();
-
-    }//GEN-LAST:event_btnUploadChangesActionPerformed
-
+    }
+    
     private void jMenuItemOtherReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOtherReportActionPerformed
 //        new ReportWin();// Create Report
     }//GEN-LAST:event_jMenuItemOtherReportActionPerformed
@@ -1216,7 +1228,13 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         loadTables.loadTables(tabs);
     }
 
-    public void setTerminalsFunction(final JTable table) { //set all listenner for JTable.
+    /**
+     * This adds mouselisteners and keylisteners to tables.
+     * @param table 
+     */
+    public void setTerminalsFunction(final JTable table) { 
+        
+        // this adds a mouselistener to the table header
         header = table.getTableHeader();
         if (header != null) {
             header.addMouseListener(new MouseAdapter() {
@@ -1227,18 +1245,52 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                             clearFilterDoubleClick(e, table);
                         }
                     } else if (e.getClickCount() == 1) {
-
+                        // why is nothing here?
+                        // Shouldnt this order the columns?
+                        // or perhaps it is already a built in feature to the JTable?
                     }
                 }
             });
         }
+        
         table.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_F2) {
                     makeTableEditable();
-                } else if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-//                    GUI.isChangesUploaded=true;
+                } 
+                
+                // in editing mode this should ask to upload changes when enter key press
+                if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                    
+                    // make sure in editing mode
+                    if(jLabelEdit.getText().equals("ON ")){
+
+                        // if finished display dialog box
+                        // Upload Changes? Yes or No?
+                        Object[] options = {"YES", "NO"};  // the titles of buttons
+
+                        int selectedOption = JOptionPane.showOptionDialog(Analyster.getInstance(), 
+                                "Would you like to upload changes?", "Upload Changes",
+                                JOptionPane.YES_NO_OPTION, 
+                                JOptionPane.QUESTION_MESSAGE,
+                                null, //do not use a custom Icon
+                                options, //the titles of buttons
+                                options[0]); //default button title
+
+                        switch (selectedOption) {
+                            case 0:            
+                                // if YES, upload changes and return to editing
+                                uploadChanges();
+                                break;
+                            case 1:
+                                // if NO, return to editing
+                                break;
+                            default:
+                                // do nothing
+                                break;
+                        }   
+                    }
                 }
             }
         }
@@ -1247,14 +1299,41 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                 new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if (e.getClickCount() == 2) {
-                            filterByDoubleClick(table);
-                        } else if (e.getClickCount() == 1) {
-                            if (jLabelEdit.getText().equals("ON ")) {
-                                selectAllText(e);
+                        
+                        // if left mouse clicks
+                        if(SwingUtilities.isLeftMouseButton(e)){
+                            if (e.getClickCount() == 2 ) {
+                                filterByDoubleClick(table);
+                            } else if (e.getClickCount() == 1) {
+                                if (jLabelEdit.getText().equals("ON ")) {
+                                    selectAllText(e);
+                                }
                             }
-                        }
-                    }
+                        } // end if left mouse clicks
+                        
+                        // if right mouse clicks
+                        else if(SwingUtilities.isRightMouseButton(e)){
+                            if (e.getClickCount() == 2 ) {
+                                
+                                // make table editable
+                                makeTableEditable();
+                                
+                                // get selected cell
+                                int columnIndex = table.columnAtPoint(e.getPoint()); // this returns the column index
+                                int rowIndex = table.rowAtPoint(e.getPoint()); // this returns the row index
+                                if (rowIndex != -1 && columnIndex != -1) {
+                                    
+                                    // make it the active editing cell
+                                    table.changeSelection(rowIndex, columnIndex, false, false);
+                                    
+                                    selectAllText(e);
+
+                                } // end not null condition
+                                
+                            } // end if 2 clicks 
+                        } // end if right mouse clicks
+                        
+                    }// end mouseClicked
 
                     private void selectAllText(MouseEvent e) {// Select all text inside jTextField
 
@@ -1279,14 +1358,13 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
     public void filterByDoubleClick(JTable table) {
         
-        // why this array? -> it always passes columnIndex[0] and the length = 1
-        int[] columnIndex = table.getColumnModel().getSelectedColumns(); // this returns the column index
+        int columnIndex = table.getSelectedColumn(); // this returns the column index
         int rowIndex = table.getSelectedRow(); // this returns the row index
         if (rowIndex != -1) {
-            Object selectedField = table.getValueAt(rowIndex, columnIndex[0]);
+            Object selectedField = table.getValueAt(rowIndex, columnIndex);
             // apply filter
-            tabs.get(table.getName()).getFilter().apply(columnIndex[0], selectedField);
-            GUI.columnFilterStatus(columnIndex[0], tabs.get(table.getName()).getFilter().getTable());
+            tabs.get(table.getName()).getFilter().apply(columnIndex, selectedField);
+            GUI.columnFilterStatus(columnIndex, tabs.get(table.getName()).getFilter().getTable());
             // set label record information
             labelRecords.setText(tabs.get(table.getName()).getRecordsLabel()); 
         }
