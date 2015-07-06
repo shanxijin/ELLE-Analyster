@@ -1272,7 +1272,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
                         // if finished display dialog box
                         // Upload Changes? Yes or No?
-                        Object[] options = {"YES", "NO"};  // the titles of buttons
+                        Object[] options = {"Commit", "Revert"};  // the titles of buttons
 
                         int selectedOption = JOptionPane.showOptionDialog(Analyster.getInstance(), 
                                 "Would you like to upload changes?", "Upload Changes",
@@ -1284,14 +1284,19 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
                         switch (selectedOption) {
                             case 0:            
-                                // if YES, upload changes and return to editing
+                                // if Commit, upload changes and return to editing
                                 uploadChanges();
                                 break;
                             case 1:
-                                // if NO, return to editing
+                                // if Revert, revert changes
+                                
+                                //TODO
+                                // there is still no easy way to work with the tables
+                                // refactoring first would be ideal for a feasible solution
+                                
                                 break;
                             default:
-                                // do nothing
+                                // do nothing -> cancel
                                 break;
                         }   
                         
