@@ -1290,11 +1290,32 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
                                 // do nothing
                                 break;
                         }   
+                        
+                        // return to edit mode for next cell
+                        
+                        // get selected cell
+                        int columnIndex = table.getSelectedColumn(); // this returns the column index
+                        int rowIndex = table.getSelectedRow() + 1; // this returns the next row index
+                        if (rowIndex != -1 && columnIndex != -1) {
+
+                            // this highlights the next row
+                            table.changeSelection(rowIndex, columnIndex, false, false);
+
+                            // this starts editing the next cell
+                            table.editCellAt(rowIndex, columnIndex);
+                            
+                            // this selects all the text in the editing cell
+                            JTextField selectCom = (JTextField) table.getEditorComponent();
+                            if (selectCom != null) {
+                                selectCom.requestFocusInWindow();
+                                selectCom.selectAll();
+                            }
+                        }
                     }
                 }
             }
-        }
-        );
+        });
+        
         table.addMouseListener(
                 new MouseAdapter() {
                     @Override
