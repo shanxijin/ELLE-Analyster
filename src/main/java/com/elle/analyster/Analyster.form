@@ -121,16 +121,19 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemViewAssig">
               <Properties>
                 <Property name="text" type="java.lang.String" value="View Assignments Columns"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemViewReports">
               <Properties>
                 <Property name="text" type="java.lang.String" value="View Reports Columns"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemViewAllAssig">
               <Properties>
                 <Property name="text" type="java.lang.String" value="View All Assignments"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemViewAllAssigActionPerformed"/>
@@ -139,6 +142,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemViewActiveAssig">
               <Properties>
                 <Property name="text" type="java.lang.String" value="View Active Assigments"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemViewActiveAssigActionPerformed"/>

@@ -678,12 +678,15 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         jMenuView.setText("View");
 
         jMenuItemViewAssig.setText("View Assignments Columns");
+        jMenuItemViewAssig.setEnabled(false);
         jMenuView.add(jMenuItemViewAssig);
 
         jMenuItemViewReports.setText("View Reports Columns");
+        jMenuItemViewReports.setEnabled(false);
         jMenuView.add(jMenuItemViewReports);
 
         jMenuItemViewAllAssig.setText("View All Assignments");
+        jMenuItemViewAllAssig.setEnabled(false);
         jMenuItemViewAllAssig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemViewAllAssigActionPerformed(evt);
@@ -692,6 +695,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         jMenuView.add(jMenuItemViewAllAssig);
 
         jMenuItemViewActiveAssig.setText("View Active Assigments");
+        jMenuItemViewActiveAssig.setEnabled(false);
         jMenuItemViewActiveAssig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemViewActiveAssigActionPerformed(evt);
