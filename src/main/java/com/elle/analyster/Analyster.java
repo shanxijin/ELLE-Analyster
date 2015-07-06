@@ -41,6 +41,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     Map<String,Tab> tabs = new HashMap<>(); // stores individual tab information
 
     private final TableService tableService = new TableService();
+    private TableRowFilterSupport tableRowFilterSupport;
     private LoadTables loadTables;
     private JTableHeader header;
     
@@ -804,7 +805,21 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         String selectedField = textFieldForSearch.getText();  // store string from text box
         
         try{
-            TableRowFilterSupport.forTable(tabs.get(selectedTab).getTable()).actions(true).apply().apply(columnIndex, selectedField);
+
+            // new tableRowFilterSupport instance and takes table to set filter
+            tableRowFilterSupport = new TableRowFilterSupport(tabs.get(selectedTab).getTable());
+            
+            // set actions visible to true
+            tableRowFilterSupport.setActionsVisible(true);
+            
+            // apply changes to tableRowFilterSupport
+            // This method still needs refactoring -> legacy code
+            tableRowFilterSupport.apply();
+            
+            // apply changes to filter
+            tableRowFilterSupport.getFilter().apply(columnIndex, selectedField);
+            
+            
             GUI.columnFilterStatus(columnIndex, tabs.get(selectedTab).getFilter().getTable());
             // set label record information
             labelRecords.setText(tabs.get(selectedTab).getRecordsLabel()); 
@@ -992,7 +1007,21 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             if (isFilterActive) {
             tabs.get(selectedTab).setTable(tabs.get(selectedTab).getFilteredTable());
             } else {
-                tabs.get(selectedTab).setFilter(TableRowFilterSupport.forTable(tabs.get(selectedTab).getTable()).actions(true).apply());
+                
+                // new tableRowFilterSupport instance and takes table to set filter
+                tableRowFilterSupport = new TableRowFilterSupport(tabs.get(selectedTab).getTable());
+
+                // set actions visible to true
+                tableRowFilterSupport.setActionsVisible(true);
+
+                // apply changes to tableRowFilterSupport
+                // This method still needs refactoring -> legacy code
+                tableRowFilterSupport.apply();
+
+                // set filter to tabs table
+                tabs.get(selectedTab).setFilter(tableRowFilterSupport.getFilter());
+                
+                // set filtered table in tabs using the filter to filter and return table
                 tabs.get(selectedTab).setFilteredTable(tabs.get(selectedTab).getFilter().getTable());
             }
             
