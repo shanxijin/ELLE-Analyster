@@ -121,11 +121,8 @@ public class LoadTables implements ITableNameConstants{
         tabs.get(table.getName()).setFilteredTable(tabs.get(table.getName()).getFilter().getTable());
             
         // this enables or disables the menu components for this tab
-        // this code still needs to be refactored.
-        if(table.getName().equals(ASSIGNMENTS_TABLE_NAME)){
-            ana.getjActivateRecord().setEnabled(false); 
-            ana.getjArchiveRecord().setEnabled(true); 
-        }
+        ana.getjActivateRecord().setEnabled(tabs.get(table.getName()).isActivateRecordMenuItemEnabled()); 
+        ana.getjArchiveRecord().setEnabled(tabs.get(table.getName()).isArchiveRecordMenuItemEnabled()); 
         
         return table;
     }

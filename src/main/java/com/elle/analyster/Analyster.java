@@ -103,6 +103,16 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         tabs.get(REPORTS_TABLE_NAME).setColWidthPercent(COL_WIDTH_PER_REPORTS);
         tabs.get(ARCHIVE_TABLE_NAME).setColWidthPercent(COL_WIDTH_PER_ARCHIVE);
         
+        // set Activate Records menu item enabled for each tab
+        tabs.get(ASSIGNMENTS_TABLE_NAME).setActivateRecordMenuItemEnabled(false);
+        tabs.get(REPORTS_TABLE_NAME).setActivateRecordMenuItemEnabled(false);
+        tabs.get(ARCHIVE_TABLE_NAME).setActivateRecordMenuItemEnabled(true);
+        
+        // set Archive Records menu item enabled for each tab
+        tabs.get(ASSIGNMENTS_TABLE_NAME).setArchiveRecordMenuItemEnabled(true);
+        tabs.get(REPORTS_TABLE_NAME).setArchiveRecordMenuItemEnabled(false);
+        tabs.get(ARCHIVE_TABLE_NAME).setArchiveRecordMenuItemEnabled(false);
+        
         setKeyboardFocusManager();
 
         // show and hide components
@@ -979,22 +989,20 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         // pointers to information
         boolean isFilterActive = false;
         
+        // this enables or disables the menu components for this tab
+        jActivateRecord.setEnabled(tabs.get(selectedTab).isActivateRecordMenuItemEnabled()); 
+        jArchiveRecord.setEnabled(tabs.get(selectedTab).isArchiveRecordMenuItemEnabled()); 
+        
         switch (selectedTab) {
             case ASSIGNMENTS_TABLE_NAME:
-                jActivateRecord.setEnabled(false);
-                jArchiveRecord.setEnabled(true);
                 isFilterActive = GUI.filterAssignmentIsActive;
                 break;
                 
             case REPORTS_TABLE_NAME:
-                jActivateRecord.setEnabled(false);
-                jArchiveRecord.setEnabled(false);
                 isFilterActive = GUI.filterReportIstActive;
                 break;
                 
             case ARCHIVE_TABLE_NAME:
-                jActivateRecord.setEnabled(true);
-                jArchiveRecord.setEnabled(false);
                 isFilterActive = GUI.filterArchiveIsActive;
                 break;
 

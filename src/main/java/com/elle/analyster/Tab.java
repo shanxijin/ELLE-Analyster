@@ -19,6 +19,10 @@ public class Tab implements ITableNameConstants{
     private float[] colWidthPercent;
     private int totalRecords;
     private int recordsShown;
+    
+    // these menu items are enabled differently for each tab
+    private boolean activateRecordMenuItemEnabled;
+    private boolean archiveRecordMenuItemEnabled;
 
     /**
      * CONSTRUCTOR
@@ -98,6 +102,27 @@ public class Tab implements ITableNameConstants{
         this.tableName = tableName;
     }
 
+    public boolean isActivateRecordMenuItemEnabled() {
+        return activateRecordMenuItemEnabled;
+    }
+
+    public void setActivateRecordMenuItemEnabled(boolean activateRecordMenuItemEnabled) {
+        this.activateRecordMenuItemEnabled = activateRecordMenuItemEnabled;
+    }
+
+    public boolean isArchiveRecordMenuItemEnabled() {
+        return archiveRecordMenuItemEnabled;
+    }
+
+    public void setArchiveRecordMenuItemEnabled(boolean archiveRecordMenuItemEnabled) {
+        this.archiveRecordMenuItemEnabled = archiveRecordMenuItemEnabled;
+    }
+
+
+    /**************************************************************************
+     *************************** Methods **************************************
+     **************************************************************************/
+    
     /**
      * This method subtracts an amount from the totalRecords value
      * This is used when records are deleted to update the totalRecords value
@@ -107,14 +132,9 @@ public class Tab implements ITableNameConstants{
         this.totalRecords = this.totalRecords - amountOfRecordsDeleted;
     }
     
-    
-    /**************************************************************************
-     *************************** Methods **************************************
-     **************************************************************************/
-    
     /**
-     * 
-     * @return 
+     * This method returns a string that displays the records.
+     * @return String This returns a string that has the records for both total and shown
      */
     public String getRecordsLabel(){
         
