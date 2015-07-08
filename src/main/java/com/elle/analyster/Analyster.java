@@ -1047,7 +1047,9 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     }//GEN-LAST:event_btnBatchEditActionPerformed
 
     private void jMenuEditDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuEditDBActionPerformed
-        new EditDatabaseList().setVisible(true);
+        EditDatabaseList editDBWindow = new EditDatabaseList();
+        editDBWindow.setLocationRelativeTo(this);
+        editDBWindow.setVisible(true);
     }//GEN-LAST:event_jMenuEditDBActionPerformed
 
     private void btnAddRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecordsActionPerformed
@@ -1196,6 +1198,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
 
         if(jCheckBoxMenuItemViewLog.isSelected()){
             
+            logwind.setLocationRelativeTo(this);
             logwind.setVisible(true); // show log window
             
             // remove check if window is closed from the window
@@ -1584,10 +1587,10 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             String uploadQuery = uploadRecordService.uploadRecord(table, modifiedDataList);
             loadPrevious(table.getName());
 
-            JOptionPane.showMessageDialog(null, "Edits uploaded!");
+            JOptionPane.showMessageDialog(this, "Edits uploaded!");
             logwind.sendMessages(uploadQuery);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Upload failed!");
+            JOptionPane.showMessageDialog(this, "Upload failed!");
             logwind.sendMessages(e.getMessage());
             logwind.sendMessages(e.getSQLState() + "\n");
         }

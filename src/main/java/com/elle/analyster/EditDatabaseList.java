@@ -38,7 +38,7 @@ public class EditDatabaseList extends javax.swing.JFrame {
         initComponents();
         L = l;
         flag = true;
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(L);
         loadList();
     }
 
