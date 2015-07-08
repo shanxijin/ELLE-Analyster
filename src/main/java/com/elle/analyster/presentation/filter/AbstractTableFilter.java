@@ -153,7 +153,7 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
     }
 
     @Override
-    public boolean includeRow(ITableFilter.Row row) {
+    public boolean includeRow(JTableFilter.Row row) {
         return filterState.include(row);
     }
 

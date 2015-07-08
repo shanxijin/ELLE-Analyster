@@ -76,7 +76,7 @@ class TableFilterState implements Serializable {
      * @param entry
      * @return true if row has to be included
      */
-    public boolean include( ITableFilter.Row entry ) {                 //////////////// Include in new data
+    public boolean include( JTableFilter.Row entry ) {                 //////////////// Include in new data
     
         for( int col=0; col< entry.getValueCount(); col++ ) {
             Collection<DistinctColumnItem> values = getValues(col);

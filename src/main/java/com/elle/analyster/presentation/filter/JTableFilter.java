@@ -127,7 +127,7 @@ public class JTableFilter extends AbstractTableFilter<JTable> {
                 return false;
             }
 
-            return includeRow(new ITableFilter.Row() {
+            return includeRow(new Row() {
 
                 @Override
                 public Object getValue(int column) {
@@ -141,6 +141,13 @@ public class JTableFilter extends AbstractTableFilter<JTable> {
 
             });
         }
+    }
+    
+    public interface Row {
+        
+        int getValueCount();
+
+        Object getValue(int column);
     }
 
 }

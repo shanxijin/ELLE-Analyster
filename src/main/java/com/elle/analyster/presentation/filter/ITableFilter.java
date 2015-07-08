@@ -36,7 +36,7 @@ public interface ITableFilter<T extends JTable> extends Serializable {
      */
     boolean isFiltered(int column);
 
-    boolean includeRow(Row entry);
+    boolean includeRow(JTableFilter.Row entry);
 
     /**
      * Apply filter for specified column based on collection of distinct items
@@ -95,12 +95,7 @@ public interface ITableFilter<T extends JTable> extends Serializable {
 
     TableModel getMyTableModelInitial();
 
-    public interface Row {
-        
-        int getValueCount();
-
-        Object getValue(int column);
-    }
+    
 
 
 }
