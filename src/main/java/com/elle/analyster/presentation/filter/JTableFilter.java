@@ -46,7 +46,7 @@ public class JTableFilter extends AbstractTableFilter<JTable> {
 
     }
 
-    @Override
+    //@Override
     public void saveTableState() {
         JTable table = this.getTable();
         tableModelPreviousState = copyTableModel(table);
@@ -69,39 +69,40 @@ public class JTableFilter extends AbstractTableFilter<JTable> {
     }
 
 
-    @Override
+    //@Override
     public MyTableModel getTableModelPreviousState() {
         return (MyTableModel)tableModelPreviousState;
     }
 
-    @Override
+    //Override
     public void saveFilterCriteria(Collection collection) {
              itemChecked = collection;
     }
 
-    @Override
+    //@Override
     public Collection<DistinctColumnItem> getFilterCriteria() {
         return itemChecked;
     }
 
-    @Override
+    //@Override
     public void modelChanged(TableModel model) {
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
         sorter.setSortsOnUpdates(true);
         getTable().setRowSorter(sorter);
     }
 
-    @Override
+    //@Override
     public void setColumnIndex(int mColumnIndex) {
         columnIndex = mColumnIndex;
 
     }
 
-    @Override
+    //@Override
     public int getColumnIndex() {
         return columnIndex;
     }
-    @Override
+    
+    //@Override
     public TableModel getMyTableModelInitial() {
         return myTableModelInitial;
     }

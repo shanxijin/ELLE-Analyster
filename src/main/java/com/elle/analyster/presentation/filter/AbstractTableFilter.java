@@ -90,12 +90,12 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
      ********************** Override Methods ***********************************
      ***************************************************************************/
     
-    @Override
+    //@Override
     public T getTable() {
         return table;
     }
 
-    @Override
+    //@Override
     public boolean apply(int col, Collection<DistinctColumnItem> items) {
         setFilterState(col, items); 
         boolean result = false;
@@ -105,7 +105,7 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
         return result;
     }
 
-    @Override
+    //@Override
     public boolean apply(int col, Object selectField) { //Create Collection from selected fields 
         Collection<DistinctColumnItem> item = new ArrayList<>();
         
@@ -116,21 +116,21 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
         item.add(distinctColumnItem);
         return apply(col, item);
     }
-    @Override
+    //@Override
     public final void addChangeListener(IFilterChangeListener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
     }
 
-    @Override
+    //@Override
     public final void removeChangeListener(IFilterChangeListener listener) {
         if (listener != null) {
             listeners.remove(listener);
         }
     }
 
-    @Override
+    //@Override
     public Collection<DistinctColumnItem> getDistinctColumnItems(int column) {
         Collection<DistinctColumnItem> result = distinctItemCache.get(column);
         if (result == null) {
@@ -141,23 +141,23 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
 
     }
 
-    @Override
+    //@Override
     public Collection<DistinctColumnItem> getFilterState(int column) {
         return filterState.getValues(column);
     }
 
-    @Override
+    //@Override
     public boolean isFiltered(int column) {
         Collection<DistinctColumnItem> checks = getFilterState(column);
         return !(CollectionUtils.isEmpty(checks)) && getDistinctColumnItems(column).size() != checks.size();
     }
 
-    @Override
+    //@Override
     public boolean includeRow(JTableFilter.Row row) {
         return filterState.include(row);
     }
 
-    @Override
+    //@Override
     public void clear() {
         filterState.clear();
         Collection<DistinctColumnItem> items = Collections.emptyList();
