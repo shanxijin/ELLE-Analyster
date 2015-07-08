@@ -17,27 +17,27 @@ import java.util.*;
  *
  * @param <T>
  */
-@SuppressWarnings("serial")
-public abstract class AbstractTableFilter<T extends JTable> {
+
+public class AbstractTableFilter {
 
     private final Set<IFilterChangeListener> listeners = Collections.synchronizedSet(new HashSet<IFilterChangeListener>());
 
     private final Map<Integer, Collection<DistinctColumnItem>> distinctItemCache
             = Collections.synchronizedMap(new HashMap<Integer, Collection<DistinctColumnItem>>());
 
-    private final T table;
-    private final TableFilterState filterState = new TableFilterState();
+    private JTable table = new JTable(); // this was Type T
+    private TableFilterState filterState = new TableFilterState();
     
     /**
      * CONSTRUCTOR
      * @param table 
      */
-    public AbstractTableFilter(T table) {
+    public AbstractTableFilter(JTable table) {
         this.table = table;
         setupDistinctItemCacheRefresh();
     }
 
-    private void setupDistinctItemCacheRefresh() {
+    public void setupDistinctItemCacheRefresh() {
         clearDistinctItemCache();
         this.table.addPropertyChangeListener("model", new PropertyChangeListener() {
             @Override
@@ -65,7 +65,10 @@ public abstract class AbstractTableFilter<T extends JTable> {
     filterState.setValues(column, values);
     }
     
-    protected abstract boolean execute(int col, Collection<DistinctColumnItem> items);
+    protected boolean execute(int col, Collection<DistinctColumnItem> items){
+        // override in JTable
+        return false;
+    }
 
     public final void fireFilterChange() {
         for (IFilterChangeListener l : listeners) {
@@ -91,7 +94,7 @@ public abstract class AbstractTableFilter<T extends JTable> {
      ***************************************************************************/
     
     //@Override
-    public T getTable() {
+    public JTable getTable() {
         return table;
     }
 

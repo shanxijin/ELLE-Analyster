@@ -8,7 +8,7 @@ import javax.swing.table.TableRowSorter;
 import java.io.Serializable;
 import java.util.Collection;
 
-public class JTableFilter extends AbstractTableFilter<JTable> {
+public class JTableFilter extends AbstractTableFilter {
 
     private static final long serialVersionUID = 1L;
     private final TableRowFilter filter = new TableRowFilter();
