@@ -83,7 +83,7 @@ public class TableRowFilterSupport {
         filter.addChangeListener(new IFilterChangeListener() {
 
             @Override
-            public void filterChanged(ITableFilter<?> filter) {
+            public void filterChanged(JTableFilter filter) {
                 table.getTableHeader().repaint();
                 table.getModel().getRowCount();
             }

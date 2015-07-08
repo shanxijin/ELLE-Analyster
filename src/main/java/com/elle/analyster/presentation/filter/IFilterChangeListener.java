@@ -4,5 +4,5 @@ public interface IFilterChangeListener {
 
     
     // this is used in AbstractTableFilter & TableRowFilterSupport
-    void filterChanged(ITableFilter<?> filter); 
+    void filterChanged(JTableFilter filter); 
 }

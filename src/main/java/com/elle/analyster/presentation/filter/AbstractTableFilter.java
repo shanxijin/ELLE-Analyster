@@ -18,7 +18,7 @@ import java.util.*;
  * @param <T>
  */
 @SuppressWarnings("serial")
-public abstract class AbstractTableFilter<T extends JTable> implements ITableFilter<T> {
+public abstract class AbstractTableFilter<T extends JTable> {
 
     private final Set<IFilterChangeListener> listeners = Collections.synchronizedSet(new HashSet<IFilterChangeListener>());
 
@@ -69,7 +69,7 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
 
     public final void fireFilterChange() {
         for (IFilterChangeListener l : listeners) {
-            l.filterChanged(AbstractTableFilter.this); // Passes T
+            l.filterChanged((JTableFilter) this); 
         }
     }
     
