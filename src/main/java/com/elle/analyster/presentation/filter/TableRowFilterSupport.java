@@ -11,7 +11,7 @@ import java.util.Collections;
 public class TableRowFilterSupport {
     
     // class attributes
-    private ITableFilter<?> filter;
+    private JTableFilter filter;
     private boolean actionsVisible;
     private int filterIconPlacement;
     private boolean useTableRenderers;
@@ -34,7 +34,7 @@ public class TableRowFilterSupport {
      ************************ Setters ***************************************
      ************************************************************************/
     
-    public void setFilter(ITableFilter<?> filter){this.filter = filter;}
+    public void setFilter(JTableFilter filter){this.filter = filter;}
     public void setActionsVisible( boolean visible ) {actionsVisible = visible;}
 
     /**
@@ -60,7 +60,7 @@ public class TableRowFilterSupport {
      ************************ Getters ***************************************
      ************************************************************************/
     
-    public ITableFilter<?> getFilter(){return filter;}
+    public JTableFilter getFilter(){return filter;}
     public boolean getActionsVisible(){return actionsVisible;}
     public int getFilterIconPlacement(){return filterIconPlacement;}
     public boolean getUseTableRenderers(){return useTableRenderers;}

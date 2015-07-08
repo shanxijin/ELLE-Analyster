@@ -33,7 +33,7 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
     private final Map<Integer, ColumnAttrs> colAttrs = new HashMap<Integer, ColumnAttrs>();
     private boolean enabled = false;
     private int mColumnIndex = -1;
-    private ITableFilter<?> filter;
+    private JTableFilter filter;
     private IObjectToStringTranslator translator;
     private boolean actionsVisible = true;
     private boolean useTableRenderers = false;
@@ -41,7 +41,7 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
     private GUI gui = new GUI();
 
     @SuppressWarnings("static-access")
-    public TableFilterColumnPopup(ITableFilter<?> filter) {
+    public TableFilterColumnPopup(JTableFilter filter) {
 
         super(true);
 
@@ -141,7 +141,7 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
         return myTableModelInitial;
     }
 
-    public ITableFilter<?> getFilter() {
+    public JTableFilter getFilter() {
         return filter;
     }
 

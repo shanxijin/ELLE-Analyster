@@ -2,5 +2,7 @@ package com.elle.analyster.presentation.filter;
 
 public interface IFilterChangeListener {
 
-    void filterChanged(ITableFilter<?> filter);
+    
+    // this is used in AbstractTableFilter & TableRowFilterSupport
+    void filterChanged(ITableFilter<?> filter); 
 }

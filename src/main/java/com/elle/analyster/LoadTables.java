@@ -11,7 +11,7 @@
 package com.elle.analyster;
 
 import com.elle.analyster.presentation.filter.DistinctColumnItem;
-import com.elle.analyster.presentation.filter.ITableFilter;
+import com.elle.analyster.presentation.filter.JTableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,7 +154,7 @@ public class LoadTables implements ITableNameConstants{
         tableRowFilterSupport.apply();
         
         // get filter and store it in a new variable
-        ITableFilter<?> filter = tableRowFilterSupport.getFilter();
+        JTableFilter filter = tableRowFilterSupport.getFilter();
         
         // apply filter changes -> not sure / legacy code / still refactoring
         ana.setFilterTempAssignment(filter);

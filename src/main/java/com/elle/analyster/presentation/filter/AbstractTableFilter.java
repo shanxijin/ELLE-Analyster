@@ -27,7 +27,11 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
 
     private final T table;
     private final TableFilterState filterState = new TableFilterState();
-
+    
+    /**
+     * CONSTRUCTOR
+     * @param table 
+     */
     public AbstractTableFilter(T table) {
         this.table = table;
         setupDistinctItemCacheRefresh();
@@ -56,13 +60,40 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
     private void clearDistinctItemCache() {
         distinctItemCache.clear();
     }
+    
+    public void setFilterState(int column, Collection<DistinctColumnItem> values) {
+    filterState.setValues(column, values);
+    }
+    
+    protected abstract boolean execute(int col, Collection<DistinctColumnItem> items);
 
+    public final void fireFilterChange() {
+        for (IFilterChangeListener l : listeners) {
+            l.filterChanged(AbstractTableFilter.this); // Passes T
+        }
+    }
+    
+    private Collection<DistinctColumnItem> collectDistinctColumnItems(int column) {
+        Set<DistinctColumnItem> result = new TreeSet<DistinctColumnItem>(); // to collect unique items
+        for (int row = 0; row < table.getModel().getRowCount(); row++) {
+            Object value = table.getModel().getValueAt(row, column);
+            
+            // handle null exception
+            if(value == null)value = "";
+            
+            result.add(new DistinctColumnItem(value, row));
+        }
+        return result;
+    }
+    
+    /***************************************************************************
+     ********************** Override Methods ***********************************
+     ***************************************************************************/
+    
     @Override
     public T getTable() {
         return table;
     }
-
-    protected abstract boolean execute(int col, Collection<DistinctColumnItem> items);
 
     @Override
     public boolean apply(int col, Collection<DistinctColumnItem> items) {
@@ -99,12 +130,6 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
         }
     }
 
-    public final void fireFilterChange() {
-        for (IFilterChangeListener l : listeners) {
-            l.filterChanged(AbstractTableFilter.this);
-        }
-    }
-
     @Override
     public Collection<DistinctColumnItem> getDistinctColumnItems(int column) {
         Collection<DistinctColumnItem> result = distinctItemCache.get(column);
@@ -114,19 +139,6 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
         }
         return result;
 
-    }
-
-    private Collection<DistinctColumnItem> collectDistinctColumnItems(int column) {
-        Set<DistinctColumnItem> result = new TreeSet<DistinctColumnItem>(); // to collect unique items
-        for (int row = 0; row < table.getModel().getRowCount(); row++) {
-            Object value = table.getModel().getValueAt(row, column);
-            
-            // handle null exception
-            if(value == null)value = "";
-            
-            result.add(new DistinctColumnItem(value, row));
-        }
-        return result;
     }
 
     @Override
@@ -143,10 +155,6 @@ public abstract class AbstractTableFilter<T extends JTable> implements ITableFil
     @Override
     public boolean includeRow(ITableFilter.Row row) {
         return filterState.include(row);
-    }
-
-    public void setFilterState(int column, Collection<DistinctColumnItem> values) {
-        filterState.setValues(column, values);
     }
 
     @Override

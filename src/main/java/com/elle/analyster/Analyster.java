@@ -3,7 +3,7 @@ package com.elle.analyster;
 import com.elle.analyster.db.ExecuteSQLStatement;
 import com.elle.analyster.domain.ModifiedData;
 import com.elle.analyster.presentation.filter.CreateDocumentFilter;
-import com.elle.analyster.presentation.filter.ITableFilter;
+import com.elle.analyster.presentation.filter.JTableFilter;
 import com.elle.analyster.presentation.filter.TableRowFilterSupport;
 import static com.elle.analyster.service.Connection.connection;
 import com.elle.analyster.service.DeleteRecord;
@@ -1671,23 +1671,23 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         this.uploadRecordService = uploadRecordService;
     }
 
-    public ITableFilter<?> getFilterTempArchive() {
+    public JTableFilter getFilterTempArchive() {
         return tabs.get(ARCHIVE_TABLE_NAME).getFilter();
     }
 
-    public void setFilterTempArchive(ITableFilter<?> filterTempArchive) {
+    public void setFilterTempArchive(JTableFilter filterTempArchive) {
         tabs.get(ARCHIVE_TABLE_NAME).setFilter(filterTempArchive);
     }
 
-    public ITableFilter<?> getFilterTempReport() {
+    public JTableFilter getFilterTempReport() {
         return tabs.get(REPORTS_TABLE_NAME).getFilter();
     }
 
-    public void setFilterTempReport(ITableFilter<?> filterTempReport) {
+    public void setFilterTempReport(JTableFilter filterTempReport) {
         tabs.get(REPORTS_TABLE_NAME).setFilter(filterTempReport);
     }
 
-    public void setFilterTempAssignment(ITableFilter<?> filterTempAssignment) {
+    public void setFilterTempAssignment(JTableFilter filterTempAssignment) {
         tabs.get(ASSIGNMENTS_TABLE_NAME).setFilter(filterTempAssignment);
     }
 
@@ -1770,7 +1770,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
         return tabs.get(ARCHIVE_TABLE_NAME).getTableState();
     }
 
-    public ITableFilter<?> getFilterTempAssignment() {
+    public JTableFilter getFilterTempAssignment() {
         return tabs.get(ASSIGNMENTS_TABLE_NAME).getFilter();
     }
     

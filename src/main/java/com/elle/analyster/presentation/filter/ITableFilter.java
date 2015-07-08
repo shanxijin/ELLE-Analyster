@@ -96,6 +96,7 @@ public interface ITableFilter<T extends JTable> extends Serializable {
     TableModel getMyTableModelInitial();
 
     public interface Row {
+        
         int getValueCount();
 
         Object getValue(int column);
