@@ -126,14 +126,6 @@ public class JTableFilter {
     }
 
     /**
-     * saveTableState
-     * called from LoadTables & TableFilterColumnPopup
-     */
-    public void saveTableState() {
-        JTable table = this.getTable();
-    }
-
-    /**
      * saveFilterCriteria
      * this method is called from LoadTables & TableFilterColumnPopup classes
      * @param collection 

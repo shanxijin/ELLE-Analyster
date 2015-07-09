@@ -130,7 +130,6 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
         myTableModelInitial = filter.getTable().getModel();
         model.filter("", translator, CheckListFilterType.CONTAINS); // clear filter to get true results
         filter.apply(mColumnIndex, checked);
-        filter.saveTableState();
         filter.saveFilterCriteria(checked);
         filter.setColumnIndex(mColumnIndex);
         gui.columnFilterStatus(mColumnIndex, filter.getTable());

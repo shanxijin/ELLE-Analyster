@@ -173,7 +173,6 @@ public class LoadTables implements ITableNameConstants{
 
         // why is this code here?
         filter.apply(columnIndex, filterCriteria);
-        filter.saveTableState();
         filter.saveFilterCriteria(filterCriteria);
         filter.setColumnIndex(columnIndex);
 
