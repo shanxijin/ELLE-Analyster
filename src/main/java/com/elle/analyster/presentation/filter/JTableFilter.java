@@ -223,17 +223,6 @@ public class JTableFilter {
     }
 
     /**
-     * removeChangeListener
-     * this method is never called
-     * @param listener 
-     */
-    public final void removeChangeListener(IFilterChangeListener listener) {
-        if (listener != null) {
-            listeners.remove(listener);
-        }
-    }
-
-    /**
      * isFiltered
      * this method is called once from FilterTableHeaderRenderer
      * @param column
