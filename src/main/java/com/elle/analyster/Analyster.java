@@ -779,8 +779,8 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
     private void jMenuItemFileVersionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileVersionActionPerformed
 
         JOptionPane.showMessageDialog(this, "Creation Date: "
-                + "2015-07-7" + "\n"
-                + "Version: " + "0.6.6a");
+                + "2015-07-9" + "\n"
+                + "Version: " + "0.6.6b");
     }//GEN-LAST:event_jMenuItemFileVersionActionPerformed
 
     private void textFieldForSearchMouseClicked(MouseEvent evt) {//GEN-FIRST:event_textFieldForSearchMouseClicked
