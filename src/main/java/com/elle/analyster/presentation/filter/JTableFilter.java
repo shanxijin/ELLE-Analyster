@@ -25,18 +25,17 @@ import javax.swing.event.TableModelListener;
 public class JTableFilter {
 
     private TableRowFilter filter = new TableRowFilter();
-    private TableModel tableModelPreviousState;
+    
     private int columnIndex = -1;
-    private TableModel  myTableModelInitial;
+    
     private Collection <DistinctColumnItem> itemChecked;
     
-    // Moved from AbstractTableFilter class
     private final Set<IFilterChangeListener> listeners = Collections.synchronizedSet(new HashSet<IFilterChangeListener>());
 
     private final Map<Integer, Collection<DistinctColumnItem>> distinctItemCache
             = Collections.synchronizedMap(new HashMap<Integer, Collection<DistinctColumnItem>>());
 
-    private JTable table = new JTable(); // this was Type T
+    private JTable table = new JTable(); 
     private TableFilterState filterState = new TableFilterState();
     
     /**
@@ -45,9 +44,8 @@ public class JTableFilter {
      * @param table 
      */
     public JTableFilter(JTable table) {
-        this.table = table; // this was abs constructor
-        setupDistinctItemCacheRefresh(); // this was abs constructor
-        myTableModelInitial  = copyTableModel(table);
+        this.table = table; 
+        setupDistinctItemCacheRefresh(); 
     }
     
     /**
@@ -133,7 +131,6 @@ public class JTableFilter {
      */
     public void saveTableState() {
         JTable table = this.getTable();
-        tableModelPreviousState = copyTableModel(table);
     }
 
     private TableModel copyTableModel(JTable table) {
