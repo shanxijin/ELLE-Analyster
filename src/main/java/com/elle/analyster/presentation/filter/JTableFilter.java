@@ -55,31 +55,23 @@ public class JTableFilter {
      * called from the constructor
      */
     public void setupDistinctItemCacheRefresh() {
-        clearDistinctItemCache();
+        distinctItemCache.clear();
         this.table.addPropertyChangeListener("model", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent e) {
-                clearDistinctItemCache();
+                distinctItemCache.clear();
                 TableModel model = (TableModel) e.getNewValue();
                 if (model != null) {
                     model.addTableModelListener(new TableModelListener() {
 
                         @Override
                         public void tableChanged(TableModelEvent e) {
-                            clearDistinctItemCache();
+                            distinctItemCache.clear();
                         }
                     });
                 }
             }
         });
-    }
-
-    /**
-     * clearDistinctItemCache
-     * called from setupDistinctItemCacheRefresh
-     */
-    private void clearDistinctItemCache() {
-        distinctItemCache.clear();
     }
 
     /**
