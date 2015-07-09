@@ -100,22 +100,12 @@ public class JTableFilter {
      * @return 
      */
     public boolean apply(int col, Collection<DistinctColumnItem> items) {
-        setFilterState(col, items); 
+        filterState.setValues(col, items); 
         boolean result = false;
         if (result = execute(col, items)) {
             fireFilterChange();
         }
         return result;
-    }
-    
-    /**
-     * setFilterState
-     * this method is called from apply
-     * @param column
-     * @param values 
-     */
-    public void setFilterState(int column, Collection<DistinctColumnItem> values) {
-    filterState.setValues(column, values);
     }
     
     /**
