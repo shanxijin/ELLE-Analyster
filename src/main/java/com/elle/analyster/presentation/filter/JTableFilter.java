@@ -199,15 +199,6 @@ public class JTableFilter {
     public int getColumnIndex() {
         return columnIndex;
     }
-
-    /**
-     * getMyTableModelInitial
-     * this method is never called
-     * @return 
-     */
-    public TableModel getMyTableModelInitial() {
-        return myTableModelInitial;
-    }
     
     /**
      * getTable
