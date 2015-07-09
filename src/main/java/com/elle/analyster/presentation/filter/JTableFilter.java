@@ -7,7 +7,6 @@ import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,6 +52,7 @@ public class JTableFilter {
     
     /**
      * setupDistinctItemCacheRefresh
+     * called from the constructor
      */
     public void setupDistinctItemCacheRefresh() {
         clearDistinctItemCache();
@@ -76,13 +76,82 @@ public class JTableFilter {
 
     /**
      * clearDistinctItemCache
+     * called from setupDistinctItemCacheRefresh
      */
     private void clearDistinctItemCache() {
         distinctItemCache.clear();
     }
 
     /**
+     * apply
+     * called from Analyster
+     * @param col
+     * @param selectField
+     * @return 
+     */
+    public boolean apply(int col, Object selectField) { //Create Collection from selected fields 
+        Collection<DistinctColumnItem> item = new ArrayList<>();
+        
+        // handle null exceptions
+        if(selectField == null) selectField = "";
+        
+        DistinctColumnItem distinctColumnItem =new DistinctColumnItem(selectField, col);
+        item.add(distinctColumnItem);
+        return apply(col, item);
+    }
+    
+    /**
+     * apply
+     * Called from Analyster, LoadTables, this, TableFilterColumnPopup
+     * @param col
+     * @param items
+     * @return 
+     */
+    public boolean apply(int col, Collection<DistinctColumnItem> items) {
+        setFilterState(col, items); 
+        boolean result = false;
+        if (result = execute(col, items)) {
+            fireFilterChange();
+        }
+        return result;
+    }
+    
+    /**
+     * setFilterState
+     * this method is called from apply
+     * @param column
+     * @param values 
+     */
+    public void setFilterState(int column, Collection<DistinctColumnItem> values) {
+    filterState.setValues(column, values);
+    }
+    
+    /**
+     * fireFilterChange
+     * this method is called from apply & clear (clear is never called)
+     */
+    public final void fireFilterChange() {
+        for (IFilterChangeListener l : listeners) {
+            l.filterChanged((JTableFilter) this); 
+        }
+    }
+    
+    /**
+     * clear
+     * this method is never called
+     */
+    public void clear() {
+        filterState.clear();
+        Collection<DistinctColumnItem> items = Collections.emptyList();
+        for (int column = 0; column < table.getModel().getColumnCount(); column++) {
+            execute(column, items);
+        }
+        fireFilterChange();
+    }
+    
+    /**
      * execute 
+     * called from apply & clear methods
      * @param col
      * @param items
      * @return 
@@ -110,6 +179,7 @@ public class JTableFilter {
 
     /**
      * saveTableState
+     * called from LoadTables & TableFilterColumnPopup
      */
     public void saveTableState() {
         JTable table = this.getTable();
@@ -134,6 +204,7 @@ public class JTableFilter {
 
     /**
      * getTableModelPreviousState
+     * this method is never called
      * @return 
      */
     public MyTableModel getTableModelPreviousState() {
@@ -142,6 +213,7 @@ public class JTableFilter {
 
     /**
      * saveFilterCriteria
+     * this method is called from LoadTables & TableFilterColumnPopup classes
      * @param collection 
      */
     public void saveFilterCriteria(Collection collection) {
@@ -150,6 +222,7 @@ public class JTableFilter {
 
     /**
      * getFilterCriteria
+     * this method is called from Analyster
      * @return 
      */
     public Collection<DistinctColumnItem> getFilterCriteria() {
@@ -158,6 +231,7 @@ public class JTableFilter {
 
     /**
      * modelChanged
+     * this method is called from TableRowFilterSupport
      * @param model 
      */
     public void modelChanged(TableModel model) {
@@ -168,6 +242,7 @@ public class JTableFilter {
 
     /**
      * setColumnIndex
+     * this method is called from LoadTables & TableFilterColumnPopup
      * @param mColumnIndex 
      */
     public void setColumnIndex(int mColumnIndex) {
@@ -177,6 +252,7 @@ public class JTableFilter {
 
     /**
      * getColumnIndex
+     * this method is called from Analyster
      * @return 
      */
     public int getColumnIndex() {
@@ -185,6 +261,7 @@ public class JTableFilter {
 
     /**
      * getMyTableModelInitial
+     * this method is never called
      * @return 
      */
     public TableModel getMyTableModelInitial() {
@@ -192,25 +269,79 @@ public class JTableFilter {
     }
     
     /**
-     * setFilterState
-     * @param column
-     * @param values 
+     * getTable
+     * this method is used a lot
+     * it is called from Analyster, LoadTables, this TableFilterColumnPopup, 
+     * & TableRowFilterSupport
+     * @return 
      */
-    public void setFilterState(int column, Collection<DistinctColumnItem> values) {
-    filterState.setValues(column, values);
+    public JTable getTable() {
+        return table;
     }
 
     /**
-     * fireFilterChange
+     * addChangeListener
+     * this method is called once from TableRowFilterSupport
+     * @param listener 
      */
-    public final void fireFilterChange() {
-        for (IFilterChangeListener l : listeners) {
-            l.filterChanged((JTableFilter) this); 
+    public final void addChangeListener(IFilterChangeListener listener) {
+        if (listener != null) {
+            listeners.add(listener);
         }
+    }
+
+    /**
+     * removeChangeListener
+     * this method is never called
+     * @param listener 
+     */
+    public final void removeChangeListener(IFilterChangeListener listener) {
+        if (listener != null) {
+            listeners.remove(listener);
+        }
+    }
+
+    /**
+     * isFiltered
+     * this method is called once from FilterTableHeaderRenderer
+     * @param column
+     * @return 
+     */
+    public boolean isFiltered(int column) {
+        Collection<DistinctColumnItem> checks = getFilterState(column);
+        return !(CollectionUtils.isEmpty(checks)) && getDistinctColumnItems(column).size() != checks.size();
+    }
+    
+    /**
+     * getFilterState
+     * this method is called once from isFiltered & once from TableFilterColumnPopup
+     * @param column
+     * @return 
+     */
+    public Collection<DistinctColumnItem> getFilterState(int column) {
+        return filterState.getValues(column);
+    }
+    
+    /**
+     * getDistinctColumnItems
+     * this method is called once from isFiltered method and once from the
+     * Analyster & TableFilterColumnPopup classes
+     * @param column
+     * @return 
+     */
+    public Collection<DistinctColumnItem> getDistinctColumnItems(int column) {
+        Collection<DistinctColumnItem> result = distinctItemCache.get(column);
+        if (result == null) {
+            result = collectDistinctColumnItems(column);
+            distinctItemCache.put(column, result);
+        }
+        return result;
+
     }
     
     /**
      * collectDistinctColumnItems
+     * this method is called from getDistinctColumnItems
      * @param column
      * @return 
      */
@@ -226,103 +357,11 @@ public class JTableFilter {
         }
         return result;
     }
-    
-    /**
-     * getTable
-     * @return 
-     */
-    public JTable getTable() {
-        return table;
-    }
-
-    /**
-     * apply
-     * @param col
-     * @param items
-     * @return 
-     */
-    public boolean apply(int col, Collection<DistinctColumnItem> items) {
-        setFilterState(col, items); 
-        boolean result = false;
-        if (result = execute(col, items)) {
-            fireFilterChange();
-        }
-        return result;
-    }
-
-    /**
-     * apply
-     * @param col
-     * @param selectField
-     * @return 
-     */
-    public boolean apply(int col, Object selectField) { //Create Collection from selected fields 
-        Collection<DistinctColumnItem> item = new ArrayList<>();
-        
-        // handle null exceptions
-        if(selectField == null) selectField = "";
-        
-        DistinctColumnItem distinctColumnItem =new DistinctColumnItem(selectField, col);
-        item.add(distinctColumnItem);
-        return apply(col, item);
-    }
-    
-    /**
-     * addChangeListener
-     * @param listener 
-     */
-    public final void addChangeListener(IFilterChangeListener listener) {
-        if (listener != null) {
-            listeners.add(listener);
-        }
-    }
-
-    /**
-     * removeChangeListener
-     * @param listener 
-     */
-    public final void removeChangeListener(IFilterChangeListener listener) {
-        if (listener != null) {
-            listeners.remove(listener);
-        }
-    }
-
-    /**
-     * getDistinctColumnItems
-     * @param column
-     * @return 
-     */
-    public Collection<DistinctColumnItem> getDistinctColumnItems(int column) {
-        Collection<DistinctColumnItem> result = distinctItemCache.get(column);
-        if (result == null) {
-            result = collectDistinctColumnItems(column);
-            distinctItemCache.put(column, result);
-        }
-        return result;
-
-    }
-
-    /**
-     * getFilterState
-     * @param column
-     * @return 
-     */
-    public Collection<DistinctColumnItem> getFilterState(int column) {
-        return filterState.getValues(column);
-    }
-
-    /**
-     * isFiltered
-     * @param column
-     * @return 
-     */
-    public boolean isFiltered(int column) {
-        Collection<DistinctColumnItem> checks = getFilterState(column);
-        return !(CollectionUtils.isEmpty(checks)) && getDistinctColumnItems(column).size() != checks.size();
-    }
 
     /**
      * includeRow
+     * this method is called once by the nested class TableRowFilter 
+     * method include that overrides the Java API method of the RowFilter class
      * @param row
      * @return 
      */
@@ -331,34 +370,39 @@ public class JTableFilter {
     }
 
     /**
-     * clear
-     */
-    public void clear() {
-        filterState.clear();
-        Collection<DistinctColumnItem> items = Collections.emptyList();
-        for (int column = 0; column < table.getModel().getColumnCount(); column++) {
-            execute(column, items);
-        }
-        fireFilterChange();
-    }
-    
-    /**
      * NESTED CLASS
      * TableRowFilter
+     * this class is used once to create an instance in this outer class
+     * it is also called as another instance in method execute in the outer class
      */
-    class TableRowFilter extends RowFilter<Object, Object> implements Serializable {
+    class TableRowFilter extends RowFilter<Object, Object>  {
 
-        private static final long serialVersionUID = 1L;
-        private RowFilter<Object, Object> parentFilter;
+        private RowFilter<Object, Object> parentFilter; // extend and then make one?
 
+        /**
+         * getParentFilter
+         * this method is never called
+         * @return 
+         */
         public RowFilter<Object, Object> getParentFilter() {
             return parentFilter;
         }
 
+        /**
+         * setParentFilter
+         * this method is called once from execute
+         * @param parentFilter 
+         */
         public void setParentFilter(RowFilter<Object, Object> parentFilter) {
             this.parentFilter = (parentFilter == null || parentFilter == this) ? null : parentFilter;
         }
 
+        /**
+         * include
+         * this method is only called once from itself
+         * @param entry
+         * @return 
+         */
         @Override
         public boolean include(final Entry<? extends Object, ? extends Object> entry) {
 
@@ -367,18 +411,28 @@ public class JTableFilter {
                 return false;
             }
 
-            return includeRow(new Row() {
+            return includeRow(new Row() { // Row is the nested interface
 
-                @Override
-                public Object getValue(int column) {
-                    return entry.getValue(column);
-                }
-
+                /**
+                 * getValueCount
+                 * this method is called once from TableFilterState
+                 * @return 
+                 */
                 @Override
                 public int getValueCount() {
                     return entry.getValueCount();
                 }
 
+                /**
+                 * getValue
+                 * this method is called twice from TableFilterState
+                 * @param column
+                 * @return 
+                 */
+                @Override
+                public Object getValue(int column) {
+                    return entry.getValue(column);
+                }
             });
         }
     }
@@ -386,11 +440,24 @@ public class JTableFilter {
     /**
      * NESTED INTERFACE 
      * Row
+     * this interface is called twice in this outer class
+     * and once from TableFilterState
      */
     public interface Row {
         
+        /**
+         * getValueCount
+         * this method is called once from TableFilterState
+         * @return 
+         */
         int getValueCount();
 
+        /**
+         * getValue
+         * this method is called twice from TableFilterState
+         * @param column
+         * @return 
+         */
         Object getValue(int column);
     }
 
