@@ -153,15 +153,6 @@ public class JTableFilter {
     }
 
     /**
-     * getTableModelPreviousState
-     * this method is never called
-     * @return 
-     */
-    public MyTableModel getTableModelPreviousState() {
-        return (MyTableModel)tableModelPreviousState;
-    }
-
-    /**
      * saveFilterCriteria
      * this method is called from LoadTables & TableFilterColumnPopup classes
      * @param collection 
