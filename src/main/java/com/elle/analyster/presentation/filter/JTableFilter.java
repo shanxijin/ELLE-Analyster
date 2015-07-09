@@ -119,19 +119,6 @@ public class JTableFilter {
     }
     
     /**
-     * clear
-     * this method is never called
-     */
-    public void clear() {
-        filterState.clear();
-        Collection<DistinctColumnItem> items = Collections.emptyList();
-        for (int column = 0; column < table.getModel().getColumnCount(); column++) {
-            execute(column, items);
-        }
-        fireFilterChange();
-    }
-    
-    /**
      * execute 
      * called from apply & clear methods
      * @param col
