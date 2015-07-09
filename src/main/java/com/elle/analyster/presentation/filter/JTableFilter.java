@@ -19,13 +19,16 @@ import java.util.TreeSet;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+/**
+ * JTableFilter class
+ * @author cigreja
+ */
 public class JTableFilter {
 
-    private static final long serialVersionUID = 1L;
-    private final TableRowFilter filter = new TableRowFilter();
+    private TableRowFilter filter = new TableRowFilter();
     private TableModel tableModelPreviousState;
     private int columnIndex = -1;
-    private final TableModel  myTableModelInitial;
+    private TableModel  myTableModelInitial;
     private Collection <DistinctColumnItem> itemChecked;
     
     // Moved from AbstractTableFilter class
@@ -37,14 +40,53 @@ public class JTableFilter {
     private JTable table = new JTable(); // this was Type T
     private TableFilterState filterState = new TableFilterState();
     
-    // constructor
+    /**
+     * CONSTRUCTOR
+     * JTableFilter
+     * @param table 
+     */
     public JTableFilter(JTable table) {
-        //super(table);
         this.table = table; // this was abs constructor
         setupDistinctItemCacheRefresh(); // this was abs constructor
         myTableModelInitial  = copyTableModel(table);
     }
+    
+    /**
+     * setupDistinctItemCacheRefresh
+     */
+    public void setupDistinctItemCacheRefresh() {
+        clearDistinctItemCache();
+        this.table.addPropertyChangeListener("model", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                clearDistinctItemCache();
+                TableModel model = (TableModel) e.getNewValue();
+                if (model != null) {
+                    model.addTableModelListener(new TableModelListener() {
 
+                        @Override
+                        public void tableChanged(TableModelEvent e) {
+                            clearDistinctItemCache();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * clearDistinctItemCache
+     */
+    private void clearDistinctItemCache() {
+        distinctItemCache.clear();
+    }
+
+    /**
+     * execute 
+     * @param col
+     * @param items
+     * @return 
+     */
     protected boolean execute(int col, Collection<DistinctColumnItem> items) {
 
         RowSorter<?> rs = getTable().getRowSorter();
@@ -66,7 +108,9 @@ public class JTableFilter {
 
     }
 
-    //@Override
+    /**
+     * saveTableState
+     */
     public void saveTableState() {
         JTable table = this.getTable();
         tableModelPreviousState = copyTableModel(table);
@@ -88,84 +132,88 @@ public class JTableFilter {
         return new MyTableModel(rowData, columnNames, true);
     }
 
-
-    //@Override
+    /**
+     * getTableModelPreviousState
+     * @return 
+     */
     public MyTableModel getTableModelPreviousState() {
         return (MyTableModel)tableModelPreviousState;
     }
 
-    //Override
+    /**
+     * saveFilterCriteria
+     * @param collection 
+     */
     public void saveFilterCriteria(Collection collection) {
              itemChecked = collection;
     }
 
-    //@Override
+    /**
+     * getFilterCriteria
+     * @return 
+     */
     public Collection<DistinctColumnItem> getFilterCriteria() {
         return itemChecked;
     }
 
-    //@Override
+    /**
+     * modelChanged
+     * @param model 
+     */
     public void modelChanged(TableModel model) {
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
         sorter.setSortsOnUpdates(true);
         getTable().setRowSorter(sorter);
     }
 
-    //@Override
+    /**
+     * setColumnIndex
+     * @param mColumnIndex 
+     */
     public void setColumnIndex(int mColumnIndex) {
         columnIndex = mColumnIndex;
 
     }
 
-    //@Override
+    /**
+     * getColumnIndex
+     * @return 
+     */
     public int getColumnIndex() {
         return columnIndex;
     }
-    
-    //@Override
+
+    /**
+     * getMyTableModelInitial
+     * @return 
+     */
     public TableModel getMyTableModelInitial() {
         return myTableModelInitial;
     }
     
-    
-    /**************************************************************************
-     ******************* Moved from AbstractFilterClass ***********************
-     **************************************************************************/
-
-    public void setupDistinctItemCacheRefresh() {
-        clearDistinctItemCache();
-        this.table.addPropertyChangeListener("model", new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                clearDistinctItemCache();
-                TableModel model = (TableModel) e.getNewValue();
-                if (model != null) {
-                    model.addTableModelListener(new TableModelListener() {
-
-                        @Override
-                        public void tableChanged(TableModelEvent e) {
-                            clearDistinctItemCache();
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    private void clearDistinctItemCache() {
-        distinctItemCache.clear();
-    }
-    
+    /**
+     * setFilterState
+     * @param column
+     * @param values 
+     */
     public void setFilterState(int column, Collection<DistinctColumnItem> values) {
     filterState.setValues(column, values);
     }
 
+    /**
+     * fireFilterChange
+     */
     public final void fireFilterChange() {
         for (IFilterChangeListener l : listeners) {
             l.filterChanged((JTableFilter) this); 
         }
     }
     
+    /**
+     * collectDistinctColumnItems
+     * @param column
+     * @return 
+     */
     private Collection<DistinctColumnItem> collectDistinctColumnItems(int column) {
         Set<DistinctColumnItem> result = new TreeSet<DistinctColumnItem>(); // to collect unique items
         for (int row = 0; row < table.getModel().getRowCount(); row++) {
@@ -179,12 +227,20 @@ public class JTableFilter {
         return result;
     }
     
-    //@Override
+    /**
+     * getTable
+     * @return 
+     */
     public JTable getTable() {
         return table;
     }
 
-    //@Override
+    /**
+     * apply
+     * @param col
+     * @param items
+     * @return 
+     */
     public boolean apply(int col, Collection<DistinctColumnItem> items) {
         setFilterState(col, items); 
         boolean result = false;
@@ -194,7 +250,12 @@ public class JTableFilter {
         return result;
     }
 
-    //@Override
+    /**
+     * apply
+     * @param col
+     * @param selectField
+     * @return 
+     */
     public boolean apply(int col, Object selectField) { //Create Collection from selected fields 
         Collection<DistinctColumnItem> item = new ArrayList<>();
         
@@ -205,21 +266,32 @@ public class JTableFilter {
         item.add(distinctColumnItem);
         return apply(col, item);
     }
-    //@Override
+    
+    /**
+     * addChangeListener
+     * @param listener 
+     */
     public final void addChangeListener(IFilterChangeListener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
     }
 
-    //@Override
+    /**
+     * removeChangeListener
+     * @param listener 
+     */
     public final void removeChangeListener(IFilterChangeListener listener) {
         if (listener != null) {
             listeners.remove(listener);
         }
     }
 
-    //@Override
+    /**
+     * getDistinctColumnItems
+     * @param column
+     * @return 
+     */
     public Collection<DistinctColumnItem> getDistinctColumnItems(int column) {
         Collection<DistinctColumnItem> result = distinctItemCache.get(column);
         if (result == null) {
@@ -230,23 +302,37 @@ public class JTableFilter {
 
     }
 
-    //@Override
+    /**
+     * getFilterState
+     * @param column
+     * @return 
+     */
     public Collection<DistinctColumnItem> getFilterState(int column) {
         return filterState.getValues(column);
     }
 
-    //@Override
+    /**
+     * isFiltered
+     * @param column
+     * @return 
+     */
     public boolean isFiltered(int column) {
         Collection<DistinctColumnItem> checks = getFilterState(column);
         return !(CollectionUtils.isEmpty(checks)) && getDistinctColumnItems(column).size() != checks.size();
     }
 
-    //@Override
+    /**
+     * includeRow
+     * @param row
+     * @return 
+     */
     public boolean includeRow(JTableFilter.Row row) {
         return filterState.include(row);
     }
 
-    //@Override
+    /**
+     * clear
+     */
     public void clear() {
         filterState.clear();
         Collection<DistinctColumnItem> items = Collections.emptyList();
@@ -256,10 +342,10 @@ public class JTableFilter {
         fireFilterChange();
     }
     
-    /**************************************************************************
-     ******************* End Moved from AbstractFilterClass *******************
-     **************************************************************************/
-
+    /**
+     * NESTED CLASS
+     * TableRowFilter
+     */
     class TableRowFilter extends RowFilter<Object, Object> implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -297,6 +383,10 @@ public class JTableFilter {
         }
     }
     
+    /**
+     * NESTED INTERFACE 
+     * Row
+     */
     public interface Row {
         
         int getValueCount();
