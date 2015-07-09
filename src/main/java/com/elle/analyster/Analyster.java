@@ -227,7 +227,7 @@ public class Analyster extends JFrame implements ITableNameConstants, IColumnCon
             }
         });
 
-        comboBoxSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "symbol", "analyster" }));
+        comboBoxSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "symbol", "analyst" }));
 
         btnClearAllFilter.setText("Clear All Filters");
         btnClearAllFilter.addActionListener(new java.awt.event.ActionListener() {
