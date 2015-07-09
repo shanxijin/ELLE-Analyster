@@ -103,19 +103,11 @@ public class JTableFilter {
         filterState.setValues(col, items); 
         boolean result = false;
         if (result = execute(col, items)) {
-            fireFilterChange();
-        }
-        return result;
-    }
-    
-    /**
-     * fireFilterChange
-     * this method is called from apply & clear (clear is never called)
-     */
-    public final void fireFilterChange() {
-        for (IFilterChangeListener l : listeners) {
+            for (IFilterChangeListener l : listeners) {
             l.filterChanged((JTableFilter) this); 
         }
+        }
+        return result;
     }
     
     /**
