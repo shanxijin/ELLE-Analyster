@@ -133,22 +133,6 @@ public class JTableFilter {
         JTable table = this.getTable();
     }
 
-    private TableModel copyTableModel(JTable table) {
-        Object[] columnNames = new Object[table.getColumnCount()];
-
-        TableModel tableModelOriginal = table.getModel();
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            columnNames[i] = tableModelOriginal.getColumnName(i);
-        }
-        Object[][] rowData = new Object[table.getRowCount()][table.getColumnCount()];
-        for (int i = 0; i < table.getRowCount(); i++) {
-            for (int j = 0; j < table.getColumnCount(); j++) {
-                rowData[i][j] = table.getValueAt(i, j);
-            }
-        }
-        return new MyTableModel(rowData, columnNames, true);
-    }
-
     /**
      * saveFilterCriteria
      * this method is called from LoadTables & TableFilterColumnPopup classes
