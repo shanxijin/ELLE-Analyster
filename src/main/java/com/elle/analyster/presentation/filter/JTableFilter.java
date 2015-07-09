@@ -1,6 +1,5 @@
 package com.elle.analyster.presentation.filter;
 
-import com.elle.analyster.MyTableModel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
