@@ -301,17 +301,8 @@ public class JTableFilter {
         private RowFilter<Object, Object> parentFilter; // extend and then make one?
 
         /**
-         * getParentFilter
-         * this method is never called
-         * @return 
-         */
-        public RowFilter<Object, Object> getParentFilter() {
-            return parentFilter;
-        }
-
-        /**
          * setParentFilter
-         * this method is called once from execute
+         * this method is called once from apply
          * @param parentFilter 
          */
         public void setParentFilter(RowFilter<Object, Object> parentFilter) {
