@@ -100,42 +100,31 @@ public class JTableFilter {
      * @return 
      */
     public boolean apply(int col, Collection<DistinctColumnItem> items) {
+        
         filterState.setValues(col, items); 
         boolean result = false;
-        if (result = execute(col, items)) {
-            for (IFilterChangeListener l : listeners) {
-            l.filterChanged((JTableFilter) this); 
-        }
-        }
-        return result;
-    }
-    
-    /**
-     * execute 
-     * called from apply & clear methods
-     * @param col
-     * @param items
-     * @return 
-     */
-    protected boolean execute(int col, Collection<DistinctColumnItem> items) {
-
+        
         RowSorter<?> rs = getTable().getRowSorter();
 
         if (!(rs instanceof DefaultRowSorter)) {
-            return false;
+            result = false;
+        }else{
+
+            DefaultRowSorter<?, ?> drs = (DefaultRowSorter<?, ?>) rs;
+
+            @SuppressWarnings("unchecked")
+            RowFilter<Object, Object> prevFilter = (RowFilter<Object, Object>) drs.getRowFilter();
+            if (!(prevFilter instanceof TableRowFilter)) {
+                filter.setParentFilter(prevFilter);
+            }
+
+            drs.setRowFilter(filter);
+            result = true;
+            for (IFilterChangeListener l : listeners) {
+                l.filterChanged((JTableFilter) this); 
+            }
         }
-
-        DefaultRowSorter<?, ?> drs = (DefaultRowSorter<?, ?>) rs;
-
-        @SuppressWarnings("unchecked")
-        RowFilter<Object, Object> prevFilter = (RowFilter<Object, Object>) drs.getRowFilter();
-        if (!(prevFilter instanceof TableRowFilter)) {
-            filter.setParentFilter(prevFilter);
-        }
-
-        drs.setRowFilter(filter);
-        return true;
-
+        return result;
     }
 
     /**
