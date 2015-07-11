@@ -61,7 +61,11 @@ public class CheckList<T> {
 
     }
 
-    @SuppressWarnings("serial")
+    /**
+	 * 
+	 * @param list
+	 */
+	@SuppressWarnings("serial")
     private void setupKeyboardActions(final JList list) {
         String actionKey = "toggle-check";
         list.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0), actionKey);

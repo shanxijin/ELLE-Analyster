@@ -13,6 +13,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.*;
 
 public class CheckListRenderer extends JCheckBox implements ListCellRenderer, Serializable {
 

@@ -52,8 +52,12 @@ public class DistinctColumnItem implements Comparable<DistinctColumnItem>, IValu
         return true;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
+    /**
+	 * 
+	 * @param o
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
     public int compareTo(DistinctColumnItem o) {
 
         if ( value == null ) {

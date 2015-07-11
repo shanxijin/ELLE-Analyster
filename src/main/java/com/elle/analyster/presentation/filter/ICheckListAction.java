@@ -15,8 +15,13 @@ public interface ICheckListAction<T> {
             return "(All)";
         }
 
-        @SuppressWarnings("unchecked")
-        @Override
+        /**
+		 * 
+		 * @param model
+		 * @param value
+		 */
+		@SuppressWarnings("unchecked")
+		@Override
         public void check(ICheckListModel<T> model, boolean value) {
             Collection<T> items = new ArrayList<>();
             if (value) {

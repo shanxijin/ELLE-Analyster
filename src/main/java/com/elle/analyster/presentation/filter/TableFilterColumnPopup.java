@@ -40,7 +40,11 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
     private TableModel myTableModelInitial;
     private GUI gui = new GUI();
 
-    @SuppressWarnings("static-access")
+    /**
+	 * 
+	 * @param filter
+	 */
+	@SuppressWarnings("static-access")
     public TableFilterColumnPopup(JTableFilter filter) {
 
         super(true);
@@ -67,7 +71,11 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
 
     }
 
-    @SuppressWarnings("static-access")
+    /**
+	 * 
+	 * @param tranlsator
+	 */
+	@SuppressWarnings("static-access")
     public void setSearchTranslator(IObjectToStringTranslator tranlsator) {
         this.translator = tranlsator;
     }
@@ -88,7 +96,7 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
     }
 
     @SuppressWarnings("serial")
-    @Override
+	@Override
     protected JComponent buildContent() {
         JPanel owner = new JPanel(new BorderLayout(3, 3));
         owner.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -176,7 +184,11 @@ class TableFilterColumnPopup extends PopupWindow implements MouseListener {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+	 * 
+	 * @param e
+	 */
+	@SuppressWarnings("unchecked")
     private void showFilterPopup(MouseEvent e) {
         JTableHeader header = (JTableHeader) (e.getSource());
         TableColumnModel colModel = filter.getTable().getColumnModel();
