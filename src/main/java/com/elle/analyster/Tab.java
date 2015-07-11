@@ -10,8 +10,9 @@ import javax.swing.JTable;
  * @since  June 25, 2015
  */
 public class Tab implements ITableNameConstants{
-
-    private String tableName; 
+    
+    // attribute 
+    private String tableName;
     private JTable table;
     private JTable filteredTable;
     private JTableFilter filter;
